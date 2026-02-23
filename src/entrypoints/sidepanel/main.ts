@@ -5,8 +5,8 @@ import { loadSettings, patchSettings, toggleCategory, toggleSubToggle } from '@s
 import type { CategoryId, PresetId } from '@shared/types';
 import { createActivityDrawer } from '@ui/components/activity-drawer';
 import { createCategoryCard } from '@ui/components/category-card';
-import { createCounter } from '@ui/components/counter';
 import { $, h } from '@ui/dom';
+import { icon } from '@ui/icons';
 import '../../assets/styles/tokens.css';
 
 async function render() {
@@ -14,64 +14,149 @@ async function render() {
   const browser = detectBrowser();
   let settings = await loadSettings();
 
+  // ── Theme ──
+  const stored = await chrome.storage.local.get('theme');
+  const initialTheme = (stored.theme as string) ?? 'dark';
+  document.documentElement.setAttribute('data-theme', initialTheme);
+
+  let currentTheme = initialTheme;
+  const themeIcon = h('span', { class: 'theme-toggle__icon' });
+  themeIcon.append(icon(currentTheme === 'dark' ? 'sun' : 'moon', 16));
+
+  const themeBtn = h(
+    'button',
+    {
+      class: 'theme-toggle',
+      title: chrome.i18n.getMessage('THEME_TOGGLE_TOOLTIP') || 'Toggle theme',
+      onClick: async () => {
+        currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        await chrome.storage.local.set({ theme: currentTheme });
+        themeIcon.textContent = '';
+        themeIcon.append(icon(currentTheme === 'dark' ? 'sun' : 'moon', 16));
+      },
+    },
+    themeIcon,
+  );
+
+  // ── Site whitelist button (header icon) ──
+  const siteIconEl = h('span', { class: 'btn-icon__inner' });
+  siteIconEl.append(icon('web-plus', 16));
+
+  let siteFlashTimer: ReturnType<typeof setTimeout> | null = null;
+
+  const siteBtn = h('button', {
+    class: 'btn-icon',
+    title: chrome.i18n.getMessage('WHITELIST_SITE_TOOLTIP') || 'Allow on this site',
+    onClick: () => {
+      // Flash success feedback immediately
+      if (siteFlashTimer) clearTimeout(siteFlashTimer);
+      siteIconEl.textContent = '';
+      siteIconEl.append(icon('check-circle', 16));
+      siteBtn.classList.add('btn-icon--ok');
+      siteFlashTimer = setTimeout(() => {
+        siteIconEl.textContent = '';
+        siteIconEl.append(icon('web-plus', 16));
+        siteBtn.classList.remove('btn-icon--ok');
+        siteFlashTimer = null;
+      }, 2000);
+
+      // Fire-and-forget whitelist
+      chrome.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
+        if (!tab?.url) return;
+        const domain = new URL(tab.url).hostname;
+        const allCats: CategoryId[] = ['ai', 'sponsored', 'shopping', 'telemetry', 'annoyances'];
+        sendMessage({ type: 'WHITELIST_SITE', domain, categories: allCats });
+      });
+    },
+  });
+  siteBtn.append(siteIconEl);
+
   // ── Header ──
+  const headerIcon = h('span', { class: 'header__icon' });
+  headerIcon.append(icon('shield-check', 20));
+
   const header = h(
     'header',
     { class: 'header' },
     h(
       'div',
-      { class: 'header__brand' },
-      h('span', { class: 'header__icon' }, '\u{1F9F9}'),
-      h('span', { class: 'header__title' }, 'Debloat'),
+      { class: 'header__top' },
+      h('div', { class: 'header__brand' }, headerIcon, h('span', { class: 'header__title' }, 'Debloat')),
+      h('div', { class: 'header__actions' }, siteBtn, themeBtn),
     ),
     h('div', { class: 'header__subtitle' }, 'Your browser, decluttered'),
   );
 
-  // ── Quick controls ──
-  const pauseBtn = h(
-    'button',
-    {
-      class: 'quick__btn',
-      onClick: async () => {
-        if (settings.pauseUntil && settings.pauseUntil > Date.now()) {
-          await sendMessage({ type: 'UNPAUSE' });
-          pauseBtn.textContent = '\u23F8 Pause (1h)';
-          pauseBtn.classList.remove('quick__btn--active');
-        } else {
-          await sendMessage({ type: 'PAUSE', durationMs: 60 * 60 * 1000 });
-          pauseBtn.textContent = '\u25B6 Resume';
-          pauseBtn.classList.add('quick__btn--active');
-        }
-        settings = await loadSettings();
+  // ── Preset pills ──
+  const presetIds: PresetId[] = ['aggressive', 'balanced', 'minimal', 'custom'];
+  const presetLabels: Record<PresetId, string> = {
+    aggressive: 'Aggressive',
+    balanced: 'Balanced',
+    minimal: 'Minimal',
+    custom: 'Custom',
+  };
+
+  const presetBar = h('div', { class: 'presets' });
+  const presetPills: Record<string, HTMLElement> = {};
+
+  for (const id of presetIds) {
+    const pill = h(
+      'button',
+      {
+        class: `preset${id === settings.preset ? ' preset--active' : ''}`,
+        type: 'button',
+        onClick: async () => {
+          const values = PRESETS[id];
+          if (!values) return;
+          settings = await patchSettings({ ...values, preset: id, subToggles: {} });
+          setPreset(id);
+          renderCards();
+        },
       },
-    },
-    settings.pauseUntil && settings.pauseUntil > Date.now() ? '\u25B6 Resume' : '\u23F8 Pause (1h)',
-  );
-
-  const siteBtn = h('button', { class: 'quick__btn' }, '\u{1F6AB} This site');
-
-  const presetSelect = h('select', {
-    class: 'quick__select',
-    onChange: async (e: Event) => {
-      const preset = (e.target as HTMLSelectElement).value as PresetId;
-      const values = PRESETS[preset];
-      if (!values) return;
-      settings = await patchSettings({
-        ...values,
-        preset,
-        subToggles: {},
-      });
-      renderCards();
-    },
-  }) as HTMLSelectElement;
-
-  for (const id of ['aggressive', 'balanced', 'minimal', 'custom'] as PresetId[]) {
-    const opt = h('option', { value: id }, id.charAt(0).toUpperCase() + id.slice(1));
-    presetSelect.append(opt);
+      presetLabels[id],
+    );
+    presetPills[id] = pill;
+    presetBar.append(pill);
   }
-  presetSelect.value = settings.preset;
 
-  const quickBar = h('div', { class: 'quick' }, pauseBtn, siteBtn, presetSelect);
+  function setPreset(id: PresetId) {
+    for (const [pid, pill] of Object.entries(presetPills)) {
+      pill.classList.toggle('preset--active', pid === id);
+    }
+  }
+
+  const presetSelect = {
+    set value(v: PresetId) {
+      setPreset(v);
+    },
+  };
+
+  // ── Pause ──
+  const pauseBtn = h('button', {
+    class: 'quick__btn',
+    onClick: async () => {
+      if (settings.pauseUntil && settings.pauseUntil > Date.now()) {
+        await sendMessage({ type: 'UNPAUSE' });
+        pauseBtn.textContent = '';
+        pauseBtn.append(icon('pause', 14), ' Pause (1h)');
+        pauseBtn.classList.remove('quick__btn--active');
+      } else {
+        await sendMessage({ type: 'PAUSE', durationMs: 60 * 60 * 1000 });
+        pauseBtn.textContent = '';
+        pauseBtn.append(icon('play', 14), ' Resume');
+        pauseBtn.classList.add('quick__btn--active');
+      }
+      settings = await loadSettings();
+    },
+  });
+  if (settings.pauseUntil && settings.pauseUntil > Date.now()) {
+    pauseBtn.append(icon('play', 14), ' Resume');
+  } else {
+    pauseBtn.append(icon('pause', 14), ' Pause (1h)');
+  }
+
+  const quickBar = h('div', { class: 'quick' }, pauseBtn);
 
   // ── Category cards ──
   const cardsContainer = h('div', { class: 'cards' });
@@ -105,8 +190,6 @@ async function render() {
   const activityDrawer = createActivityDrawer();
 
   // ── Footer ──
-  const counter = createCounter();
-
   const enableAllBtn = h(
     'button',
     {
@@ -143,13 +226,12 @@ async function render() {
   const footer = h(
     'footer',
     { class: 'footer' },
-    counter,
     activityDrawer,
     h('div', { class: 'footer__actions' }, enableAllBtn, disableAllBtn),
   );
 
   // ── Assemble ──
-  app.append(header, quickBar, cardsContainer, footer);
+  app.append(header, presetBar, quickBar, cardsContainer, footer);
 }
 
 render();

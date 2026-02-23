@@ -1,26 +1,68 @@
 :root {
+  color-scheme: dark;
+
+  /* Semantic colors */
   --color-primary: #10B981;
   --color-primary-dim: #059669;
-  --color-bg: #0F1117;
+  --color-success: #18C27A;
+  --color-danger: #FF4F6E;
+  --color-warning: #FFB347;
+
+  /* Dark theme (default) */
+  --color-bg: #111111;
   --color-surface: #1A1D27;
   --color-surface-hover: #242836;
-  --color-text: #F0F0F0;
-  --color-text-secondary: #8B8FA3;
-  --color-danger: #EF4444;
+  --color-text: #E7E9EE;
+  --color-text-secondary: #A0A4AF;
+  --color-border: rgba(255, 255, 255, 0.08);
+
+  /* Browser brand */
   --color-chrome: #4285F4;
   --color-edge: #0078D4;
   --color-firefox: #FF7139;
 
+  /* Toggle states */
+  --toggle-on: var(--color-success);
+  --toggle-off: #4B5563;
+
+  /* Elevation */
+  --shadow-menu: 0 6px 18px rgba(0, 0, 0, 0.35);
+
+  /* Spacing */
   --radius: 8px;
   --radius-sm: 4px;
   --gap: 12px;
   --gap-sm: 8px;
   --gap-xs: 4px;
 
+  /* Typography */
   --font-size: 13px;
   --font-size-sm: 11px;
   --font-size-lg: 15px;
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   --transition: 200ms ease;
+}
+
+/* ── Light theme ── */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --color-primary: #059669;
+  --color-primary-dim: #047857;
+  --color-success: #0E7B4C;
+  --color-danger: #D9264A;
+  --color-warning: #9A6200;
+
+  --color-bg: #FFFFFF;
+  --color-surface: #F4F5F7;
+  --color-surface-hover: #EAEBEF;
+  --color-text: #111111;
+  --color-text-secondary: #666A73;
+  --color-border: rgba(15, 23, 42, 0.08);
+
+  --toggle-on: var(--color-success);
+  --toggle-off: #C0C4CC;
+
+  --shadow-menu: 0 6px 18px rgba(0, 0, 0, 0.12);
 }

@@ -1,5 +1,6 @@
 import type { BrowserType, Category, CategoryId, Settings } from '@shared/types';
 import { h } from '@ui/dom';
+import { icon } from '@ui/icons';
 import { createToggle } from './toggle';
 
 export interface CategoryCardOptions {
@@ -40,7 +41,8 @@ export function createCategoryCard({
 
   let expanded = false;
 
-  const chevron = h('span', { class: 'card__chevron' }, '\u25B8');
+  const chevron = h('span', { class: 'card__chevron' });
+  chevron.append(icon('chevron-down', 14));
 
   const expandBtn = h(
     'button',
@@ -49,7 +51,8 @@ export function createCategoryCard({
       onClick: () => {
         expanded = !expanded;
         subContainer.style.display = expanded ? 'block' : 'none';
-        chevron.textContent = expanded ? '\u25BE' : '\u25B8';
+        chevron.textContent = '';
+        chevron.append(icon(expanded ? 'chevron-up' : 'chevron-down', 14));
       },
     },
     chevron,
@@ -63,13 +66,16 @@ export function createCategoryCard({
 
   const coverageLine = buildCoverageLine(counts, browser);
 
+  const iconEl = h('span', { class: 'card__icon' });
+  iconEl.append(icon(category.icon));
+
   const card = h(
     'div',
     { class: `card ${masterEnabled ? '' : 'card--off'}` },
     h(
       'div',
       { class: 'card__header' },
-      h('span', { class: 'card__icon' }, category.icon),
+      iconEl,
       h(
         'div',
         { class: 'card__info' },

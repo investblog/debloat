@@ -58,7 +58,7 @@ export const DEFAULT_SETTINGS: Settings = {
 export const CATEGORIES: Category[] = [
   {
     id: 'ai',
-    icon: '\u{1F916}',
+    icon: 'shield-check',
     labelKey: 'CATEGORY_AI',
     descriptionKey: 'CATEGORY_AI_DESC',
     subToggles: [
@@ -98,7 +98,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'sponsored',
-    icon: '\u{1F4F0}',
+    icon: 'filter',
     labelKey: 'CATEGORY_SPONSORED',
     descriptionKey: 'CATEGORY_SPONSORED_DESC',
     subToggles: [
@@ -135,7 +135,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'shopping',
-    icon: '\u{1F6D2}',
+    icon: 'shopping',
     labelKey: 'CATEGORY_SHOPPING',
     descriptionKey: 'CATEGORY_SHOPPING_DESC',
     subToggles: [
@@ -153,7 +153,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'telemetry',
-    icon: '\u{1F4E1}',
+    icon: 'analytics',
     labelKey: 'CATEGORY_TELEMETRY',
     descriptionKey: 'CATEGORY_TELEMETRY_DESC',
     subToggles: [
@@ -195,7 +195,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'annoyances',
-    icon: '\u{1F4A1}',
+    icon: 'lightbulb-alert',
     labelKey: 'CATEGORY_ANNOYANCES',
     descriptionKey: 'CATEGORY_ANNOYANCES_DESC',
     subToggles: [

@@ -2,13 +2,13 @@ import { CATEGORIES } from '@shared/constants';
 import { sendMessage } from '@shared/messaging';
 import type { ActivityEntry, CategoryId } from '@shared/types';
 import { h } from '@ui/dom';
+import { icon } from '@ui/icons';
 
 const POLL_INTERVAL = 3000;
 
-const CATEGORY_ICONS: Record<CategoryId, string> = Object.fromEntries(CATEGORIES.map((c) => [c.id, c.icon])) as Record<
-  CategoryId,
-  string
->;
+const CATEGORY_ICON_NAMES: Record<CategoryId, string> = Object.fromEntries(
+  CATEGORIES.map((c) => [c.id, c.icon]),
+) as Record<CategoryId, string>;
 
 function formatTime(ts: number): string {
   const d = new Date(ts);
@@ -19,7 +19,8 @@ export function createActivityDrawer(): HTMLElement {
   let expanded = false;
   let pollTimer: ReturnType<typeof setInterval> | null = null;
 
-  const chevron = h('span', { class: 'activity__chevron' }, '\u25B8');
+  const chevron = h('span', { class: 'activity__chevron' });
+  chevron.append(icon('chevron-down', 12));
   const list = h('div', { class: 'activity__list' });
   list.style.display = 'none';
 
@@ -43,7 +44,8 @@ export function createActivityDrawer(): HTMLElement {
         expanded = !expanded;
         list.style.display = expanded ? 'flex' : 'none';
         clearBtn.style.display = expanded ? 'inline' : 'none';
-        chevron.textContent = expanded ? '\u25BE' : '\u25B8';
+        chevron.textContent = '';
+        chevron.append(icon(expanded ? 'chevron-up' : 'chevron-down', 12));
 
         if (expanded) {
           refresh();
@@ -82,7 +84,9 @@ export function createActivityDrawer(): HTMLElement {
     // Show newest first
     for (let i = entries.length - 1; i >= 0; i--) {
       const entry = entries[i];
-      const icon = CATEGORY_ICONS[entry.category] ?? '\u2753';
+      const iconName = CATEGORY_ICON_NAMES[entry.category] ?? 'shield-check';
+      const iconEl = h('span', { class: 'activity__icon' });
+      iconEl.append(icon(iconName, 14));
 
       const allowBtn = h(
         'button',
@@ -105,7 +109,7 @@ export function createActivityDrawer(): HTMLElement {
         'div',
         { class: 'activity__row' },
         h('span', { class: 'activity__time' }, formatTime(entry.time)),
-        h('span', { class: 'activity__icon' }, icon),
+        iconEl,
         h('span', { class: 'activity__domain' }, entry.domain || entry.rulesetId),
         allowBtn,
       );
