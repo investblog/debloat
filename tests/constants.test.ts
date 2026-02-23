@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BrowserType } from '@shared/types';
-import { CATEGORIES } from '@shared/constants';
+import { CATEGORIES, STORE_URLS } from '@shared/constants';
 import { icon } from '@ui/icons';
 
 describe('CATEGORIES icon keys', () => {
@@ -51,4 +51,20 @@ describe('CATEGORIES browser coverage', () => {
     expect(edgeCount).toBeGreaterThan(chromeCount);
     expect(edgeCount).toBeGreaterThan(firefoxCount);
   });
+});
+
+describe('STORE_URLS', () => {
+  const browsers = ['chrome', 'edge', 'firefox'];
+
+  for (const browser of browsers) {
+    it(`${browser} has a valid store entry`, () => {
+      const entry = STORE_URLS[browser];
+      expect(entry, `${browser} should have a STORE_URLS entry`).toBeDefined();
+      expect(entry.url).toBeTruthy();
+      expect(entry.labelKey).toBeTruthy();
+
+      const el = icon(entry.icon);
+      expect(el.tagName.toLowerCase(), `icon("${entry.icon}") should be svg`).toBe('svg');
+    });
+  }
 });

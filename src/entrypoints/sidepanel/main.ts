@@ -1,5 +1,5 @@
 import { detectBrowser } from '@background/browser';
-import { CATEGORIES, PRESETS } from '@shared/constants';
+import { CATEGORIES, PRESETS, STORE_URLS } from '@shared/constants';
 import { sendMessage } from '@shared/messaging';
 import { loadSettings, patchSettings, toggleCategory, toggleSubToggle } from '@shared/settings';
 import type { CategoryId, PresetId } from '@shared/types';
@@ -189,6 +189,17 @@ async function render() {
   // ── Activity drawer ──
   const activityDrawer = createActivityDrawer();
 
+  // ── Review link ──
+  const storeInfo = STORE_URLS[browser];
+  const reviewLink = storeInfo
+    ? h(
+        'a',
+        { class: 'footer__review', href: storeInfo.url, target: '_blank' },
+        icon(storeInfo.icon, 16),
+        chrome.i18n.getMessage(storeInfo.labelKey) || 'Rate this extension',
+      )
+    : null;
+
   // ── Footer ──
   const enableAllBtn = h(
     'button',
@@ -223,12 +234,12 @@ async function render() {
     'Disable All',
   );
 
-  const footer = h(
-    'footer',
-    { class: 'footer' },
-    activityDrawer,
-    h('div', { class: 'footer__actions' }, enableAllBtn, disableAllBtn),
-  );
+  const footerChildren: (Node | string)[] = [activityDrawer];
+  if (reviewLink) footerChildren.push(reviewLink);
+  footerChildren.push(h('div', { class: 'footer__actions' }, enableAllBtn, disableAllBtn));
+
+  const footer = h('footer', { class: 'footer' });
+  for (const child of footerChildren) footer.append(child);
 
   // ── Assemble ──
   app.append(header, presetBar, quickBar, cardsContainer, footer);

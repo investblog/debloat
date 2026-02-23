@@ -46,5 +46,17 @@
   "CATEGORY_ANNOYANCES_DESC": {
     "message": "Реклама Rewards, подсказки фич, предиктивный ввод, кнопка Acrobat",
     "description": "Annoyances category description"
+  },
+  "RATE_CHROME": {
+    "message": "Оценить в Chrome Web Store",
+    "description": "Footer link to rate extension on Chrome Web Store"
+  },
+  "RATE_EDGE": {
+    "message": "Оценить в Edge Add-ons",
+    "description": "Footer link to rate extension on Edge Add-ons"
+  },
+  "RATE_FIREFOX": {
+    "message": "Оценить в Firefox Add-ons",
+    "description": "Footer link to rate extension on Firefox Add-ons"
   }
 }

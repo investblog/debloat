@@ -46,5 +46,17 @@
   "CATEGORY_ANNOYANCES_DESC": {
     "message": "Rewards prompts, feature tips, text prediction, Acrobat button",
     "description": "Annoyances category description"
+  },
+  "RATE_CHROME": {
+    "message": "Rate on Chrome Web Store",
+    "description": "Footer link to rate extension on Chrome Web Store"
+  },
+  "RATE_EDGE": {
+    "message": "Rate on Edge Add-ons",
+    "description": "Footer link to rate extension on Edge Add-ons"
+  },
+  "RATE_FIREFOX": {
+    "message": "Rate on Firefox Add-ons",
+    "description": "Footer link to rate extension on Firefox Add-ons"
   }
 }

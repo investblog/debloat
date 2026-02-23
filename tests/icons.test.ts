@@ -50,6 +50,10 @@ describe('icon()', () => {
       'web-plus',
       'play',
       'pause',
+      'star',
+      'browser-chrome',
+      'browser-edge',
+      'browser-firefox',
     ];
 
     for (const name of knownNames) {
