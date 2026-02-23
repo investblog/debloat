@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { BrowserType } from '@shared/types';
 import { CATEGORIES } from '@shared/constants';
 import { icon } from '@ui/icons';
 
@@ -16,5 +17,38 @@ describe('CATEGORIES icon keys', () => {
       expect(el.tagName.toLowerCase(), `icon("${cat.icon}") for ${cat.id} should be svg`).toBe('svg');
       expect(el.querySelector('path'), `icon("${cat.icon}") for ${cat.id} should have path`).not.toBeNull();
     }
+  });
+});
+
+describe('CATEGORIES browser coverage', () => {
+  const browsers: BrowserType[] = ['chrome', 'edge', 'firefox'];
+
+  for (const browser of browsers) {
+    it(`${browser} has at least one sub-toggle across all categories`, () => {
+      const total = CATEGORIES.flatMap((c) => c.subToggles).filter((s) => s.browsers.includes(browser)).length;
+      expect(total, `${browser} should have ≥1 sub-toggle overall`).toBeGreaterThan(0);
+    });
+  }
+
+  it('every sub-toggle targets at least one supported browser', () => {
+    for (const cat of CATEGORIES) {
+      for (const sub of cat.subToggles) {
+        const supported = sub.browsers.filter((b) => browsers.includes(b));
+        expect(
+          supported.length,
+          `${cat.id}/${sub.id} should target ≥1 of chrome/edge/firefox`,
+        ).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('edge has the most sub-toggles (primary target browser)', () => {
+    const countByBrowser = (b: BrowserType) =>
+      CATEGORIES.flatMap((c) => c.subToggles).filter((s) => s.browsers.includes(b)).length;
+    const edgeCount = countByBrowser('edge');
+    const chromeCount = countByBrowser('chrome');
+    const firefoxCount = countByBrowser('firefox');
+    expect(edgeCount).toBeGreaterThan(chromeCount);
+    expect(edgeCount).toBeGreaterThan(firefoxCount);
   });
 });
