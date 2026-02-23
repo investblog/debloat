@@ -1,7 +1,38 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
-dev/
+.output/
+
+# WXT
 .wxt/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+
+# Zip files (store submission artifacts)
+*.zip
+
+# Test artifacts
 test-screenshots/
 *.tsbuildinfo
+
+# Claude Code
 .claude/
+CLAUDE.md

@@ -14,6 +14,7 @@
     "zip:firefox": "wxt zip -b firefox",
     "zip:edge": "wxt zip -b edge",
     "zip:all": "wxt zip && wxt zip -b firefox && wxt zip -b edge",
+    "build:all": "wxt build && wxt build -b firefox && wxt build -b edge",
     "typecheck": "tsc --noEmit",
     "lint": "biome check src/ wxt.config.ts",
     "lint:fix": "biome check --write src/ wxt.config.ts",
