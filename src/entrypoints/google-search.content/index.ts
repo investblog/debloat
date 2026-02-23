@@ -5,6 +5,7 @@ import './style.css';
 export default defineContentScript({
   matches: ['*://www.google.com/search*'],
   runAt: 'document_start',
+  // Use default manifest registration
 
   async main() {
     const settings = await loadSettings();

@@ -4,3 +4,4 @@ dev/
 .wxt/
 test-screenshots/
 *.tsbuildinfo
+.claude/

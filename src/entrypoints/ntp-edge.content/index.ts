@@ -5,6 +5,7 @@ import './style.css';
 export default defineContentScript({
   matches: ['*://ntp.msn.com/*', '*://edge.microsoft.com/*'],
   runAt: 'document_start',
+  // Use default manifest registration
 
   async main() {
     const settings = await loadSettings();

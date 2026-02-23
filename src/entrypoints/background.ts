@@ -8,7 +8,7 @@ import type { ActivityEntry } from '@shared/types';
 // Per-tab activity log (circular buffer, runtime only)
 const tabActivity = new Map<number, ActivityEntry[]>();
 
-export default defineBackground(() => {
+export default defineBackground(async () => {
   initBadge();
   initRules();
   initPause();
