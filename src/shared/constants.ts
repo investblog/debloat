@@ -45,8 +45,16 @@ export const PRESETS: Record<PresetId, Record<CategoryId, boolean>> = {
 
 /** Store listing URLs per browser (replace EXTENSION_ID with real IDs) */
 export const STORE_URLS: Record<string, { url: string; icon: string; labelKey: string }> = {
-  chrome: { url: 'https://chromewebstore.google.com/detail/EXTENSION_ID', icon: 'browser-chrome', labelKey: 'RATE_CHROME' },
-  edge: { url: 'https://microsoftedge.microsoft.com/addons/detail/EXTENSION_ID', icon: 'browser-edge', labelKey: 'RATE_EDGE' },
+  chrome: {
+    url: 'https://chromewebstore.google.com/detail/EXTENSION_ID',
+    icon: 'browser-chrome',
+    labelKey: 'RATE_CHROME',
+  },
+  edge: {
+    url: 'https://microsoftedge.microsoft.com/addons/detail/EXTENSION_ID',
+    icon: 'browser-edge',
+    labelKey: 'RATE_EDGE',
+  },
   firefox: { url: 'https://addons.mozilla.org/addon/EXTENSION_ID/', icon: 'browser-firefox', labelKey: 'RATE_FIREFOX' },
 };
 
