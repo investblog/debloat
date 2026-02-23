@@ -4,6 +4,7 @@
   /* Semantic colors */
   --color-primary: #10B981;
   --color-primary-dim: #059669;
+  --color-primary-hover: #047857;
   --color-success: #18C27A;
   --color-danger: #FF4F6E;
   --color-warning: #FFB347;
@@ -50,6 +51,7 @@
 
   --color-primary: #059669;
   --color-primary-dim: #047857;
+  --color-primary-hover: #03634A;
   --color-success: #0E7B4C;
   --color-danger: #D9264A;
   --color-warning: #9A6200;

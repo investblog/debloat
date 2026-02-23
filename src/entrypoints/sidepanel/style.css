@@ -196,7 +196,7 @@ body {
 }
 
 .quick__btn--active:hover {
-  background: var(--color-primary);
+  background: var(--color-primary-hover);
 }
 
 .quick__btn svg {
