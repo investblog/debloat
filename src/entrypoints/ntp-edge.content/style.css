@@ -1,0 +1,38 @@
+/*
+ * Edge NTP (ntp.msn.com) bloat hiding — injected at document_start.
+ */
+
+/* MSN news feed */
+#cib-feed-container,
+.feed-layout,
+[data-m*="NewsFeed"],
+.infopane-container {
+  display: none !important;
+}
+
+/* Copilot Discover */
+#copilot-discover,
+[data-m*="CopilotDiscover"],
+.copilot-card {
+  display: none !important;
+}
+
+/* Sponsored tiles */
+.sponsored-tile,
+[data-m*="SponsoredTile"],
+a[data-tag*="sponsored"] {
+  display: none !important;
+}
+
+/* Shopping */
+[data-m*="Shopping"],
+.shopping-card {
+  display: none !important;
+}
+
+/* Microsoft Rewards */
+#rewards-card,
+[data-m*="Rewards"],
+.rewards-container {
+  display: none !important;
+}

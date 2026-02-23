@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||alkali-pa.googleapis.com",
+      "resourceTypes": ["xmlhttprequest", "script", "other"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||gemini.google.com/api/",
+      "resourceTypes": ["xmlhttprequest", "script", "other"]
+    }
+  },
+  {
+    "id": 3,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||copilot.microsoft.com",
+      "resourceTypes": ["xmlhttprequest", "script", "sub_frame", "other"]
+    }
+  },
+  {
+    "id": 4,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||sydney.bing.com",
+      "resourceTypes": ["xmlhttprequest", "script", "websocket", "other"]
+    }
+  },
+  {
+    "id": 5,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||turing.microsoft.com",
+      "resourceTypes": ["xmlhttprequest", "script", "other"]
+    }
+  },
+  {
+    "id": 6,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||substrate.office.com/ai/",
+      "resourceTypes": ["xmlhttprequest", "script", "other"]
+    }
+  }
+]

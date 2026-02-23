@@ -1,0 +1,50 @@
+{
+  "EXTENSION_NAME": {
+    "message": "Debloat",
+    "description": "Extension display name"
+  },
+  "EXTENSION_DESCRIPTION": {
+    "message": "Hide AI features, block sponsored content, stop telemetry. One click, no admin rights.",
+    "description": "Extension description for store listing"
+  },
+  "CATEGORY_AI": {
+    "message": "AI Features",
+    "description": "AI Features category name"
+  },
+  "CATEGORY_AI_DESC": {
+    "message": "Gemini, Copilot, AI Overview, Help Me Write, Visual Search",
+    "description": "AI Features category description"
+  },
+  "CATEGORY_SPONSORED": {
+    "message": "Sponsored Content",
+    "description": "Sponsored Content category name"
+  },
+  "CATEGORY_SPONSORED_DESC": {
+    "message": "NTP feed, sponsored tiles, recommended stories",
+    "description": "Sponsored Content category description"
+  },
+  "CATEGORY_SHOPPING": {
+    "message": "Shopping",
+    "description": "Shopping category name"
+  },
+  "CATEGORY_SHOPPING_DESC": {
+    "message": "Price comparison, coupons, shopping assistant",
+    "description": "Shopping category description"
+  },
+  "CATEGORY_TELEMETRY": {
+    "message": "Telemetry",
+    "description": "Telemetry category name"
+  },
+  "CATEGORY_TELEMETRY_DESC": {
+    "message": "Diagnostic data, usage reports, Firefox Studies",
+    "description": "Telemetry category description"
+  },
+  "CATEGORY_ANNOYANCES": {
+    "message": "Annoyances",
+    "description": "Annoyances category name"
+  },
+  "CATEGORY_ANNOYANCES_DESC": {
+    "message": "Rewards prompts, feature tips, text prediction, Acrobat button",
+    "description": "Annoyances category description"
+  }
+}

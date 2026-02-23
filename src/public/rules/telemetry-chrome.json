@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||clients.google.com/tbproxy/",
+      "resourceTypes": ["xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||clients.google.com/uma/",
+      "resourceTypes": ["xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 3,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||update.googleapis.com/service/update2",
+      "resourceTypes": ["xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 4,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||clientservices.googleapis.com",
+      "resourceTypes": ["xmlhttprequest", "ping", "other"]
+    }
+  }
+]

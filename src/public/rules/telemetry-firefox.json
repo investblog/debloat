@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||incoming.telemetry.mozilla.org",
+      "resourceTypes": ["xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||normandy.cdn.mozilla.net",
+      "resourceTypes": ["xmlhttprequest", "script", "other"]
+    }
+  },
+  {
+    "id": 3,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||content-signature-2.cdn.mozilla.net",
+      "resourceTypes": ["xmlhttprequest", "other"]
+    }
+  }
+]

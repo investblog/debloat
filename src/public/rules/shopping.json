@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||microsoftedge.microsoft.com/shopping/",
+      "resourceTypes": ["xmlhttprequest", "script", "sub_frame", "other"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||shoppingcont.microsoft.com",
+      "resourceTypes": ["xmlhttprequest", "script", "other"]
+    }
+  }
+]

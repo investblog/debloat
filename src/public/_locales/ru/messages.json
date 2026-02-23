@@ -1,0 +1,50 @@
+{
+  "EXTENSION_NAME": {
+    "message": "Debloat",
+    "description": "Extension display name"
+  },
+  "EXTENSION_DESCRIPTION": {
+    "message": "Скройте AI-фичи, заблокируйте спонсированный контент, отключите телеметрию. Один клик, без прав админа.",
+    "description": "Extension description for store listing"
+  },
+  "CATEGORY_AI": {
+    "message": "AI-функции",
+    "description": "AI Features category name"
+  },
+  "CATEGORY_AI_DESC": {
+    "message": "Gemini, Copilot, AI Overview, Помощь в написании, Visual Search",
+    "description": "AI Features category description"
+  },
+  "CATEGORY_SPONSORED": {
+    "message": "Спонсированный контент",
+    "description": "Sponsored Content category name"
+  },
+  "CATEGORY_SPONSORED_DESC": {
+    "message": "Лента NTP, спонсированные плитки, рекомендованные истории",
+    "description": "Sponsored Content category description"
+  },
+  "CATEGORY_SHOPPING": {
+    "message": "Покупки",
+    "description": "Shopping category name"
+  },
+  "CATEGORY_SHOPPING_DESC": {
+    "message": "Сравнение цен, купоны, ассистент покупок",
+    "description": "Shopping category description"
+  },
+  "CATEGORY_TELEMETRY": {
+    "message": "Телеметрия",
+    "description": "Telemetry category name"
+  },
+  "CATEGORY_TELEMETRY_DESC": {
+    "message": "Диагностические данные, отчёты об использовании, Firefox Studies",
+    "description": "Telemetry category description"
+  },
+  "CATEGORY_ANNOYANCES": {
+    "message": "Раздражители",
+    "description": "Annoyances category name"
+  },
+  "CATEGORY_ANNOYANCES_DESC": {
+    "message": "Реклама Rewards, подсказки фич, предиктивный ввод, кнопка Acrobat",
+    "description": "Annoyances category description"
+  }
+}

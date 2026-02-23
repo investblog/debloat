@@ -1,0 +1,19 @@
+/*
+ * Google Search AI element hiding — injected at document_start.
+ * Selectors may break when Google updates its UI.
+ * Keep this file minimal — MutationObserver in index.ts handles dynamic elements.
+ */
+
+/* AI Overview */
+#ai-overview-card,
+div[data-attrid="AIOverview"],
+div.M8OgIe,
+div[jsname="Cpkphb"] {
+  display: none !important;
+}
+
+/* AI Mode button and results */
+a[href*="/search?udm=50"],
+div[data-udm="50"] {
+  display: none !important;
+}

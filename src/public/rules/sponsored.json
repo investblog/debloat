@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||ntp.msn.com/edge/ntp",
+      "resourceTypes": ["xmlhttprequest", "script", "sub_frame", "other"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||assets.msn.com/content/",
+      "resourceTypes": ["xmlhttprequest", "script", "image", "other"]
+    }
+  },
+  {
+    "id": 3,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||api.msn.com/content/",
+      "resourceTypes": ["xmlhttprequest", "script", "other"]
+    }
+  }
+]
