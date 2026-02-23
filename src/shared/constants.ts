@@ -1,5 +1,27 @@
 import type { Category, CategoryId, PresetId, Settings } from './types';
 
+/** Top Google country domains for search content script */
+export const GOOGLE_SEARCH_DOMAINS = [
+  'www.google.com',
+  'www.google.co.uk',
+  'www.google.de',
+  'www.google.fr',
+  'www.google.co.jp',
+  'www.google.co.in',
+  'www.google.com.br',
+  'www.google.ca',
+  'www.google.com.au',
+  'www.google.ru',
+  'www.google.it',
+  'www.google.es',
+  'www.google.com.mx',
+  'www.google.co.kr',
+  'www.google.nl',
+  'www.google.pl',
+  'www.google.com.tr',
+  'www.google.co.id',
+];
+
 export const BADGE_COLOR = '#10B981';
 export const BADGE_REFRESH_MS = 2000;
 export const ACTIVITY_BUFFER_SIZE = 100;

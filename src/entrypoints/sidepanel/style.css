@@ -311,3 +311,116 @@ body {
 .footer__btn--danger:hover {
   background: rgba(239, 68, 68, 0.1);
 }
+
+/* ── Activity Drawer ── */
+
+.activity {
+  padding: var(--gap-sm) 0;
+  border-top: 1px solid var(--color-surface);
+  border-bottom: 1px solid var(--color-surface);
+  margin-bottom: var(--gap-sm);
+}
+
+.activity__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.activity__header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  padding: 2px 0;
+  transition: color var(--transition);
+}
+
+.activity__header:hover {
+  color: var(--color-text);
+}
+
+.activity__chevron {
+  font-size: 10px;
+}
+
+.activity__clear {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.activity__clear:hover {
+  color: var(--color-danger);
+}
+
+.activity__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: var(--gap-sm);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.activity__empty {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  padding: var(--gap-xs) 0;
+}
+
+.activity__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  padding: 3px 0;
+  font-size: var(--font-size-sm);
+}
+
+.activity__time {
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.activity__icon {
+  flex-shrink: 0;
+}
+
+.activity__domain {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text);
+}
+
+.activity__allow {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--color-surface-hover);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  font-size: 10px;
+  padding: 1px 6px;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.activity__allow:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.activity__allow:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

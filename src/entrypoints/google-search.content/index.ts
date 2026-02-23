@@ -3,9 +3,27 @@ import { loadSettings } from '@shared/settings';
 import './style.css';
 
 export default defineContentScript({
-  matches: ['*://www.google.com/search*'],
+  matches: [
+    '*://www.google.com/search*',
+    '*://www.google.co.uk/search*',
+    '*://www.google.de/search*',
+    '*://www.google.fr/search*',
+    '*://www.google.co.jp/search*',
+    '*://www.google.co.in/search*',
+    '*://www.google.com.br/search*',
+    '*://www.google.ca/search*',
+    '*://www.google.com.au/search*',
+    '*://www.google.ru/search*',
+    '*://www.google.it/search*',
+    '*://www.google.es/search*',
+    '*://www.google.com.mx/search*',
+    '*://www.google.co.kr/search*',
+    '*://www.google.nl/search*',
+    '*://www.google.pl/search*',
+    '*://www.google.com.tr/search*',
+    '*://www.google.co.id/search*',
+  ],
   runAt: 'document_start',
-  // Use default manifest registration
 
   async main() {
     const settings = await loadSettings();

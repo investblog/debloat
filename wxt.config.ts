@@ -25,7 +25,13 @@ export default defineConfig({
     homepage_url: 'https://debloat.click',
     default_locale: 'en',
 
-    permissions: ['storage', 'declarativeNetRequest', 'declarativeNetRequestFeedback', 'scripting', 'webNavigation'],
+    permissions: [
+      'storage',
+      'declarativeNetRequest',
+      ...(browser !== 'firefox' ? ['declarativeNetRequestFeedback'] : []),
+      'scripting',
+      'webNavigation',
+    ],
 
     ...(browser !== 'firefox' && {
       minimum_chrome_version: '116',
@@ -57,6 +63,23 @@ export default defineConfig({
 
     host_permissions: [
       '*://www.google.com/*',
+      '*://www.google.co.uk/*',
+      '*://www.google.de/*',
+      '*://www.google.fr/*',
+      '*://www.google.co.jp/*',
+      '*://www.google.co.in/*',
+      '*://www.google.com.br/*',
+      '*://www.google.ca/*',
+      '*://www.google.com.au/*',
+      '*://www.google.ru/*',
+      '*://www.google.it/*',
+      '*://www.google.es/*',
+      '*://www.google.com.mx/*',
+      '*://www.google.co.kr/*',
+      '*://www.google.nl/*',
+      '*://www.google.pl/*',
+      '*://www.google.com.tr/*',
+      '*://www.google.co.id/*',
       '*://ntp.msn.com/*',
       '*://edge.microsoft.com/*',
       '*://*.bing.com/*',

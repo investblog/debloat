@@ -9,7 +9,7 @@ import type { ActivityEntry } from '@shared/types';
 const tabActivity = new Map<number, ActivityEntry[]>();
 
 export default defineBackground(async () => {
-  initBadge();
+  initBadge(tabActivity);
   initRules();
   initPause();
 

@@ -3,6 +3,7 @@ import { CATEGORIES, PRESETS } from '@shared/constants';
 import { sendMessage } from '@shared/messaging';
 import { loadSettings, patchSettings, toggleCategory, toggleSubToggle } from '@shared/settings';
 import type { CategoryId, PresetId } from '@shared/types';
+import { createActivityDrawer } from '@ui/components/activity-drawer';
 import { createCategoryCard } from '@ui/components/category-card';
 import { createCounter } from '@ui/components/counter';
 import { $, h } from '@ui/dom';
@@ -100,6 +101,9 @@ async function render() {
   }
   renderCards();
 
+  // ── Activity drawer ──
+  const activityDrawer = createActivityDrawer();
+
   // ── Footer ──
   const counter = createCounter();
 
@@ -140,6 +144,7 @@ async function render() {
     'footer',
     { class: 'footer' },
     counter,
+    activityDrawer,
     h('div', { class: 'footer__actions' }, enableAllBtn, disableAllBtn),
   );
 
