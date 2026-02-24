@@ -29,6 +29,7 @@ export const BADGE_PAUSED_COLOR = '#6B7280';
 export const BADGE_REFRESH_MS = 2000;
 export const ACTIVITY_BUFFER_SIZE = 100;
 export const PAUSE_DURATION_MS = 60 * 60 * 1000; // 1 hour
+export const CSS_REPORT_DEBOUNCE_MS = 500;
 
 /** Maps category → static dNR ruleset IDs */
 export const CATEGORY_RULESETS: Record<string, string[]> = {

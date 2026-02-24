@@ -8,7 +8,9 @@
  */
 import { ALL as COPILOT_SELECTORS } from '@selectors/edge-copilot';
 import { ALL as SHOPPING_SELECTORS } from '@selectors/edge-shopping';
+import { createHideReporter } from '@shared/report-hidden';
 import { loadSettings } from '@shared/settings';
+import type { CategoryId } from '@shared/types';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -18,15 +20,24 @@ export default defineContentScript({
   async main() {
     const settings = await loadSettings();
 
-    const selectors: string[] = [];
-    if (settings.ai) selectors.push(...COPILOT_SELECTORS);
-    if (settings.shopping) selectors.push(...SHOPPING_SELECTORS);
-    if (selectors.length === 0) return;
+    const groups: { selectors: string[]; category: CategoryId; enabled: boolean }[] = [
+      { selectors: COPILOT_SELECTORS, category: 'ai', enabled: settings.ai },
+      { selectors: SHOPPING_SELECTORS, category: 'shopping', enabled: settings.shopping },
+    ];
+
+    const activeGroups = groups.filter((g) => g.enabled);
+    if (activeGroups.length === 0) return;
+
+    const reporters = new Map(activeGroups.map((g) => [g.category, createHideReporter(g.category)]));
 
     // Hide existing elements
-    for (const selector of selectors) {
-      for (const el of document.querySelectorAll<HTMLElement>(selector)) {
-        el.style.display = 'none';
+    for (const group of activeGroups) {
+      const reporter = reporters.get(group.category);
+      for (const selector of group.selectors) {
+        for (const el of document.querySelectorAll<HTMLElement>(selector)) {
+          el.style.display = 'none';
+          reporter?.track(el);
+        }
       }
     }
 
@@ -35,10 +46,14 @@ export default defineContentScript({
       for (const mutation of mutations) {
         for (const node of mutation.addedNodes) {
           if (!(node instanceof HTMLElement)) continue;
-          for (const selector of selectors) {
-            const targets = node.matches(selector) ? [node] : [...node.querySelectorAll(selector)];
-            for (const target of targets) {
-              (target as HTMLElement).style.display = 'none';
+          for (const group of activeGroups) {
+            const reporter = reporters.get(group.category);
+            for (const selector of group.selectors) {
+              const targets = node.matches(selector) ? [node] : [...node.querySelectorAll(selector)];
+              for (const target of targets) {
+                (target as HTMLElement).style.display = 'none';
+                reporter?.track(target as HTMLElement);
+              }
             }
           }
         }

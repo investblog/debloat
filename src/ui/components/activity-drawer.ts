@@ -5,6 +5,8 @@ import { h } from '@ui/dom';
 import { icon } from '@ui/icons';
 import { browser } from 'wxt/browser';
 
+type MsgKey = Parameters<typeof browser.i18n.getMessage>[0];
+
 const POLL_INTERVAL = 3000;
 
 const CATEGORY_ICON_NAMES: Record<CategoryId, string> = Object.fromEntries(
@@ -24,19 +26,15 @@ function buildIssueLink(entry: ActivityEntry): string {
   return `https://github.com/investblog/debloat/issues/new?${params.toString()}`;
 }
 
-export function createActivityDrawer(): HTMLElement {
-  let expanded = false;
+export function createActivityDrawer(): { drawer: HTMLElement; open: () => void } {
   let pollTimer: ReturnType<typeof setInterval> | null = null;
 
-  const chevron = h('span', { class: 'activity__chevron' });
-  chevron.append(icon('chevron-down', 12));
   const list = h('div', { class: 'activity__list', 'data-testid': 'activity-list' });
-  list.style.display = 'none';
 
   const clearBtn = h(
     'button',
     {
-      class: 'activity__clear',
+      class: 'drawer__clear',
       'data-testid': 'activity-clear',
       onClick: () => {
         list.textContent = '';
@@ -44,34 +42,50 @@ export function createActivityDrawer(): HTMLElement {
     },
     'Clear',
   );
-  clearBtn.style.display = 'none';
 
-  const headerBtn = h(
-    'button',
-    {
-      class: 'activity__header',
-      'data-testid': 'activity-toggle',
-      onClick: () => {
-        expanded = !expanded;
-        list.style.display = expanded ? 'flex' : 'none';
-        clearBtn.style.display = expanded ? 'inline' : 'none';
-        chevron.textContent = '';
-        chevron.append(icon(expanded ? 'chevron-up' : 'chevron-down', 12));
+  const closeIcon = h('span', { class: 'btn-icon__inner' });
+  closeIcon.append(icon('close-circle', 16));
 
-        if (expanded) {
-          refresh();
-          pollTimer = setInterval(refresh, POLL_INTERVAL);
-        } else if (pollTimer) {
-          clearInterval(pollTimer);
-          pollTimer = null;
-        }
-      },
-    },
-    chevron,
-    ' Activity',
+  const closeBtn = h('button', {
+    class: 'btn-icon drawer__close',
+    'data-testid': 'activity-close',
+    onClick: close,
+  });
+  closeBtn.append(closeIcon);
+
+  const overlay = h('div', { class: 'drawer__overlay' });
+  overlay.addEventListener('click', close);
+
+  const panel = h(
+    'div',
+    { class: 'drawer__panel' },
+    h('div', { class: 'drawer__header' }, h('span', { class: 'drawer__title' }, 'Activity'), closeBtn),
+    h('div', { class: 'drawer__body' }, list),
+    h('div', { class: 'drawer__footer' }, clearBtn),
   );
 
-  const container = h('div', { class: 'activity' }, h('div', { class: 'activity__bar' }, headerBtn, clearBtn), list);
+  const drawer = h('aside', { class: 'drawer' }, overlay, panel);
+  drawer.hidden = true;
+
+  function open() {
+    drawer.hidden = false;
+    refresh();
+    pollTimer = setInterval(refresh, POLL_INTERVAL);
+    document.addEventListener('keydown', onKeyDown);
+  }
+
+  function close() {
+    drawer.hidden = true;
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+    document.removeEventListener('keydown', onKeyDown);
+  }
+
+  function onKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Escape') close();
+  }
 
   async function refresh() {
     try {
@@ -92,9 +106,46 @@ export function createActivityDrawer(): HTMLElement {
       return;
     }
 
-    // Show newest first
-    for (let i = entries.length - 1; i >= 0; i--) {
-      const entry = entries[i];
+    // Aggregate CSS entries by domain+category, keep newest time and sum counts
+    interface AggregatedEntry {
+      time: number;
+      domain: string;
+      category: CategoryId;
+      rulesetId: string;
+      count: number;
+    }
+
+    const cssAggregated = new Map<string, AggregatedEntry>();
+    const dnrEntries: ActivityEntry[] = [];
+
+    for (const entry of entries) {
+      if (entry.rulesetId.startsWith('css:')) {
+        const key = `${entry.domain}:${entry.category}`;
+        const existing = cssAggregated.get(key);
+        if (existing) {
+          existing.count += entry.count ?? 0;
+          if (entry.time > existing.time) existing.time = entry.time;
+        } else {
+          cssAggregated.set(key, {
+            time: entry.time,
+            domain: entry.domain,
+            category: entry.category,
+            rulesetId: entry.rulesetId,
+            count: entry.count ?? 0,
+          });
+        }
+      } else {
+        dnrEntries.push(entry);
+      }
+    }
+
+    // Merge and sort by time (newest first)
+    const merged: AggregatedEntry[] = [...dnrEntries.map((e) => ({ ...e, count: 0 })), ...cssAggregated.values()];
+    merged.sort((a, b) => b.time - a.time);
+
+    for (let i = 0; i < merged.length; i++) {
+      const entry = merged[i];
+      const isCss = entry.rulesetId.startsWith('css:');
       const iconName = CATEGORY_ICON_NAMES[entry.category] ?? 'shield-check';
       const iconEl = h('span', { class: 'activity__icon' });
       iconEl.append(icon(iconName, 14));
@@ -128,12 +179,17 @@ export function createActivityDrawer(): HTMLElement {
         'Report',
       );
 
+      const elementsHiddenLabel = browser.i18n.getMessage('ACTIVITY_ELEMENTS_HIDDEN' as MsgKey) || 'elements hidden';
+      const domainText = isCss
+        ? `${entry.domain} \u2014 ${entry.count} ${elementsHiddenLabel}`
+        : entry.domain || entry.rulesetId;
+
       const row = h(
         'div',
         { class: 'activity__row', 'data-testid': `activity-row-${i}` },
         h('span', { class: 'activity__time' }, formatTime(entry.time)),
         iconEl,
-        h('span', { class: 'activity__domain' }, entry.domain || entry.rulesetId),
+        h('span', { class: 'activity__domain' }, domainText),
         allowBtn,
         reportLink,
       );
@@ -141,5 +197,5 @@ export function createActivityDrawer(): HTMLElement {
     }
   }
 
-  return container;
+  return { drawer, open };
 }

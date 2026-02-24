@@ -1,4 +1,5 @@
 import { ALL } from '@selectors/google-search';
+import { createHideReporter } from '@shared/report-hidden';
 import { loadSettings } from '@shared/settings';
 import './style.css';
 
@@ -29,6 +30,8 @@ export default defineContentScript({
     const settings = await loadSettings();
     if (!settings.ai) return;
 
+    const reporter = createHideReporter('ai');
+
     // MutationObserver for dynamically loaded AI elements
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
@@ -38,6 +41,7 @@ export default defineContentScript({
             const targets = node.matches(selector) ? [node] : [...node.querySelectorAll(selector)];
             for (const target of targets) {
               (target as HTMLElement).style.display = 'none';
+              reporter.track(target as HTMLElement);
             }
           }
         }

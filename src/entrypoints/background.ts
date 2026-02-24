@@ -1,4 +1,4 @@
-import { getTabCount, initBadge } from '@background/badge';
+import { addCssHiddenCount, getTabCount, initBadge } from '@background/badge';
 import { initPause, pause, unpause } from '@background/pause';
 import { initRules } from '@background/rules';
 import type { Message, MessageResponse } from '@shared/messaging';
@@ -24,10 +24,10 @@ export default defineBackground(async () => {
   // Message handler for Side Panel / Sidebar
   browser.runtime.onMessage.addListener(((
     msg: Message,
-    _sender: unknown,
+    sender: { tab?: { id?: number } },
     sendResponse: (resp: MessageResponse) => void,
   ) => {
-    handleMessage(msg).then(sendResponse);
+    handleMessage(msg, sender).then(sendResponse);
     return true; // async response
   }) as Parameters<typeof browser.runtime.onMessage.addListener>[0]);
 
@@ -43,7 +43,7 @@ export default defineBackground(async () => {
   });
 });
 
-async function handleMessage(msg: Message): Promise<MessageResponse> {
+async function handleMessage(msg: Message, sender: { tab?: { id?: number } }): Promise<MessageResponse> {
   switch (msg.type) {
     case 'GET_TAB_COUNT':
       return { type: 'TAB_COUNT', count: getTabCount(msg.tabId) };
@@ -66,5 +66,13 @@ async function handleMessage(msg: Message): Promise<MessageResponse> {
     case 'UNWHITELIST_SITE':
       await removeSiteWhitelist(msg.domain);
       return { type: 'OK' };
+
+    case 'REPORT_CSS_HIDDEN': {
+      const tabId = sender.tab?.id;
+      if (tabId != null) {
+        addCssHiddenCount(tabId, msg.count, msg.domain, msg.category, tabActivity);
+      }
+      return { type: 'OK' };
+    }
   }
 }

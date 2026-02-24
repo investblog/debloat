@@ -15,6 +15,7 @@ import { browser } from 'wxt/browser';
 const actionApi = browser.action ?? browser.browserAction;
 
 const tabCounts = new Map<number, number>();
+const tabCssCounts = new Map<number, number>();
 const flashTimers = new Map<number, ReturnType<typeof setTimeout>>();
 
 /** Reverse map: rulesetId → CategoryId */
@@ -30,6 +31,7 @@ export function initBadge(tabActivity: Map<number, ActivityEntry[]>): void {
   browser.webNavigation.onCommitted.addListener((details) => {
     if (details.frameId !== 0) return;
     tabCounts.set(details.tabId, 0);
+    tabCssCounts.set(details.tabId, 0);
     tabActivity.delete(details.tabId);
     refreshBadge(details.tabId, tabActivity);
   });
@@ -43,6 +45,7 @@ export function initBadge(tabActivity: Map<number, ActivityEntry[]>): void {
   // Cleanup on tab close
   browser.tabs.onRemoved.addListener((tabId) => {
     tabCounts.delete(tabId);
+    tabCssCounts.delete(tabId);
     tabActivity.delete(tabId);
     const timer = flashTimers.get(tabId);
     if (timer) {
@@ -53,7 +56,37 @@ export function initBadge(tabActivity: Map<number, ActivityEntry[]>): void {
 }
 
 export function getTabCount(tabId: number): number {
-  return tabCounts.get(tabId) ?? 0;
+  return (tabCounts.get(tabId) ?? 0) + (tabCssCounts.get(tabId) ?? 0);
+}
+
+/** Accumulate CSS-hidden element count and add activity entry */
+export function addCssHiddenCount(
+  tabId: number,
+  count: number,
+  domain: string,
+  category: CategoryId,
+  tabActivity: Map<number, ActivityEntry[]>,
+): void {
+  const prev = tabCssCounts.get(tabId) ?? 0;
+  tabCssCounts.set(tabId, prev + count);
+
+  // Add activity entry
+  const existing = tabActivity.get(tabId) ?? [];
+  existing.push({
+    time: Date.now(),
+    domain,
+    category,
+    rulesetId: `css:${category}`,
+    count,
+  });
+  if (existing.length > ACTIVITY_BUFFER_SIZE) {
+    existing.splice(0, existing.length - ACTIVITY_BUFFER_SIZE);
+  }
+  tabActivity.set(tabId, existing);
+
+  // Update badge immediately
+  flashBadge(tabId);
+  refreshBadgeImmediate(tabId);
 }
 
 /** Show paused state on all tabs */
@@ -97,6 +130,22 @@ function flashBadge(tabId: number): void {
     }
   }, BADGE_FLASH_MS);
   flashTimers.set(tabId, timer);
+}
+
+/** Quick badge text update using cached counts (no dNR re-fetch) */
+async function refreshBadgeImmediate(tabId: number): Promise<void> {
+  try {
+    const settings = await loadSettings();
+    if (settings.pauseUntil && settings.pauseUntil > Date.now()) return;
+
+    const merged = (tabCounts.get(tabId) ?? 0) + (tabCssCounts.get(tabId) ?? 0);
+    const text = merged === 0 ? '' : merged > 999 ? '1k+' : String(merged);
+    await actionApi.setBadgeText({ text, tabId });
+    const title = merged > 0 ? `Debloat: ${merged} blocked` : 'Debloat';
+    await actionApi.setTitle({ title, tabId });
+  } catch {
+    // Tab may have been closed
+  }
 }
 
 async function refreshBadge(tabId: number, tabActivity: Map<number, ActivityEntry[]>): Promise<void> {
@@ -152,12 +201,13 @@ async function refreshBadge(tabId: number, tabActivity: Map<number, ActivityEntr
       tabActivity.set(tabId, existing);
     }
 
-    const text = count === 0 ? '' : count > 999 ? '1k+' : String(count);
+    const merged = count + (tabCssCounts.get(tabId) ?? 0);
+    const text = merged === 0 ? '' : merged > 999 ? '1k+' : String(merged);
     await actionApi.setBadgeText({ text, tabId });
     await actionApi.setBadgeBackgroundColor({ color: BADGE_COLOR, tabId });
 
     // Tooltip
-    const title = count > 0 ? `Debloat: ${count} blocked` : 'Debloat';
+    const title = merged > 0 ? `Debloat: ${merged} blocked` : 'Debloat';
     await actionApi.setTitle({ title, tabId });
 
     // Flash on new blocks

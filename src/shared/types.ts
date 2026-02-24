@@ -43,4 +43,6 @@ export interface ActivityEntry {
   domain: string;
   category: CategoryId;
   rulesetId: string;
+  /** CSS/DOM entries carry element count; absent for dNR */
+  count?: number;
 }

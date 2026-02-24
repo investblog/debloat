@@ -102,5 +102,9 @@
   "WELCOME_CTA_FALLBACK": {
     "message": "Нажмите на иконку Debloat на панели инструментов",
     "description": "Welcome page CTA fallback text when sidePanel API is unavailable"
+  },
+  "ACTIVITY_ELEMENTS_HIDDEN": {
+    "message": "элем. скрыто",
+    "description": "Activity drawer label for CSS/DOM hidden element count"
   }
 }
