@@ -33,6 +33,10 @@ npm-debug.log*
 test-screenshots/
 *.tsbuildinfo
 
+# Store assets (large binaries)
+store-assets/
+temp/
+
 # Claude Code
 .claude/
 CLAUDE.md
