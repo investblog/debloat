@@ -33,9 +33,15 @@ export function createCategoryCard({
       checked: subEnabled && masterEnabled,
       onChange: (val) => onToggleSub(sub.id, val),
       size: 'small',
+      testId: `sub-toggle-${sub.id}`,
     });
 
-    const subRow = h('div', { class: 'card__sub-row' }, subToggle, h('span', { class: 'card__sub-label' }, sub.label));
+    const subRow = h(
+      'div',
+      { class: 'card__sub-row', 'data-testid': `sub-row-${sub.id}` },
+      subToggle,
+      h('span', { class: 'card__sub-label' }, sub.label),
+    );
     subContainer.append(subRow);
   }
 
@@ -48,6 +54,7 @@ export function createCategoryCard({
     'button',
     {
       class: 'card__expand',
+      'data-testid': `expand-${category.id}`,
       onClick: () => {
         expanded = !expanded;
         subContainer.style.display = expanded ? 'block' : 'none';
@@ -62,6 +69,7 @@ export function createCategoryCard({
   const masterToggle = createToggle({
     checked: masterEnabled,
     onChange: (val) => onToggleCategory(category.id, val),
+    testId: `master-toggle-${category.id}`,
   });
 
   const coverageLine = buildCoverageLine(counts, browser);
@@ -71,7 +79,7 @@ export function createCategoryCard({
 
   const card = h(
     'div',
-    { class: `card ${masterEnabled ? '' : 'card--off'}` },
+    { class: `card ${masterEnabled ? '' : 'card--off'}`, 'data-testid': `category-${category.id}` },
     h(
       'div',
       { class: 'card__header' },
@@ -86,7 +94,7 @@ export function createCategoryCard({
           masterToggle,
         ),
         h('div', { class: 'card__desc' }, chrome.i18n.getMessage(category.descriptionKey) || ''),
-        h('div', { class: 'card__coverage' }, coverageLine),
+        h('div', { class: 'card__coverage', 'data-testid': `coverage-${category.id}` }, coverageLine),
       ),
     ),
     visibleSubs.length > 0 ? expandBtn : h('span'),

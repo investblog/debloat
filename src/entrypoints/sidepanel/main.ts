@@ -27,6 +27,7 @@ async function render() {
     'button',
     {
       class: 'theme-toggle',
+      'data-testid': 'theme-toggle',
       title: chrome.i18n.getMessage('THEME_TOGGLE_TOOLTIP') || 'Toggle theme',
       onClick: async () => {
         currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -47,6 +48,7 @@ async function render() {
 
   const siteBtn = h('button', {
     class: 'btn-icon',
+    'data-testid': 'whitelist-site',
     title: chrome.i18n.getMessage('WHITELIST_SITE_TOOLTIP') || 'Allow on this site',
     onClick: () => {
       // Flash success feedback immediately
@@ -78,11 +80,16 @@ async function render() {
 
   const header = h(
     'header',
-    { class: 'header' },
+    { class: 'header', 'data-testid': 'header' },
     h(
       'div',
       { class: 'header__top' },
-      h('div', { class: 'header__brand' }, headerIcon, h('span', { class: 'header__title' }, 'Debloat')),
+      h(
+        'div',
+        { class: 'header__brand' },
+        headerIcon,
+        h('span', { class: 'header__title', 'data-testid': 'header-title' }, 'Debloat'),
+      ),
       h('div', { class: 'header__actions' }, siteBtn, themeBtn),
     ),
     h('div', { class: 'header__subtitle' }, 'Your browser, decluttered'),
@@ -97,7 +104,7 @@ async function render() {
     custom: 'Custom',
   };
 
-  const presetBar = h('div', { class: 'presets' });
+  const presetBar = h('div', { class: 'presets', 'data-testid': 'preset-selector' });
   const presetPills: Record<string, HTMLElement> = {};
 
   for (const id of presetIds) {
@@ -105,6 +112,7 @@ async function render() {
       'button',
       {
         class: `preset${id === settings.preset ? ' preset--active' : ''}`,
+        'data-testid': `preset-${id}`,
         type: 'button',
         onClick: async () => {
           const values = PRESETS[id];
@@ -135,6 +143,7 @@ async function render() {
   // ── Pause ──
   const pauseBtn = h('button', {
     class: 'quick__btn',
+    'data-testid': 'pause-1h',
     onClick: async () => {
       if (settings.pauseUntil && settings.pauseUntil > Date.now()) {
         await sendMessage({ type: 'UNPAUSE' });
@@ -156,10 +165,10 @@ async function render() {
     pauseBtn.append(icon('pause', 14), ' Pause (1h)');
   }
 
-  const quickBar = h('div', { class: 'quick' }, pauseBtn);
+  const quickBar = h('div', { class: 'quick', 'data-testid': 'quick-controls' }, pauseBtn);
 
   // ── Category cards ──
-  const cardsContainer = h('div', { class: 'cards' });
+  const cardsContainer = h('div', { class: 'cards', 'data-testid': 'categories' });
 
   function renderCards() {
     cardsContainer.textContent = '';
@@ -205,6 +214,7 @@ async function render() {
     'button',
     {
       class: 'footer__btn',
+      'data-testid': 'enable-all',
       onClick: async () => {
         settings = await patchSettings({ ...PRESETS.aggressive, preset: 'aggressive' as PresetId, subToggles: {} });
         presetSelect.value = 'aggressive';
@@ -218,6 +228,7 @@ async function render() {
     'button',
     {
       class: 'footer__btn footer__btn--danger',
+      'data-testid': 'disable-all',
       onClick: async () => {
         settings = await patchSettings({
           ai: false,

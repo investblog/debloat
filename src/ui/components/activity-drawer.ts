@@ -15,19 +15,30 @@ function formatTime(ts: number): string {
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 }
 
+function buildIssueLink(entry: ActivityEntry): string {
+  const body = new URLSearchParams({
+    domain: entry.domain,
+    rulesetId: entry.rulesetId,
+    browser: navigator.userAgent,
+    extensionVersion: chrome.runtime.getManifest().version,
+  });
+  return `https://github.com/investblog/debloat/issues/new?${body.toString()}`;
+}
+
 export function createActivityDrawer(): HTMLElement {
   let expanded = false;
   let pollTimer: ReturnType<typeof setInterval> | null = null;
 
   const chevron = h('span', { class: 'activity__chevron' });
   chevron.append(icon('chevron-down', 12));
-  const list = h('div', { class: 'activity__list' });
+  const list = h('div', { class: 'activity__list', 'data-testid': 'activity-list' });
   list.style.display = 'none';
 
   const clearBtn = h(
     'button',
     {
       class: 'activity__clear',
+      'data-testid': 'activity-clear',
       onClick: () => {
         list.textContent = '';
       },
@@ -40,6 +51,7 @@ export function createActivityDrawer(): HTMLElement {
     'button',
     {
       class: 'activity__header',
+      'data-testid': 'activity-toggle',
       onClick: () => {
         expanded = !expanded;
         list.style.display = expanded ? 'flex' : 'none';
@@ -81,7 +93,6 @@ export function createActivityDrawer(): HTMLElement {
       return;
     }
 
-    // Show newest first
     for (let i = entries.length - 1; i >= 0; i--) {
       const entry = entries[i];
       const iconName = CATEGORY_ICON_NAMES[entry.category] ?? 'shield-check';
@@ -92,6 +103,7 @@ export function createActivityDrawer(): HTMLElement {
         'button',
         {
           class: 'activity__allow',
+          'data-testid': `activity-allow-${i}`,
           onClick: async () => {
             await sendMessage({
               type: 'WHITELIST_SITE',
@@ -105,13 +117,26 @@ export function createActivityDrawer(): HTMLElement {
         'Allow on site',
       );
 
+      const report = h(
+        'a',
+        {
+          class: 'activity__report',
+          'data-testid': `activity-report-${i}`,
+          href: buildIssueLink(entry),
+          target: '_blank',
+        },
+        'Report broken',
+      );
+
       const row = h(
         'div',
-        { class: 'activity__row' },
+        { class: 'activity__row', 'data-testid': `activity-row-${i}` },
         h('span', { class: 'activity__time' }, formatTime(entry.time)),
         iconEl,
         h('span', { class: 'activity__domain' }, entry.domain || entry.rulesetId),
+        h('span', { class: 'activity__ruleset' }, entry.rulesetId),
         allowBtn,
+        report,
       );
       list.append(row);
     }

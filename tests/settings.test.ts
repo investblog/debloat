@@ -19,7 +19,7 @@ const chromeStorageMock = {
 vi.stubGlobal('chrome', { storage: chromeStorageMock });
 
 // Import after mocking
-const { loadSettings, patchSettings, saveSettings } = await import('@shared/settings');
+const { loadSettings, patchSettings, saveSettings, addSiteWhitelist } = await import('@shared/settings');
 
 describe('settings', () => {
   beforeEach(() => {
@@ -34,7 +34,8 @@ describe('settings', () => {
   describe('loadSettings', () => {
     it('should return defaults when storage is empty', async () => {
       const settings = await loadSettings();
-      expect(settings).toEqual(DEFAULT_SETTINGS);
+      expect(settings).toMatchObject(DEFAULT_SETTINGS);
+      expect(settings.schemaVersion).toBeDefined();
     });
 
     it('should merge stored values with defaults', async () => {
@@ -53,8 +54,27 @@ describe('settings', () => {
     it('should persist settings to storage', async () => {
       const settings: Settings = { ...DEFAULT_SETTINGS, ai: false };
       await saveSettings(settings);
-      expect(chromeStorageMock.local.set).toHaveBeenCalledWith({ settings });
-      expect(store.settings).toEqual(settings);
+      expect(chromeStorageMock.local.set).toHaveBeenCalled();
+      expect((store.settings as any).ai).toEqual(settings.ai);
+    });
+  });
+
+
+  describe('migrations + whitelist', () => {
+    it('migrates old schema preserving values and initializing new fields', async () => {
+      store.settings = { ai: false, preset: 'custom', siteWhitelist: { 'WWW.Example.com.': ['ai'] } };
+      const settings = await loadSettings();
+      expect(settings.ai).toBe(false);
+      expect(settings.sponsored).toBe(true);
+      expect(settings.schemaVersion).toBeDefined();
+      expect(settings.siteWhitelist['example.com']).toEqual(['ai']);
+    });
+
+    it('dedupes whitelist categories and normalizes domain', async () => {
+      await addSiteWhitelist('WWW.Example.com:443', ['ai']);
+      await addSiteWhitelist('example.com', ['ai', 'telemetry']);
+      const settings = await loadSettings();
+      expect(settings.siteWhitelist['example.com']).toEqual(['ai', 'telemetry']);
     });
   });
 

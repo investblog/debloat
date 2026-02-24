@@ -22,6 +22,7 @@ export interface Category {
 }
 
 export interface Settings {
+  schemaVersion?: number;
   /** Master toggles per category */
   ai: boolean;
   sponsored: boolean;

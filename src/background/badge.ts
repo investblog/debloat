@@ -3,6 +3,12 @@ import type { ActivityEntry, CategoryId } from '@shared/types';
 
 const tabCounts = new Map<number, number>();
 
+export function formatCount(count: number): string {
+  if (count <= 0) return '';
+  if (count > 999) return '1k+';
+  return String(count);
+}
+
 /** Reverse map: rulesetId → CategoryId */
 const rulesetToCategory = new Map<string, CategoryId>();
 for (const [category, rulesetIds] of Object.entries(CATEGORY_RULESETS)) {
@@ -80,7 +86,7 @@ async function refreshBadge(tabId: number, tabActivity: Map<number, ActivityEntr
     }
 
     await chrome.action.setBadgeText({
-      text: count === 0 ? '' : count > 999 ? '1k+' : String(count),
+      text: formatCount(count),
       tabId,
     });
     await chrome.action.setBadgeBackgroundColor({ color: BADGE_COLOR, tabId });
