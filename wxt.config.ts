@@ -44,7 +44,7 @@ export default defineConfig({
       browser_specific_settings: {
         gecko: {
           id: 'debloat@debloat.click',
-          strict_min_version: '109.0',
+          strict_min_version: '142.0',
         },
       },
     }),
