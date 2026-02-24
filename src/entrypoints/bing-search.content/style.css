@@ -19,7 +19,9 @@ html:not([data-debloat-allow-ai]) .qna_tlgacont {
 /* Copilot chat / follow-up composer */
 html:not([data-debloat-allow-ai]) #b_copilot_search,
 html:not([data-debloat-allow-ai]) #b_copilot_search_container,
-html:not([data-debloat-allow-ai]) #b_bop_pin_placeholder {
+html:not([data-debloat-allow-ai]) #b_bop_pin_placeholder,
+html:not([data-debloat-allow-ai]) .b_copilot_composer,
+html:not([data-debloat-allow-ai]) .b_copilot_send {
   display: none !important;
 }
 

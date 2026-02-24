@@ -10,7 +10,13 @@ export const COPILOT_ANSWER = ['#copans_container', '#b_genserp_container'];
 export const QNA_ANSWER = ['.qna_tlgacont'];
 
 /** Copilot chat / follow-up composer on SERP */
-export const COPILOT_CHAT = ['#b_copilot_search', '#b_copilot_search_container', '#b_bop_pin_placeholder'];
+export const COPILOT_CHAT = [
+  '#b_copilot_search',
+  '#b_copilot_search_container',
+  '#b_bop_pin_placeholder',
+  '.b_copilot_composer',
+  '.b_copilot_send',
+];
 
 /** Copilot tab in search navigation */
 export const COPILOT_NAV = ['#b-scopeListItem-copilotsearch'];
