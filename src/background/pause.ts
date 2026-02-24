@@ -1,3 +1,4 @@
+import { clearPausedBadge, showPausedBadge } from '@background/badge';
 import { PAUSE_DURATION_MS } from '@shared/constants';
 import { loadSettings, patchSettings } from '@shared/settings';
 
@@ -19,6 +20,7 @@ async function restorePause(): Promise<void> {
   }
 
   await disableAllRulesets();
+  await showPausedBadge();
   pauseTimer = setTimeout(unpause, remaining);
 }
 
@@ -26,6 +28,7 @@ export async function pause(durationMs = PAUSE_DURATION_MS): Promise<void> {
   const pauseUntil = Date.now() + durationMs;
   await patchSettings({ pauseUntil });
   await disableAllRulesets();
+  await showPausedBadge();
 
   if (pauseTimer) clearTimeout(pauseTimer);
   pauseTimer = setTimeout(unpause, durationMs);
@@ -37,6 +40,7 @@ export async function unpause(): Promise<void> {
     pauseTimer = null;
   }
   await patchSettings({ pauseUntil: null });
+  await clearPausedBadge();
   // Rules will re-apply via storage.onChanged listener in rules.ts
 }
 
