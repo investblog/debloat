@@ -46,36 +46,51 @@ async function render() {
   // ── Site whitelist button (header icon) ──
   const siteIconEl = h('span', { class: 'btn-icon__inner' });
   siteIconEl.append(icon('web-plus', 16));
-
-  let siteFlashTimer: ReturnType<typeof setTimeout> | null = null;
+  let siteWhitelisted = false;
 
   const siteBtn = h('button', {
     class: 'btn-icon',
     'data-testid': 'whitelist-site',
     title: browser.i18n.getMessage('WHITELIST_SITE_TOOLTIP' as MsgKey) || 'Allow on this site',
     onClick: () => {
-      // Flash success feedback immediately
-      if (siteFlashTimer) clearTimeout(siteFlashTimer);
-      siteIconEl.textContent = '';
-      siteIconEl.append(icon('check-circle', 16));
-      siteBtn.classList.add('btn-icon--ok');
-      siteFlashTimer = setTimeout(() => {
+      if (siteWhitelisted) {
+        // Revert to default
         siteIconEl.textContent = '';
         siteIconEl.append(icon('web-plus', 16));
         siteBtn.classList.remove('btn-icon--ok');
-        siteFlashTimer = null;
-      }, 2000);
-
-      // Fire-and-forget whitelist
-      browser.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
-        if (!tab?.url) return;
-        const domain = new URL(tab.url).hostname;
-        const allCats: CategoryId[] = ['ai', 'sponsored', 'shopping', 'telemetry', 'annoyances'];
-        sendMessage({ type: 'WHITELIST_SITE', domain, categories: allCats });
-      });
+        siteWhitelisted = false;
+        browser.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
+          if (!tab?.url) return;
+          sendMessage({ type: 'UNWHITELIST_SITE', domain: new URL(tab.url).hostname });
+        });
+      } else {
+        // Whitelist — stay green
+        siteIconEl.textContent = '';
+        siteIconEl.append(icon('check-circle', 16));
+        siteBtn.classList.add('btn-icon--ok');
+        siteWhitelisted = true;
+        browser.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
+          if (!tab?.url) return;
+          const domain = new URL(tab.url).hostname;
+          const allCats: CategoryId[] = ['ai', 'sponsored', 'shopping', 'telemetry', 'annoyances'];
+          sendMessage({ type: 'WHITELIST_SITE', domain, categories: allCats });
+        });
+      }
     },
   });
   siteBtn.append(siteIconEl);
+
+  // ── Activity drawer (overlay) ──
+  const activity = createActivityDrawer();
+
+  // ── Logs icon button (header) ──
+  const logsBtn = h('button', {
+    class: 'btn-icon',
+    'data-testid': 'activity-log',
+    title: 'Activity log',
+    onClick: () => activity.open(),
+  });
+  logsBtn.append(h('span', { class: 'btn-icon__inner' }, icon('console-log', 16)));
 
   // ── Header ──
   const headerIcon = h('span', { class: 'header__icon' });
@@ -93,7 +108,7 @@ async function render() {
         headerIcon,
         h('span', { class: 'header__title', 'data-testid': 'header-title' }, 'Debloat'),
       ),
-      h('div', { class: 'header__actions' }, siteBtn, themeBtn),
+      h('div', { class: 'header__actions' }, logsBtn, siteBtn, themeBtn),
     ),
     h('div', { class: 'header__subtitle' }, 'Your browser, decluttered'),
   );
@@ -198,9 +213,6 @@ async function render() {
   }
   renderCards();
 
-  // ── Activity drawer ──
-  const activityDrawer = createActivityDrawer();
-
   // ── Review link ──
   const storeInfo = STORE_URLS[currentBrowser];
   const reviewLink = storeInfo
@@ -248,14 +260,13 @@ async function render() {
     'Disable All',
   );
 
-  // Activity & review go inside scrollable area
-  cardsContainer.append(activityDrawer);
+  // Review link goes inside scrollable area
   if (reviewLink) cardsContainer.append(reviewLink);
 
   const footer = h('footer', { class: 'footer' }, h('div', { class: 'footer__actions' }, enableAllBtn, disableAllBtn));
 
   // ── Assemble ──
-  app.append(header, presetBar, quickBar, cardsContainer, footer);
+  app.append(header, presetBar, quickBar, cardsContainer, footer, activity.drawer);
 }
 
 render();

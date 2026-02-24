@@ -13,6 +13,10 @@ const CATEGORY_ICON_NAMES: Record<CategoryId, string> = Object.fromEntries(
   CATEGORIES.map((c) => [c.id, c.icon]),
 ) as Record<CategoryId, string>;
 
+const CATEGORY_LABEL_KEYS: Record<CategoryId, string> = Object.fromEntries(
+  CATEGORIES.map((c) => [c.id, c.labelKey]),
+) as Record<CategoryId, string>;
+
 function formatTime(ts: number): string {
   const d = new Date(ts);
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
@@ -184,9 +188,14 @@ export function createActivityDrawer(): { drawer: HTMLElement; open: () => void 
         ? `${entry.domain} \u2014 ${entry.count} ${elementsHiddenLabel}`
         : entry.domain || entry.rulesetId;
 
+      const categoryLabel = browser.i18n.getMessage(CATEGORY_LABEL_KEYS[entry.category] as MsgKey) || entry.category;
+      const tooltip = isCss
+        ? `${categoryLabel}\n${entry.domain} \u2014 ${entry.count} ${elementsHiddenLabel}\n${formatTime(entry.time)}`
+        : `${categoryLabel}\n${entry.domain}\nRuleset: ${entry.rulesetId}\n${formatTime(entry.time)}`;
+
       const row = h(
         'div',
-        { class: 'activity__row', 'data-testid': `activity-row-${i}` },
+        { class: 'activity__row', 'data-testid': `activity-row-${i}`, title: tooltip },
         h('span', { class: 'activity__time' }, formatTime(entry.time)),
         iconEl,
         h('span', { class: 'activity__domain' }, domainText),
