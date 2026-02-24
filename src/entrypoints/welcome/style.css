@@ -87,13 +87,16 @@ body {
 /* ── Feature cards ── */
 
 .welcome__features {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--gap);
   margin-bottom: 40px;
 }
 
 .welcome__feature-card {
+  flex: 0 1 calc((100% - 2 * var(--gap)) / 3);
+  min-width: 200px;
   background: var(--color-surface);
   border-radius: var(--radius);
   padding: 16px;
@@ -212,8 +215,8 @@ body {
 /* ── Responsive ── */
 
 @media (max-width: 540px) {
-  .welcome__features {
-    grid-template-columns: 1fr;
+  .welcome__feature-card {
+    flex: 1 1 100%;
   }
 
   .welcome__steps {
