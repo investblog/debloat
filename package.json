@@ -1,6 +1,6 @@
 {
   "name": "debloat",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Hide AI features, block sponsored content, stop telemetry. One click, no admin rights.",
   "type": "module",
   "scripts": {
