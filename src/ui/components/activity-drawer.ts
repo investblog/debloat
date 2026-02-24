@@ -16,19 +16,28 @@ function formatTime(ts: number): string {
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 }
 
+function buildIssueLink(entry: ActivityEntry): string {
+  const params = new URLSearchParams({
+    title: `[Report] ${entry.domain} — ${entry.rulesetId}`,
+    body: `**Domain:** ${entry.domain}\n**Ruleset:** ${entry.rulesetId}\n**Category:** ${entry.category}\n\n_Describe the issue:_`,
+  });
+  return `https://github.com/investblog/debloat/issues/new?${params.toString()}`;
+}
+
 export function createActivityDrawer(): HTMLElement {
   let expanded = false;
   let pollTimer: ReturnType<typeof setInterval> | null = null;
 
   const chevron = h('span', { class: 'activity__chevron' });
   chevron.append(icon('chevron-down', 12));
-  const list = h('div', { class: 'activity__list' });
+  const list = h('div', { class: 'activity__list', 'data-testid': 'activity-list' });
   list.style.display = 'none';
 
   const clearBtn = h(
     'button',
     {
       class: 'activity__clear',
+      'data-testid': 'activity-clear',
       onClick: () => {
         list.textContent = '';
       },
@@ -41,6 +50,7 @@ export function createActivityDrawer(): HTMLElement {
     'button',
     {
       class: 'activity__header',
+      'data-testid': 'activity-toggle',
       onClick: () => {
         expanded = !expanded;
         list.style.display = expanded ? 'flex' : 'none';
@@ -93,6 +103,7 @@ export function createActivityDrawer(): HTMLElement {
         'button',
         {
           class: 'activity__allow',
+          'data-testid': `activity-allow-${i}`,
           onClick: async () => {
             await sendMessage({
               type: 'WHITELIST_SITE',
@@ -106,13 +117,25 @@ export function createActivityDrawer(): HTMLElement {
         'Allow on site',
       );
 
+      const reportLink = h(
+        'a',
+        {
+          class: 'activity__report',
+          'data-testid': `activity-report-${i}`,
+          href: buildIssueLink(entry),
+          target: '_blank',
+        },
+        'Report',
+      );
+
       const row = h(
         'div',
-        { class: 'activity__row' },
+        { class: 'activity__row', 'data-testid': `activity-row-${i}` },
         h('span', { class: 'activity__time' }, formatTime(entry.time)),
         iconEl,
         h('span', { class: 'activity__domain' }, entry.domain || entry.rulesetId),
         allowBtn,
+        reportLink,
       );
       list.append(row);
     }

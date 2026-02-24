@@ -4,12 +4,14 @@ export interface ToggleOptions {
   checked: boolean;
   onChange: (checked: boolean) => void;
   size?: 'normal' | 'small';
+  testId?: string;
 }
 
-export function createToggle({ checked, onChange, size = 'normal' }: ToggleOptions): HTMLElement {
+export function createToggle({ checked, onChange, size = 'normal', testId }: ToggleOptions): HTMLElement {
   const input = h('input', {
     type: 'checkbox',
     class: 'toggle__input',
+    ...(testId && { 'data-testid': testId }),
     ...(checked && { checked: true }),
     onChange: (e: Event) => {
       const target = e.target as HTMLInputElement;

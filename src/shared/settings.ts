@@ -1,6 +1,7 @@
 import { browser } from 'wxt/browser';
 import { DEFAULT_SETTINGS } from './constants';
 import type { CategoryId, Settings } from './types';
+import { normalizeHost } from './url';
 
 const STORAGE_KEY = 'settings';
 
@@ -38,12 +39,15 @@ export async function toggleSubToggle(id: string, enabled: boolean): Promise<Set
 
 export async function addSiteWhitelist(domain: string, categories: CategoryId[]): Promise<void> {
   const current = await loadSettings();
-  current.siteWhitelist[domain] = categories;
+  const host = normalizeHost(domain);
+  const existing = new Set(current.siteWhitelist[host] ?? []);
+  for (const c of categories) existing.add(c);
+  current.siteWhitelist[host] = [...existing] as CategoryId[];
   await saveSettings(current);
 }
 
 export async function removeSiteWhitelist(domain: string): Promise<void> {
   const current = await loadSettings();
-  delete current.siteWhitelist[domain];
+  delete current.siteWhitelist[normalizeHost(domain)];
   await saveSettings(current);
 }

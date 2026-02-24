@@ -564,3 +564,16 @@ body {
   opacity: 0.5;
   cursor: default;
 }
+
+.activity__report {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  padding: 1px 4px;
+  transition: color var(--transition);
+}
+
+.activity__report:hover {
+  color: var(--color-danger);
+}
