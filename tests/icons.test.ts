@@ -54,6 +54,7 @@ describe('icon()', () => {
       'browser-chrome',
       'browser-edge',
       'browser-firefox',
+      'console-log',
     ];
 
     for (const name of knownNames) {
@@ -61,5 +62,15 @@ describe('icon()', () => {
       expect(el.tagName.toLowerCase(), `icon("${name}") should be svg`).toBe('svg');
       expect(el.querySelector('path'), `icon("${name}") should have a path`).not.toBeNull();
     }
+  });
+
+  it('uses custom viewBox for console-log icon', () => {
+    const el = icon('console-log');
+    expect(el.getAttribute('viewBox')).toBe('0 0 23 20');
+  });
+
+  it('uses default viewBox for standard icons', () => {
+    const el = icon('shield-check');
+    expect(el.getAttribute('viewBox')).toBe('0 0 20 20');
   });
 });

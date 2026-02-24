@@ -1,19 +1,20 @@
 /*
  * Google Search AI element hiding — injected at document_start.
  * Selectors may break when Google updates its UI.
- * Keep this file minimal — MutationObserver in index.ts handles dynamic elements.
+ * Rules scoped with html:not([data-debloat-allow-ai]) so the content script
+ * can disable hiding when the site is whitelisted.
  */
 
 /* AI Overview */
-#ai-overview-card,
-div[data-attrid="AIOverview"],
-div.M8OgIe,
-div[jsname="Cpkphb"] {
+html:not([data-debloat-allow-ai]) #ai-overview-card,
+html:not([data-debloat-allow-ai]) div[data-attrid="AIOverview"],
+html:not([data-debloat-allow-ai]) div.M8OgIe,
+html:not([data-debloat-allow-ai]) div[jsname="Cpkphb"] {
   display: none !important;
 }
 
 /* AI Mode button and results */
-a[href*="/search?udm=50"],
-div[data-udm="50"] {
+html:not([data-debloat-allow-ai]) a[href*="/search?udm=50"],
+html:not([data-debloat-allow-ai]) div[data-udm="50"] {
   display: none !important;
 }

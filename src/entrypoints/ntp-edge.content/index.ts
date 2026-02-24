@@ -2,6 +2,7 @@ import { COPILOT_DISCOVER, MSN_FEED, REWARDS, SHOPPING, SPONSORED_TILES } from '
 import { createHideReporter } from '@shared/report-hidden';
 import { loadSettings } from '@shared/settings';
 import type { CategoryId } from '@shared/types';
+import { normalizeHost } from '@shared/url';
 import './style.css';
 
 export default defineContentScript({
@@ -10,8 +11,19 @@ export default defineContentScript({
 
   async main() {
     const settings = await loadSettings();
+    const host = normalizeHost(location.hostname);
+    const whitelisted = settings.siteWhitelist[host] ?? [];
 
-    // Only proceed if at least one relevant category is enabled
+    // Set allow attributes for whitelisted or globally-disabled categories
+    // so the injected CSS rules are neutralized
+    const allCategories: CategoryId[] = ['sponsored', 'ai', 'shopping', 'annoyances'];
+    for (const cat of allCategories) {
+      if (!settings[cat] || whitelisted.includes(cat)) {
+        document.documentElement.setAttribute(`data-debloat-allow-${cat}`, '');
+      }
+    }
+
+    // Only proceed if at least one relevant category is enabled and not whitelisted
     if (!settings.sponsored && !settings.ai && !settings.annoyances && !settings.shopping) return;
 
     // Map selector groups to categories
@@ -22,7 +34,7 @@ export default defineContentScript({
       { selectors: REWARDS, category: 'annoyances', enabled: settings.annoyances },
     ];
 
-    const activeGroups = groups.filter((g) => g.enabled);
+    const activeGroups = groups.filter((g) => g.enabled && !whitelisted.includes(g.category));
     if (activeGroups.length === 0) return;
 
     // One reporter per active category

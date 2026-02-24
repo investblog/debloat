@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { ALL as BING_ALL } from '@selectors/bing-search';
 import { ALL as COPILOT_ALL } from '@selectors/edge-copilot';
 import { ALL as NTP_ALL } from '@selectors/edge-ntp';
 import { ALL as SHOPPING_ALL } from '@selectors/edge-shopping';
@@ -7,6 +8,7 @@ import { ALL as FIREFOX_ALL } from '@selectors/firefox-home';
 import { ALL as GOOGLE_ALL } from '@selectors/google-search';
 
 const selectorModules: Record<string, string[]> = {
+  'bing-search': BING_ALL,
   'google-search': GOOGLE_ALL,
   'edge-copilot': COPILOT_ALL,
   'edge-ntp': NTP_ALL,

@@ -166,7 +166,11 @@ export function createActivityDrawer(): { drawer: HTMLElement; open: () => void 
               categories: [entry.category],
             });
             allowBtn.textContent = '\u2713';
+            allowBtn.classList.add('activity__allow--done');
             allowBtn.disabled = true;
+            // Reload the active tab so the content script picks up the new whitelist
+            const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+            if (tab?.id) browser.tabs.reload(tab.id);
           },
         },
         'Allow on site',

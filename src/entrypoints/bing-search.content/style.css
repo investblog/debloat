@@ -1,0 +1,39 @@
+/*
+ * Bing Search Copilot hiding — injected at document_start.
+ * Selectors may break when Bing updates its UI.
+ * Rules scoped with html:not([data-debloat-allow-ai]) so the content script
+ * can disable hiding when the site is whitelisted.
+ */
+
+/* Copilot Search answer panel (AI summary) */
+html:not([data-debloat-allow-ai]) #copans_container,
+html:not([data-debloat-allow-ai]) #b_genserp_container {
+  display: none !important;
+}
+
+/* QnA AI-generated answer block */
+html:not([data-debloat-allow-ai]) .qna_tlgacont {
+  display: none !important;
+}
+
+/* Copilot chat / follow-up composer */
+html:not([data-debloat-allow-ai]) #b_copilot_search,
+html:not([data-debloat-allow-ai]) #b_copilot_search_container,
+html:not([data-debloat-allow-ai]) #b_bop_pin_placeholder {
+  display: none !important;
+}
+
+/* Copilot tab in search navigation */
+html:not([data-debloat-allow-ai]) #b-scopeListItem-copilotsearch {
+  display: none !important;
+}
+
+/* Sydney conversation */
+html:not([data-debloat-allow-ai]) #b_sydConvOuter {
+  display: none !important;
+}
+
+/* Trivia overlay */
+html:not([data-debloat-allow-ai]) #b_TriviaOverlay {
+  display: none !important;
+}

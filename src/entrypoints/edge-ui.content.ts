@@ -11,6 +11,7 @@ import { ALL as SHOPPING_SELECTORS } from '@selectors/edge-shopping';
 import { createHideReporter } from '@shared/report-hidden';
 import { loadSettings } from '@shared/settings';
 import type { CategoryId } from '@shared/types';
+import { normalizeHost } from '@shared/url';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -19,13 +20,15 @@ export default defineContentScript({
 
   async main() {
     const settings = await loadSettings();
+    const host = normalizeHost(location.hostname);
+    const whitelisted = settings.siteWhitelist[host] ?? [];
 
     const groups: { selectors: string[]; category: CategoryId; enabled: boolean }[] = [
       { selectors: COPILOT_SELECTORS, category: 'ai', enabled: settings.ai },
       { selectors: SHOPPING_SELECTORS, category: 'shopping', enabled: settings.shopping },
     ];
 
-    const activeGroups = groups.filter((g) => g.enabled);
+    const activeGroups = groups.filter((g) => g.enabled && !whitelisted.includes(g.category));
     if (activeGroups.length === 0) return;
 
     const reporters = new Map(activeGroups.map((g) => [g.category, createHideReporter(g.category)]));

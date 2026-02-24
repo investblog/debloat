@@ -1,38 +1,40 @@
 /*
  * Edge NTP (ntp.msn.com) bloat hiding — injected at document_start.
+ * Rules scoped with html:not([data-debloat-allow-CATEGORY]) so the content script
+ * can disable hiding when the site is whitelisted.
  */
 
-/* MSN news feed */
-#cib-feed-container,
-.feed-layout,
-[data-m*="NewsFeed"],
-.infopane-container {
+/* MSN news feed — sponsored */
+html:not([data-debloat-allow-sponsored]) #cib-feed-container,
+html:not([data-debloat-allow-sponsored]) .feed-layout,
+html:not([data-debloat-allow-sponsored]) [data-m*="NewsFeed"],
+html:not([data-debloat-allow-sponsored]) .infopane-container {
   display: none !important;
 }
 
-/* Copilot Discover */
-#copilot-discover,
-[data-m*="CopilotDiscover"],
-.copilot-card {
+/* Copilot Discover — ai */
+html:not([data-debloat-allow-ai]) #copilot-discover,
+html:not([data-debloat-allow-ai]) [data-m*="CopilotDiscover"],
+html:not([data-debloat-allow-ai]) .copilot-card {
   display: none !important;
 }
 
-/* Sponsored tiles */
-.sponsored-tile,
-[data-m*="SponsoredTile"],
-a[data-tag*="sponsored"] {
+/* Sponsored tiles — sponsored */
+html:not([data-debloat-allow-sponsored]) .sponsored-tile,
+html:not([data-debloat-allow-sponsored]) [data-m*="SponsoredTile"],
+html:not([data-debloat-allow-sponsored]) a[data-tag*="sponsored"] {
   display: none !important;
 }
 
-/* Shopping */
-[data-m*="Shopping"],
-.shopping-card {
+/* Shopping — shopping */
+html:not([data-debloat-allow-shopping]) [data-m*="Shopping"],
+html:not([data-debloat-allow-shopping]) .shopping-card {
   display: none !important;
 }
 
-/* Microsoft Rewards */
-#rewards-card,
-[data-m*="Rewards"],
-.rewards-container {
+/* Microsoft Rewards — annoyances */
+html:not([data-debloat-allow-annoyances]) #rewards-card,
+html:not([data-debloat-allow-annoyances]) [data-m*="Rewards"],
+html:not([data-debloat-allow-annoyances]) .rewards-container {
   display: none !important;
 }

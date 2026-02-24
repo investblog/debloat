@@ -148,4 +148,75 @@ describe('content script injection', () => {
       await page.close();
     }
   });
+
+  it('content script runs on Bing Search', async () => {
+    const page = await ctx.context.newPage();
+    try {
+      await page.goto('https://www.bing.com/search?q=test', {
+        waitUntil: 'domcontentloaded',
+        timeout: 15_000,
+      });
+
+      // Wait for Bing to finish rendering dynamic content
+      await page.waitForTimeout(2000);
+
+      // Audit all Copilot-related elements on the page
+      const audit = await page.evaluate(() => {
+        const selectors = [
+          '#b_copilot_search',
+          '#b_copilot_search_container',
+          '#b_bop_pin_placeholder',
+          '#b-scopeListItem-copilotsearch',
+          '#b_sydConvOuter',
+          '#b_TriviaOverlay',
+        ];
+        const results: Record<string, { present: boolean; visible: boolean }> = {};
+        for (const sel of selectors) {
+          const el = document.querySelector(sel);
+          if (!el) {
+            results[sel] = { present: false, visible: false };
+          } else {
+            const style = getComputedStyle(el);
+            results[sel] = { present: true, visible: style.display !== 'none' };
+          }
+        }
+        return results;
+      });
+
+      console.log('Bing Copilot element audit:', JSON.stringify(audit, null, 2));
+
+      // Any present Copilot elements must be hidden
+      for (const [selector, { present, visible }] of Object.entries(audit)) {
+        if (present) {
+          expect(visible, `${selector} should be hidden`).toBe(false);
+        }
+      }
+
+      // Also scan for unknown AI elements we might be missing
+      const unknownAI = await page.evaluate(() => {
+        const found: string[] = [];
+        // Check for elements with AI-related IDs/classes
+        const candidates = document.querySelectorAll('[id*="copilot"], [id*="sydConv"], [id*="deepdive"], [class*="copilot"], [class*="deepdive"], [class*="serpchat"]');
+        for (const el of candidates) {
+          // Skip elements inside already-hidden ancestors
+          const parent = el.closest('[style*="display: none"], [hidden]');
+          if (parent && parent !== el) continue;
+
+          const style = getComputedStyle(el);
+          if (style.display !== 'none') {
+            const id = el.id ? `#${el.id}` : '';
+            const cls = el.className ? `.${String(el.className).split(' ').join('.')}` : '';
+            found.push(`${el.tagName.toLowerCase()}${id}${cls}`);
+          }
+        }
+        return found;
+      });
+
+      if (unknownAI.length > 0) {
+        console.log('Visible AI-related elements not targeted:', unknownAI);
+      }
+    } finally {
+      await page.close();
+    }
+  });
 });
