@@ -109,6 +109,11 @@ export default defineConfig({
         };
       }
 
+      // Ensure all standard array keys exist (empty [] when unused)
+      if (!manifest.optional_permissions) {
+        manifest.optional_permissions = [];
+      }
+
       // Firefox MV2: no sidePanel API — enrich auto-generated sidebar_action
       if (wxt.config.browser === 'firefox') {
         const sa = manifest as unknown as Record<string, unknown>;
@@ -117,10 +122,7 @@ export default defineConfig({
           sidebar.open_at_install = false;
           sidebar.default_icon = { '16': 'icons/16.png', '32': 'icons/32.png' };
         }
-        // MV2 has no optional_host_permissions — convert to optional_permissions
-        if (!manifest.optional_permissions) {
-          manifest.optional_permissions = [];
-        }
+        // MV2 has no optional_host_permissions — merge into optional_permissions
         const ohp = (manifest as unknown as Record<string, unknown>).optional_host_permissions as string[] | undefined;
         if (ohp) {
           manifest.optional_permissions.push(...ohp);
