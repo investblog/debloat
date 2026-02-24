@@ -115,6 +115,7 @@ export default defineConfig({
       }
 
       // Firefox MV2: no sidePanel API — enrich auto-generated sidebar_action
+      // and add browser_action for toolbar icon
       if (wxt.config.browser === 'firefox') {
         const sa = manifest as unknown as Record<string, unknown>;
         if (sa.sidebar_action && typeof sa.sidebar_action === 'object') {
@@ -122,6 +123,12 @@ export default defineConfig({
           sidebar.open_at_install = false;
           sidebar.default_icon = { '16': 'icons/16.png', '32': 'icons/32.png' };
         }
+        // Toolbar button — opens sidepanel as popup on click
+        (manifest as unknown as Record<string, unknown>).browser_action = {
+          default_icon: { '16': 'icons/16.png', '32': 'icons/32.png', '48': 'icons/48.png' },
+          default_popup: 'sidepanel.html',
+          default_title: 'Debloat',
+        };
         // MV2 has no optional_host_permissions — merge into optional_permissions
         const ohp = (manifest as unknown as Record<string, unknown>).optional_host_permissions as string[] | undefined;
         if (ohp) {
