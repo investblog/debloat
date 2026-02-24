@@ -2,6 +2,7 @@ import { detectBrowser } from '@background/browser';
 import { CATEGORY_RULESETS } from '@shared/constants';
 import { loadSettings } from '@shared/settings';
 import type { CategoryId, Settings } from '@shared/types';
+import { browser } from 'wxt/browser';
 
 const EDGE_UI_SCRIPT_ID = 'debloat-edge-ui';
 const AI_APIS_SCRIPT_ID = 'debloat-ai-apis';
@@ -12,7 +13,7 @@ export function initRules(): void {
   applyDynamicScripts();
 
   // React to storage changes from Side Panel
-  chrome.storage.onChanged.addListener((changes, area) => {
+  browser.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local') return;
     if ('settings' in changes) {
       applyAllRulesets();
@@ -33,7 +34,7 @@ async function applyAllRulesets(): Promise<void> {
     }
   }
 
-  await chrome.declarativeNetRequest.updateEnabledRulesets({
+  await browser.declarativeNetRequest.updateEnabledRulesets({
     enableRulesetIds: enable,
     disableRulesetIds: disable,
   });
@@ -43,7 +44,7 @@ export async function toggleCategory(category: CategoryId, enabled: boolean): Pr
   const rulesetIds = CATEGORY_RULESETS[category];
   if (!rulesetIds?.length) return;
 
-  await chrome.declarativeNetRequest.updateEnabledRulesets({
+  await browser.declarativeNetRequest.updateEnabledRulesets({
     enableRulesetIds: enabled ? rulesetIds : [],
     disableRulesetIds: enabled ? [] : rulesetIds,
   });
@@ -53,7 +54,7 @@ export async function toggleCategory(category: CategoryId, enabled: boolean): Pr
 
 async function hasAllUrlsPermission(): Promise<boolean> {
   try {
-    return await chrome.permissions.contains({ origins: ['<all_urls>'] });
+    return await browser.permissions.contains({ origins: ['<all_urls>'] });
   } catch {
     return false;
   }
@@ -61,7 +62,7 @@ async function hasAllUrlsPermission(): Promise<boolean> {
 
 async function isScriptRegistered(id: string): Promise<boolean> {
   try {
-    const scripts = await chrome.scripting.getRegisteredContentScripts({ ids: [id] });
+    const scripts = await browser.scripting.getRegisteredContentScripts({ ids: [id] });
     return scripts.length > 0;
   } catch {
     return false;
@@ -71,7 +72,7 @@ async function isScriptRegistered(id: string): Promise<boolean> {
 async function enableEdgeUI(): Promise<void> {
   if (await isScriptRegistered(EDGE_UI_SCRIPT_ID)) return;
   try {
-    await chrome.scripting.registerContentScripts([
+    await browser.scripting.registerContentScripts([
       {
         id: EDGE_UI_SCRIPT_ID,
         matches: ['<all_urls>'],
@@ -87,7 +88,7 @@ async function enableEdgeUI(): Promise<void> {
 async function disableEdgeUI(): Promise<void> {
   if (!(await isScriptRegistered(EDGE_UI_SCRIPT_ID))) return;
   try {
-    await chrome.scripting.unregisterContentScripts({ ids: [EDGE_UI_SCRIPT_ID] });
+    await browser.scripting.unregisterContentScripts({ ids: [EDGE_UI_SCRIPT_ID] });
   } catch {
     // Script may already be unregistered
   }
@@ -96,7 +97,7 @@ async function disableEdgeUI(): Promise<void> {
 async function enableAiApis(): Promise<void> {
   if (await isScriptRegistered(AI_APIS_SCRIPT_ID)) return;
   try {
-    await chrome.scripting.registerContentScripts([
+    await browser.scripting.registerContentScripts([
       {
         id: AI_APIS_SCRIPT_ID,
         matches: ['<all_urls>'],
@@ -113,7 +114,7 @@ async function enableAiApis(): Promise<void> {
 async function disableAiApis(): Promise<void> {
   if (!(await isScriptRegistered(AI_APIS_SCRIPT_ID))) return;
   try {
-    await chrome.scripting.unregisterContentScripts({ ids: [AI_APIS_SCRIPT_ID] });
+    await browser.scripting.unregisterContentScripts({ ids: [AI_APIS_SCRIPT_ID] });
   } catch {
     // Script may already be unregistered
   }
@@ -121,11 +122,11 @@ async function disableAiApis(): Promise<void> {
 
 async function applyDynamicScripts(): Promise<void> {
   const settings: Settings = await loadSettings();
-  const browser = detectBrowser();
+  const currentBrowser = detectBrowser();
   const hasPermission = await hasAllUrlsPermission();
 
   // Edge UI: register when ai or shopping enabled + has <all_urls> permission + is Edge
-  if (browser === 'edge' && hasPermission && (settings.ai || settings.shopping)) {
+  if (currentBrowser === 'edge' && hasPermission && (settings.ai || settings.shopping)) {
     await enableEdgeUI();
   } else {
     await disableEdgeUI();

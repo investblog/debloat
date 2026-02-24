@@ -7,15 +7,18 @@ import { createActivityDrawer } from '@ui/components/activity-drawer';
 import { createCategoryCard } from '@ui/components/category-card';
 import { $, h } from '@ui/dom';
 import { icon } from '@ui/icons';
+import { browser } from 'wxt/browser';
 import '../../assets/styles/tokens.css';
+
+type MsgKey = Parameters<typeof browser.i18n.getMessage>[0];
 
 async function render() {
   const app = $('#app')!;
-  const browser = detectBrowser();
+  const currentBrowser = detectBrowser();
   let settings = await loadSettings();
 
   // ── Theme ──
-  const stored = await chrome.storage.local.get('theme');
+  const stored = await browser.storage.local.get('theme');
   const initialTheme = (stored.theme as string) ?? 'dark';
   document.documentElement.setAttribute('data-theme', initialTheme);
 
@@ -27,11 +30,11 @@ async function render() {
     'button',
     {
       class: 'theme-toggle',
-      title: chrome.i18n.getMessage('THEME_TOGGLE_TOOLTIP') || 'Toggle theme',
+      title: browser.i18n.getMessage('THEME_TOGGLE_TOOLTIP' as MsgKey) || 'Toggle theme',
       onClick: async () => {
         currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', currentTheme);
-        await chrome.storage.local.set({ theme: currentTheme });
+        await browser.storage.local.set({ theme: currentTheme });
         themeIcon.textContent = '';
         themeIcon.append(icon(currentTheme === 'dark' ? 'sun' : 'moon', 16));
       },
@@ -47,7 +50,7 @@ async function render() {
 
   const siteBtn = h('button', {
     class: 'btn-icon',
-    title: chrome.i18n.getMessage('WHITELIST_SITE_TOOLTIP') || 'Allow on this site',
+    title: browser.i18n.getMessage('WHITELIST_SITE_TOOLTIP' as MsgKey) || 'Allow on this site',
     onClick: () => {
       // Flash success feedback immediately
       if (siteFlashTimer) clearTimeout(siteFlashTimer);
@@ -62,7 +65,7 @@ async function render() {
       }, 2000);
 
       // Fire-and-forget whitelist
-      chrome.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
+      browser.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
         if (!tab?.url) return;
         const domain = new URL(tab.url).hostname;
         const allCats: CategoryId[] = ['ai', 'sponsored', 'shopping', 'telemetry', 'annoyances'];
@@ -165,13 +168,13 @@ async function render() {
     cardsContainer.textContent = '';
     for (const cat of CATEGORIES) {
       // Skip categories with zero visible sub-toggles for current browser
-      const visibleCount = cat.subToggles.filter((s) => s.browsers.includes(browser)).length;
+      const visibleCount = cat.subToggles.filter((s) => s.browsers.includes(currentBrowser)).length;
       if (visibleCount === 0) continue;
 
       const card = createCategoryCard({
         category: cat,
         settings,
-        browser,
+        browser: currentBrowser,
         onToggleCategory: async (id: CategoryId, enabled: boolean) => {
           settings = await toggleCategory(id, enabled);
           presetSelect.value = 'custom';
@@ -190,13 +193,13 @@ async function render() {
   const activityDrawer = createActivityDrawer();
 
   // ── Review link ──
-  const storeInfo = STORE_URLS[browser];
+  const storeInfo = STORE_URLS[currentBrowser];
   const reviewLink = storeInfo
     ? h(
         'a',
         { class: 'footer__review', href: storeInfo.url, target: '_blank' },
         icon(storeInfo.icon, 16),
-        chrome.i18n.getMessage(storeInfo.labelKey) || 'Rate this extension',
+        browser.i18n.getMessage(storeInfo.labelKey as MsgKey) || 'Rate this extension',
       )
     : null;
 

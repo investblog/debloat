@@ -4,6 +4,7 @@ import { initRules } from '@background/rules';
 import type { Message, MessageResponse } from '@shared/messaging';
 import { addSiteWhitelist, removeSiteWhitelist } from '@shared/settings';
 import type { ActivityEntry } from '@shared/types';
+import { browser } from 'wxt/browser';
 
 // Per-tab activity log (circular buffer, runtime only)
 const tabActivity = new Map<number, ActivityEntry[]>();
@@ -14,24 +15,30 @@ export default defineBackground(async () => {
   initPause();
 
   // Chrome/Edge: click icon → open Side Panel
-  if (chrome.sidePanel?.setPanelBehavior) {
-    chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+  if ((browser as unknown as { sidePanel?: { setPanelBehavior: (o: object) => void } }).sidePanel?.setPanelBehavior) {
+    (browser as unknown as { sidePanel: { setPanelBehavior: (o: object) => void } }).sidePanel.setPanelBehavior({
+      openPanelOnActionClick: true,
+    });
   }
 
   // Message handler for Side Panel / Sidebar
-  chrome.runtime.onMessage.addListener((msg: Message, _sender, sendResponse: (resp: MessageResponse) => void) => {
+  browser.runtime.onMessage.addListener(((
+    msg: Message,
+    _sender: unknown,
+    sendResponse: (resp: MessageResponse) => void,
+  ) => {
     handleMessage(msg).then(sendResponse);
     return true; // async response
-  });
+  }) as Parameters<typeof browser.runtime.onMessage.addListener>[0]);
 
   // Cleanup activity on tab close
-  chrome.tabs.onRemoved.addListener((tabId) => tabActivity.delete(tabId));
+  browser.tabs.onRemoved.addListener((tabId) => tabActivity.delete(tabId));
 
   // Welcome page on first install + uninstall URL
-  chrome.runtime.onInstalled.addListener(({ reason }) => {
+  browser.runtime.onInstalled.addListener(({ reason }) => {
     if (reason === 'install') {
-      chrome.tabs.create({ url: chrome.runtime.getURL('welcome.html') });
-      chrome.runtime.setUninstallURL('https://debloat.click/uninstall');
+      browser.tabs.create({ url: browser.runtime.getURL('/welcome.html') });
+      browser.runtime.setUninstallURL('https://debloat.click/uninstall');
     }
   });
 });

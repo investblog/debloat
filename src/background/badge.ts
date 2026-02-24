@@ -9,6 +9,10 @@ import {
 } from '@shared/constants';
 import { loadSettings } from '@shared/settings';
 import type { ActivityEntry, CategoryId } from '@shared/types';
+import { browser } from 'wxt/browser';
+
+/** Compat: Firefox MV2 uses browserAction, Chrome/Edge MV3 uses action */
+const actionApi = browser.action ?? browser.browserAction;
 
 const tabCounts = new Map<number, number>();
 const flashTimers = new Map<number, ReturnType<typeof setTimeout>>();
@@ -23,7 +27,7 @@ for (const [category, rulesetIds] of Object.entries(CATEGORY_RULESETS)) {
 
 export function initBadge(tabActivity: Map<number, ActivityEntry[]>): void {
   // Reset counter + activity on navigation
-  chrome.webNavigation.onCommitted.addListener((details) => {
+  browser.webNavigation.onCommitted.addListener((details) => {
     if (details.frameId !== 0) return;
     tabCounts.set(details.tabId, 0);
     tabActivity.delete(details.tabId);
@@ -32,12 +36,12 @@ export function initBadge(tabActivity: Map<number, ActivityEntry[]>): void {
 
   // Periodic refresh for active tab
   setInterval(async () => {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
     if (tab?.id != null) refreshBadge(tab.id, tabActivity);
   }, BADGE_REFRESH_MS);
 
   // Cleanup on tab close
-  chrome.tabs.onRemoved.addListener((tabId) => {
+  browser.tabs.onRemoved.addListener((tabId) => {
     tabCounts.delete(tabId);
     tabActivity.delete(tabId);
     const timer = flashTimers.get(tabId);
@@ -55,9 +59,9 @@ export function getTabCount(tabId: number): number {
 /** Show paused state on all tabs */
 export async function showPausedBadge(): Promise<void> {
   try {
-    await chrome.action.setBadgeText({ text: '⏸' });
-    await chrome.action.setBadgeBackgroundColor({ color: BADGE_PAUSED_COLOR });
-    await chrome.action.setTitle({ title: 'Debloat: paused' });
+    await actionApi.setBadgeText({ text: '⏸' });
+    await actionApi.setBadgeBackgroundColor({ color: BADGE_PAUSED_COLOR });
+    await actionApi.setTitle({ title: 'Debloat: paused' });
   } catch {
     // Extension context may be invalid
   }
@@ -66,9 +70,9 @@ export async function showPausedBadge(): Promise<void> {
 /** Clear paused state (global badge) so per-tab badges take over */
 export async function clearPausedBadge(): Promise<void> {
   try {
-    await chrome.action.setBadgeText({ text: '' });
-    await chrome.action.setBadgeBackgroundColor({ color: BADGE_COLOR });
-    await chrome.action.setTitle({ title: 'Debloat' });
+    await actionApi.setBadgeText({ text: '' });
+    await actionApi.setBadgeBackgroundColor({ color: BADGE_COLOR });
+    await actionApi.setTitle({ title: 'Debloat' });
   } catch {
     // Extension context may be invalid
   }
@@ -79,7 +83,7 @@ function flashBadge(tabId: number): void {
   if (prev) clearTimeout(prev);
 
   try {
-    chrome.action.setBadgeBackgroundColor({ tabId, color: BADGE_FLASH_COLOR });
+    actionApi.setBadgeBackgroundColor({ tabId, color: BADGE_FLASH_COLOR });
   } catch {
     return;
   }
@@ -87,7 +91,7 @@ function flashBadge(tabId: number): void {
   const timer = setTimeout(() => {
     flashTimers.delete(tabId);
     try {
-      chrome.action.setBadgeBackgroundColor({ tabId, color: BADGE_COLOR });
+      actionApi.setBadgeBackgroundColor({ tabId, color: BADGE_COLOR });
     } catch {
       // Tab may be gone
     }
@@ -101,7 +105,13 @@ async function refreshBadge(tabId: number, tabActivity: Map<number, ActivityEntr
     const settings = await loadSettings();
     if (settings.pauseUntil && settings.pauseUntil > Date.now()) return;
 
-    const { rulesMatchedInfo } = await chrome.declarativeNetRequest.getMatchedRules({ tabId });
+    const { rulesMatchedInfo } = await (
+      browser.declarativeNetRequest as unknown as {
+        getMatchedRules: (o: {
+          tabId: number;
+        }) => Promise<{ rulesMatchedInfo: { rule: { rulesetId: string }; timeStamp?: number }[] }>;
+      }
+    ).getMatchedRules({ tabId });
     const count = rulesMatchedInfo.length;
     const prevCount = tabCounts.get(tabId) ?? 0;
     tabCounts.set(tabId, count);
@@ -110,7 +120,7 @@ async function refreshBadge(tabId: number, tabActivity: Map<number, ActivityEntr
     if (rulesMatchedInfo.length > 0) {
       let domain = '';
       try {
-        const tab = await chrome.tabs.get(tabId);
+        const tab = await browser.tabs.get(tabId);
         if (tab.url) {
           domain = new URL(tab.url).hostname;
         }
@@ -143,12 +153,12 @@ async function refreshBadge(tabId: number, tabActivity: Map<number, ActivityEntr
     }
 
     const text = count === 0 ? '' : count > 999 ? '1k+' : String(count);
-    await chrome.action.setBadgeText({ text, tabId });
-    await chrome.action.setBadgeBackgroundColor({ color: BADGE_COLOR, tabId });
+    await actionApi.setBadgeText({ text, tabId });
+    await actionApi.setBadgeBackgroundColor({ color: BADGE_COLOR, tabId });
 
     // Tooltip
     const title = count > 0 ? `Debloat: ${count} blocked` : 'Debloat';
-    await chrome.action.setTitle({ title, tabId });
+    await actionApi.setTitle({ title, tabId });
 
     // Flash on new blocks
     if (count > prevCount && prevCount > 0) {

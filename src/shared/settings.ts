@@ -1,15 +1,16 @@
+import { browser } from 'wxt/browser';
 import { DEFAULT_SETTINGS } from './constants';
 import type { CategoryId, Settings } from './types';
 
 const STORAGE_KEY = 'settings';
 
 export async function loadSettings(): Promise<Settings> {
-  const result = await chrome.storage.local.get(STORAGE_KEY);
-  return { ...DEFAULT_SETTINGS, ...result[STORAGE_KEY] };
+  const result = await browser.storage.local.get(STORAGE_KEY);
+  return { ...DEFAULT_SETTINGS, ...(result[STORAGE_KEY] as Partial<Settings> | undefined) };
 }
 
 export async function saveSettings(settings: Settings): Promise<void> {
-  await chrome.storage.local.set({ [STORAGE_KEY]: settings });
+  await browser.storage.local.set({ [STORAGE_KEY]: settings });
 }
 
 export async function patchSettings(patch: Partial<Settings>): Promise<Settings> {

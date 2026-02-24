@@ -3,6 +3,7 @@ import { sendMessage } from '@shared/messaging';
 import type { ActivityEntry, CategoryId } from '@shared/types';
 import { h } from '@ui/dom';
 import { icon } from '@ui/icons';
+import { browser } from 'wxt/browser';
 
 const POLL_INTERVAL = 3000;
 
@@ -64,7 +65,7 @@ export function createActivityDrawer(): HTMLElement {
 
   async function refresh() {
     try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
       if (!tab?.id) return;
       const resp = await sendMessage({ type: 'GET_ACTIVITY', tabId: tab.id });
       if (resp.type !== 'ACTIVITY') return;

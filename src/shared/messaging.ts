@@ -1,3 +1,4 @@
+import { browser } from 'wxt/browser';
 import type { ActivityEntry, CategoryId } from './types';
 
 /**
@@ -21,5 +22,5 @@ export type MessageResponse =
   | { type: 'OK' };
 
 export function sendMessage(msg: Message): Promise<MessageResponse> {
-  return chrome.runtime.sendMessage(msg);
+  return browser.runtime.sendMessage(msg);
 }

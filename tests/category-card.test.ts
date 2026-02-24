@@ -2,9 +2,11 @@ import { describe, expect, it, vi } from 'vitest';
 import type { Category, Settings } from '@shared/types';
 import { DEFAULT_SETTINGS } from '@shared/constants';
 
-vi.stubGlobal('chrome', {
-  i18n: { getMessage: vi.fn((key: string) => `[${key}]`) },
-});
+vi.mock('wxt/browser', () => ({
+  browser: {
+    i18n: { getMessage: vi.fn((key: string) => `[${key}]`) },
+  },
+}));
 
 const { createCategoryCard } = await import('@ui/components/category-card');
 

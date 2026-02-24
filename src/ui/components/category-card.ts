@@ -1,6 +1,7 @@
 import type { BrowserType, Category, CategoryId, Settings } from '@shared/types';
 import { h } from '@ui/dom';
 import { icon } from '@ui/icons';
+import { browser as webBrowser } from 'wxt/browser';
 import { createToggle } from './toggle';
 
 export interface CategoryCardOptions {
@@ -82,10 +83,19 @@ export function createCategoryCard({
         h(
           'div',
           { class: 'card__title-row' },
-          h('span', { class: 'card__title' }, chrome.i18n.getMessage(category.labelKey) || category.id),
+          h(
+            'span',
+            { class: 'card__title' },
+            webBrowser.i18n.getMessage(category.labelKey as Parameters<typeof webBrowser.i18n.getMessage>[0]) ||
+              category.id,
+          ),
           masterToggle,
         ),
-        h('div', { class: 'card__desc' }, chrome.i18n.getMessage(category.descriptionKey) || ''),
+        h(
+          'div',
+          { class: 'card__desc' },
+          webBrowser.i18n.getMessage(category.descriptionKey as Parameters<typeof webBrowser.i18n.getMessage>[0]) || '',
+        ),
         h('div', { class: 'card__coverage' }, coverageLine),
       ),
     ),

@@ -1,5 +1,6 @@
 import { sendMessage } from '@shared/messaging';
 import { h } from '@ui/dom';
+import { browser } from 'wxt/browser';
 
 export function createCounter(): HTMLElement {
   const countEl = h('span', { class: 'counter__value' }, '0');
@@ -13,7 +14,7 @@ export function createCounter(): HTMLElement {
   // Poll for count updates
   async function refresh() {
     try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
       if (!tab?.id) return;
       const resp = await sendMessage({ type: 'GET_TAB_COUNT', tabId: tab.id });
       if (resp.type === 'TAB_COUNT') {

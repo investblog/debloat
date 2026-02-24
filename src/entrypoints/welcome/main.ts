@@ -2,10 +2,11 @@ import { detectBrowser } from '@background/browser';
 import { CATEGORIES } from '@shared/constants';
 import { $, h } from '@ui/dom';
 import { icon } from '@ui/icons';
+import { browser } from 'wxt/browser';
 import '../../assets/styles/tokens.css';
 
 function msg(key: string, fallback: string): string {
-  return chrome.i18n.getMessage(key) || fallback;
+  return browser.i18n.getMessage(key as Parameters<typeof browser.i18n.getMessage>[0]) || fallback;
 }
 
 async function render() {
@@ -13,7 +14,7 @@ async function render() {
   const currentBrowser = detectBrowser();
 
   // ── Theme ──
-  const stored = await chrome.storage.local.get('theme');
+  const stored = await browser.storage.local.get('theme');
   const initialTheme = (stored.theme as string) ?? 'dark';
   document.documentElement.setAttribute('data-theme', initialTheme);
 
@@ -29,7 +30,7 @@ async function render() {
       onClick: async () => {
         currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', currentTheme);
-        await chrome.storage.local.set({ theme: currentTheme });
+        await browser.storage.local.set({ theme: currentTheme });
         themeIcon.textContent = '';
         themeIcon.append(icon(currentTheme === 'dark' ? 'sun' : 'moon', 16));
       },
@@ -133,10 +134,12 @@ async function render() {
           if (currentBrowser === 'firefox') {
             // @ts-expect-error -- Firefox sidebar API via globalThis
             await globalThis.browser.sidebarAction.open();
-          } else if (chrome.sidePanel?.open) {
-            const win = await chrome.windows.getCurrent();
+          } else if ((browser as unknown as { sidePanel?: { open: (o: object) => Promise<void> } }).sidePanel?.open) {
+            const win = await browser.windows.getCurrent();
             if (!win.id) throw new Error('no-window');
-            await chrome.sidePanel.open({ windowId: win.id });
+            await (browser as unknown as { sidePanel: { open: (o: object) => Promise<void> } }).sidePanel.open({
+              windowId: win.id,
+            });
           } else {
             throw new Error('no-api');
           }

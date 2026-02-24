@@ -1,6 +1,7 @@
 import { clearPausedBadge, showPausedBadge } from '@background/badge';
 import { PAUSE_DURATION_MS } from '@shared/constants';
 import { loadSettings, patchSettings } from '@shared/settings';
+import { browser } from 'wxt/browser';
 
 let pauseTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -45,9 +46,9 @@ export async function unpause(): Promise<void> {
 }
 
 async function disableAllRulesets(): Promise<void> {
-  const current = await chrome.declarativeNetRequest.getEnabledRulesets();
+  const current = await browser.declarativeNetRequest.getEnabledRulesets();
   if (current.length > 0) {
-    await chrome.declarativeNetRequest.updateEnabledRulesets({
+    await browser.declarativeNetRequest.updateEnabledRulesets({
       disableRulesetIds: current,
     });
   }
