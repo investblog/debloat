@@ -28,7 +28,7 @@ export default defineConfig({
     permissions: [
       'storage',
       'declarativeNetRequest',
-      ...(browser !== 'firefox' ? ['declarativeNetRequestFeedback'] : []),
+      ...(browser !== 'firefox' ? ['declarativeNetRequestFeedback', 'sidePanel'] : []),
       'scripting',
       'webNavigation',
     ],
@@ -45,18 +45,6 @@ export default defineConfig({
         gecko: {
           id: 'debloat@debloat.click',
           strict_min_version: '109.0',
-          data_collection_permissions: {
-            required: ['none'],
-          },
-        },
-      },
-      sidebar_action: {
-        default_panel: 'sidebar.html',
-        default_title: '__MSG_EXTENSION_NAME__',
-        open_at_install: false,
-        default_icon: {
-          16: 'icons/16.png',
-          32: 'icons/32.png',
         },
       },
     }),
@@ -107,11 +95,28 @@ export default defineConfig({
   }),
 
   hooks: {
-    'build:manifestGenerated': (_wxt, manifest) => {
+    'build:manifestGenerated': (wxt, manifest) => {
       // WXT auto-adds <all_urls> from runtime content scripts to host_permissions.
       // We want it ONLY in optional_host_permissions to avoid scary install prompts.
       if (manifest.host_permissions) {
         manifest.host_permissions = manifest.host_permissions.filter((p: string) => p !== '<all_urls>');
+      }
+
+      // Firefox AMO requires data_collection_permissions (mandatory H1 2026)
+      if (manifest.browser_specific_settings?.gecko) {
+        (manifest.browser_specific_settings.gecko as Record<string, unknown>).data_collection_permissions = {
+          required: ['none'],
+        };
+      }
+
+      // Firefox: no sidePanel API — enrich auto-generated sidebar_action
+      if (wxt.config.browser === 'firefox') {
+        const sa = manifest as unknown as Record<string, unknown>;
+        if (sa.sidebar_action && typeof sa.sidebar_action === 'object') {
+          const sidebar = sa.sidebar_action as Record<string, unknown>;
+          sidebar.open_at_install = false;
+          sidebar.default_icon = { '16': 'icons/16.png', '32': 'icons/32.png' };
+        }
       }
     },
   },
