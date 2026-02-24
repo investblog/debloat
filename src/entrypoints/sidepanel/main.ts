@@ -234,12 +234,11 @@ async function render() {
     'Disable All',
   );
 
-  const footerChildren: (Node | string)[] = [activityDrawer];
-  if (reviewLink) footerChildren.push(reviewLink);
-  footerChildren.push(h('div', { class: 'footer__actions' }, enableAllBtn, disableAllBtn));
+  // Activity & review go inside scrollable area
+  cardsContainer.append(activityDrawer);
+  if (reviewLink) cardsContainer.append(reviewLink);
 
-  const footer = h('footer', { class: 'footer' });
-  for (const child of footerChildren) footer.append(child);
+  const footer = h('footer', { class: 'footer' }, h('div', { class: 'footer__actions' }, enableAllBtn, disableAllBtn));
 
   // ── Assemble ──
   app.append(header, presetBar, quickBar, cardsContainer, footer);

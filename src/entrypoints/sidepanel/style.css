@@ -12,19 +12,21 @@ body {
   color: var(--color-text);
   background: var(--color-bg);
   width: 100%;
-  min-height: 100vh;
-  overflow-y: auto;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 #app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 /* ── Header ── */
 
 .header {
+  flex-shrink: 0;
   padding: 16px var(--gap);
   border-bottom: 1px solid var(--color-border);
 }
@@ -125,6 +127,7 @@ body {
 /* ── Preset pills ── */
 
 .presets {
+  flex-shrink: 0;
   display: flex;
   gap: 2px;
   padding: var(--gap-sm) var(--gap);
@@ -163,6 +166,7 @@ body {
 /* ── Quick controls ── */
 
 .quick {
+  flex-shrink: 0;
   display: flex;
   gap: var(--gap-sm);
   padding: var(--gap-sm) var(--gap);
@@ -207,6 +211,7 @@ body {
 
 .cards {
   flex: 1;
+  overflow-y: auto;
   padding: var(--gap);
   display: flex;
   flex-direction: column;
@@ -384,9 +389,9 @@ body {
 /* ── Footer ── */
 
 .footer {
+  flex-shrink: 0;
   padding: var(--gap);
   border-top: 1px solid var(--color-border);
-  margin-top: auto;
 }
 
 .footer__review {
