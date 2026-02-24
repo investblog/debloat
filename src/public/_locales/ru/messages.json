@@ -58,5 +58,49 @@
   "RATE_FIREFOX": {
     "message": "Оценить в Firefox Add-ons",
     "description": "Footer link to rate extension on Firefox Add-ons"
+  },
+  "WELCOME_TAGLINE": {
+    "message": "Ваш браузер без лишнего",
+    "description": "Welcome page hero tagline"
+  },
+  "WELCOME_FEATURES_TITLE": {
+    "message": "Что блокирует",
+    "description": "Welcome page features section title"
+  },
+  "WELCOME_HOW_TITLE": {
+    "message": "Как это работает",
+    "description": "Welcome page how-it-works section title"
+  },
+  "WELCOME_STEP1_TITLE": {
+    "message": "Установите",
+    "description": "Welcome page step 1 title"
+  },
+  "WELCOME_STEP1_DESC": {
+    "message": "Добавьте расширение — без прав администратора",
+    "description": "Welcome page step 1 description"
+  },
+  "WELCOME_STEP2_TITLE": {
+    "message": "Настройте",
+    "description": "Welcome page step 2 title"
+  },
+  "WELCOME_STEP2_DESC": {
+    "message": "Выберите, какие категории блокировать",
+    "description": "Welcome page step 2 description"
+  },
+  "WELCOME_STEP3_TITLE": {
+    "message": "Пользуйтесь",
+    "description": "Welcome page step 3 title"
+  },
+  "WELCOME_STEP3_DESC": {
+    "message": "Наслаждайтесь чистым и быстрым браузером",
+    "description": "Welcome page step 3 description"
+  },
+  "WELCOME_CTA": {
+    "message": "Открыть боковую панель",
+    "description": "Welcome page CTA button text"
+  },
+  "WELCOME_CTA_FALLBACK": {
+    "message": "Нажмите на иконку Debloat на панели инструментов",
+    "description": "Welcome page CTA fallback text when sidePanel API is unavailable"
   }
 }

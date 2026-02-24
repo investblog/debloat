@@ -58,5 +58,49 @@
   "RATE_FIREFOX": {
     "message": "Rate on Firefox Add-ons",
     "description": "Footer link to rate extension on Firefox Add-ons"
+  },
+  "WELCOME_TAGLINE": {
+    "message": "Your browser, decluttered",
+    "description": "Welcome page hero tagline"
+  },
+  "WELCOME_FEATURES_TITLE": {
+    "message": "What it blocks",
+    "description": "Welcome page features section title"
+  },
+  "WELCOME_HOW_TITLE": {
+    "message": "How it works",
+    "description": "Welcome page how-it-works section title"
+  },
+  "WELCOME_STEP1_TITLE": {
+    "message": "Install",
+    "description": "Welcome page step 1 title"
+  },
+  "WELCOME_STEP1_DESC": {
+    "message": "Add the extension — no admin rights needed",
+    "description": "Welcome page step 1 description"
+  },
+  "WELCOME_STEP2_TITLE": {
+    "message": "Customize",
+    "description": "Welcome page step 2 title"
+  },
+  "WELCOME_STEP2_DESC": {
+    "message": "Pick which categories to block or allow",
+    "description": "Welcome page step 2 description"
+  },
+  "WELCOME_STEP3_TITLE": {
+    "message": "Browse",
+    "description": "Welcome page step 3 title"
+  },
+  "WELCOME_STEP3_DESC": {
+    "message": "Enjoy a cleaner, faster browser",
+    "description": "Welcome page step 3 description"
+  },
+  "WELCOME_CTA": {
+    "message": "Open Side Panel",
+    "description": "Welcome page CTA button text"
+  },
+  "WELCOME_CTA_FALLBACK": {
+    "message": "Click the Debloat icon in your toolbar to get started",
+    "description": "Welcome page CTA fallback text when sidePanel API is unavailable"
   }
 }

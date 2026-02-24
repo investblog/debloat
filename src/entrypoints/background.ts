@@ -26,6 +26,14 @@ export default defineBackground(async () => {
 
   // Cleanup activity on tab close
   chrome.tabs.onRemoved.addListener((tabId) => tabActivity.delete(tabId));
+
+  // Welcome page on first install + uninstall URL
+  chrome.runtime.onInstalled.addListener(({ reason }) => {
+    if (reason === 'install') {
+      chrome.tabs.create({ url: chrome.runtime.getURL('welcome.html') });
+      chrome.runtime.setUninstallURL('https://debloat.click/uninstall');
+    }
+  });
 });
 
 async function handleMessage(msg: Message): Promise<MessageResponse> {

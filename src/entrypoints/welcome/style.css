@@ -1,0 +1,230 @@
+@import '../../assets/styles/tokens.css';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  color: var(--color-text);
+  background: var(--color-bg);
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+  position: relative;
+}
+
+/* ── Theme toggle (fixed top-right) ── */
+
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+  z-index: 10;
+}
+
+.theme-toggle:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.theme-toggle__icon {
+  display: flex;
+  align-items: center;
+}
+
+/* ── Hero ── */
+
+.welcome__hero {
+  text-align: center;
+  padding: 48px 0 40px;
+}
+
+.welcome__hero-icon {
+  display: inline-flex;
+  color: var(--color-primary);
+}
+
+.welcome__title {
+  margin-top: 16px;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.welcome__tagline {
+  margin-top: 8px;
+  font-size: 16px;
+  color: var(--color-text-secondary);
+}
+
+/* ── Section title ── */
+
+.welcome__section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* ── Feature cards ── */
+
+.welcome__features {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--gap);
+  margin-bottom: 40px;
+}
+
+.welcome__feature-card {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  animation: welcome-fade-in 0.4s ease both;
+}
+
+.welcome__feature-card:nth-child(1) { animation-delay: 0.05s; }
+.welcome__feature-card:nth-child(2) { animation-delay: 0.1s; }
+.welcome__feature-card:nth-child(3) { animation-delay: 0.15s; }
+.welcome__feature-card:nth-child(4) { animation-delay: 0.2s; }
+.welcome__feature-card:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes welcome-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.welcome__feature-icon {
+  display: inline-flex;
+  color: var(--color-primary);
+  margin-bottom: 8px;
+}
+
+.welcome__feature-name {
+  font-size: var(--font-size);
+  font-weight: 600;
+}
+
+.welcome__feature-desc {
+  margin-top: 4px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+/* ── How it works ── */
+
+.welcome__steps {
+  display: flex;
+  gap: var(--gap);
+  margin-bottom: 40px;
+}
+
+.welcome__step {
+  flex: 1;
+  text-align: center;
+}
+
+.welcome__step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.welcome__step-title {
+  font-size: var(--font-size);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.welcome__step-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+/* ── CTA ── */
+
+.welcome__cta {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.welcome__cta:hover {
+  background: var(--color-primary-hover);
+}
+
+.welcome__cta--fallback {
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: default;
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+}
+
+.welcome__cta--fallback:hover {
+  background: var(--color-surface);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 540px) {
+  .welcome__features {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome__steps {
+    flex-direction: column;
+  }
+
+  .welcome__hero {
+    padding: 32px 0 28px;
+  }
+
+  .welcome__title {
+    font-size: 26px;
+  }
+}
