@@ -1,7 +1,7 @@
 import { detectBrowser } from '@background/browser';
 import { CATEGORIES, PRESETS, STORE_URLS } from '@shared/constants';
 import { sendMessage } from '@shared/messaging';
-import { loadSettings, patchSettings, toggleCategory, toggleSubToggle } from '@shared/settings';
+import { loadSettings, patchSettings, setScoutReporting, toggleCategory, toggleSubToggle } from '@shared/settings';
 import type { CategoryId, PresetId } from '@shared/types';
 import { createActivityDrawer } from '@ui/components/activity-drawer';
 import { createCategoryCard } from '@ui/components/category-card';
@@ -80,17 +80,24 @@ async function render() {
   });
   siteBtn.append(siteIconEl);
 
-  // ── Activity drawer (overlay) ──
-  const activity = createActivityDrawer();
-
   // ── Logs icon button (header) ──
   const logsBtn = h('button', {
     class: 'btn-icon',
     'data-testid': 'activity-log',
     title: 'Activity log',
-    onClick: () => activity.open(),
   });
   logsBtn.append(h('span', { class: 'btn-icon__inner' }, icon('console-log', 16)));
+
+  // ── Activity drawer (overlay) ──
+  const activity = createActivityDrawer({
+    onHasActivity: (has) => {
+      logsBtn.classList.toggle('btn-icon--active-log', has);
+    },
+    onScoutPending: (pending) => {
+      logsBtn.classList.toggle('btn-icon--scout', pending);
+    },
+  });
+  logsBtn.addEventListener('click', () => activity.open());
 
   // ── Header ──
   const headerIcon = h('span', { class: 'header__icon' });
@@ -183,7 +190,21 @@ async function render() {
     pauseBtn.append(icon('pause', 14), ' Pause (1h)');
   }
 
-  const quickBar = h('div', { class: 'quick', 'data-testid': 'quick-controls' }, pauseBtn);
+  // ── Scout toggle ──
+  const scoutBtn = h('button', {
+    class: `quick__btn${settings.scoutReporting ? ' quick__btn--active' : ''}`,
+    'data-testid': 'scout-toggle',
+    onClick: async () => {
+      const nowEnabled = !settings.scoutReporting;
+      settings = await setScoutReporting(nowEnabled);
+      scoutBtn.classList.toggle('quick__btn--active', nowEnabled);
+      scoutBtn.textContent = '';
+      scoutBtn.append(icon('radar', 14), nowEnabled ? ' Scout: On' : ' Scout: Off');
+    },
+  });
+  scoutBtn.append(icon('radar', 14), settings.scoutReporting ? ' Scout: On' : ' Scout: Off');
+
+  const quickBar = h('div', { class: 'quick', 'data-testid': 'quick-controls' }, pauseBtn, scoutBtn);
 
   // ── Category cards ──
   const cardsContainer = h('div', { class: 'cards', 'data-testid': 'categories' });

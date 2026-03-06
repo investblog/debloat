@@ -51,3 +51,14 @@ export async function removeSiteWhitelist(domain: string): Promise<void> {
   delete current.siteWhitelist[normalizeHost(domain)];
   await saveSettings(current);
 }
+
+/** Enable/disable scout reporting. Generates installId on first enable. */
+export async function setScoutReporting(enabled: boolean): Promise<Settings> {
+  const current = await loadSettings();
+  current.scoutReporting = enabled;
+  if (enabled && !current.scoutInstallId) {
+    current.scoutInstallId = crypto.randomUUID();
+  }
+  await saveSettings(current);
+  return current;
+}

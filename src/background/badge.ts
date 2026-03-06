@@ -5,11 +5,13 @@ import {
   BADGE_FLASH_MS,
   BADGE_PAUSED_COLOR,
   BADGE_REFRESH_MS,
+  BADGE_SCOUT_COLOR,
   CATEGORY_RULESETS,
 } from '@shared/constants';
 import { loadSettings } from '@shared/settings';
 import type { ActivityEntry, CategoryId } from '@shared/types';
 import { browser } from 'wxt/browser';
+import { getScoutStatus } from './scout';
 
 /** Compat: Firefox MV2 uses browserAction, Chrome/Edge MV3 uses action */
 const actionApi = browser.action ?? browser.browserAction;
@@ -124,7 +126,9 @@ function flashBadge(tabId: number): void {
   const timer = setTimeout(() => {
     flashTimers.delete(tabId);
     try {
-      actionApi.setBadgeBackgroundColor({ tabId, color: BADGE_COLOR });
+      const scout = getScoutStatus(tabId);
+      const restoreColor = scout?.state === 'pending' && scout.unknownCount > 0 ? BADGE_SCOUT_COLOR : BADGE_COLOR;
+      actionApi.setBadgeBackgroundColor({ tabId, color: restoreColor });
     } catch {
       // Tab may be gone
     }
@@ -139,9 +143,30 @@ async function refreshBadgeImmediate(tabId: number): Promise<void> {
     if (settings.pauseUntil && settings.pauseUntil > Date.now()) return;
 
     const merged = (tabCounts.get(tabId) ?? 0) + (tabCssCounts.get(tabId) ?? 0);
-    const text = merged === 0 ? '' : merged > 999 ? '1k+' : String(merged);
+    const scout = getScoutStatus(tabId);
+    const hasNewFinds = scout?.state === 'pending' && scout.unknownCount > 0;
+
+    let text: string;
+    if (merged === 0 && hasNewFinds) {
+      text = '●';
+    } else if (merged > 999) {
+      text = '1k+';
+    } else if (merged > 0) {
+      text = String(merged);
+    } else {
+      text = '';
+    }
+
     await actionApi.setBadgeText({ text, tabId });
-    const title = merged > 0 ? `Debloat: ${merged} blocked` : 'Debloat';
+    await actionApi.setBadgeBackgroundColor({
+      color: hasNewFinds ? BADGE_SCOUT_COLOR : BADGE_COLOR,
+      tabId,
+    });
+
+    let title = merged > 0 ? `Debloat: ${merged} blocked` : 'Debloat';
+    if (hasNewFinds) {
+      title += ` · ${scout.unknownCount} new AI element${scout.unknownCount > 1 ? 's' : ''} found`;
+    }
     await actionApi.setTitle({ title, tabId });
   } catch {
     // Tab may have been closed
@@ -202,12 +227,31 @@ async function refreshBadge(tabId: number, tabActivity: Map<number, ActivityEntr
     }
 
     const merged = count + (tabCssCounts.get(tabId) ?? 0);
-    const text = merged === 0 ? '' : merged > 999 ? '1k+' : String(merged);
+    const scout = getScoutStatus(tabId);
+    const hasNewFinds = scout?.state === 'pending' && scout.unknownCount > 0;
+
+    let text: string;
+    if (merged === 0 && hasNewFinds) {
+      text = '●';
+    } else if (merged > 999) {
+      text = '1k+';
+    } else if (merged > 0) {
+      text = String(merged);
+    } else {
+      text = '';
+    }
+
     await actionApi.setBadgeText({ text, tabId });
-    await actionApi.setBadgeBackgroundColor({ color: BADGE_COLOR, tabId });
+    await actionApi.setBadgeBackgroundColor({
+      color: hasNewFinds ? BADGE_SCOUT_COLOR : BADGE_COLOR,
+      tabId,
+    });
 
     // Tooltip
-    const title = merged > 0 ? `Debloat: ${merged} blocked` : 'Debloat';
+    let title = merged > 0 ? `Debloat: ${merged} blocked` : 'Debloat';
+    if (hasNewFinds) {
+      title += ` · ${scout.unknownCount} new AI element${scout.unknownCount > 1 ? 's' : ''} found`;
+    }
     await actionApi.setTitle({ title, tabId });
 
     // Flash on new blocks

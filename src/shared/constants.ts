@@ -26,6 +26,7 @@ export const BADGE_COLOR = '#10B981';
 export const BADGE_FLASH_COLOR = '#FFB347';
 export const BADGE_FLASH_MS = 600;
 export const BADGE_PAUSED_COLOR = '#6B7280';
+export const BADGE_SCOUT_COLOR = '#818CF8';
 export const BADGE_REFRESH_MS = 2000;
 export const ACTIVITY_BUFFER_SIZE = 100;
 export const PAUSE_DURATION_MS = 60 * 60 * 1000; // 1 hour
@@ -50,16 +51,20 @@ export const PRESETS: Record<PresetId, Record<CategoryId, boolean>> = {
 /** Store listing URLs per browser (replace EXTENSION_ID with real IDs) */
 export const STORE_URLS: Record<string, { url: string; icon: string; labelKey: string }> = {
   chrome: {
-    url: 'https://chromewebstore.google.com/detail/EXTENSION_ID',
+    url: 'https://chromewebstore.google.com/detail/debloat/dijkbjgecffhihdbddoeamibbomhlpdm',
     icon: 'browser-chrome',
     labelKey: 'RATE_CHROME',
   },
   edge: {
-    url: 'https://microsoftedge.microsoft.com/addons/detail/EXTENSION_ID',
+    url: 'https://microsoftedge.microsoft.com/addons/detail/ofdaaeifdjdgpnclofbacljohlgplgbd',
     icon: 'browser-edge',
     labelKey: 'RATE_EDGE',
   },
-  firefox: { url: 'https://addons.mozilla.org/addon/EXTENSION_ID/', icon: 'browser-firefox', labelKey: 'RATE_FIREFOX' },
+  firefox: {
+    url: 'https://addons.mozilla.org/firefox/addon/debloat/',
+    icon: 'browser-firefox',
+    labelKey: 'RATE_FIREFOX',
+  },
 };
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -72,6 +77,8 @@ export const DEFAULT_SETTINGS: Settings = {
   preset: 'aggressive',
   siteWhitelist: {},
   pauseUntil: null,
+  scoutReporting: false,
+  scoutInstallId: '',
 };
 
 export const CATEGORIES: Category[] = [

@@ -1,5 +1,6 @@
 import { detectBrowser } from '@background/browser';
 import { CATEGORIES } from '@shared/constants';
+import { setScoutReporting } from '@shared/settings';
 import { $, h } from '@ui/dom';
 import { icon } from '@ui/icons';
 import { browser } from 'wxt/browser';
@@ -41,8 +42,8 @@ async function render() {
   // ── Hero ──
   const heroIcon = h('span', { class: 'welcome__hero-icon' });
   const brandSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  brandSvg.setAttribute('width', '64');
-  brandSvg.setAttribute('height', '64');
+  brandSvg.setAttribute('width', '48');
+  brandSvg.setAttribute('height', '48');
   brandSvg.setAttribute('viewBox', '0 0 36 36');
   brandSvg.setAttribute('fill', 'none');
   brandSvg.setAttribute('aria-hidden', 'true');
@@ -121,6 +122,72 @@ async function render() {
     );
   }
 
+  // ── Scout opt-in ──
+  const scoutIcon = h('span', { class: 'welcome__scout-icon' });
+  scoutIcon.append(icon('radar', 24));
+
+  const scoutStatus = h('span', { class: 'welcome__scout-status' }, 'Off');
+
+  const scoutBtn = h(
+    'button',
+    {
+      class: 'welcome__scout-btn',
+      onClick: async () => {
+        const settings = await setScoutReporting(true);
+        if (settings.scoutReporting) {
+          scoutBtn.classList.add('welcome__scout-btn--active');
+          scoutBtn.textContent = '';
+          scoutBtn.append(icon('check-circle', 16), ' Enabled');
+          scoutBtn.disabled = true;
+          scoutStatus.textContent = 'On';
+          scoutStatus.classList.add('welcome__scout-status--on');
+        }
+      },
+    },
+    msg('WELCOME_SCOUT_CTA', 'Enable Scout'),
+  );
+
+  const scoutSection = h(
+    'section',
+    { class: 'welcome__scout' },
+    h(
+      'div',
+      { class: 'welcome__scout-header' },
+      scoutIcon,
+      h(
+        'div',
+        { class: 'welcome__scout-text' },
+        h(
+          'h2',
+          { class: 'welcome__scout-title' },
+          msg('WELCOME_SCOUT_TITLE', 'Help improve Debloat'),
+          h('span', { class: 'welcome__scout-badge' }, 'Optional'),
+        ),
+        h(
+          'p',
+          { class: 'welcome__scout-desc' },
+          msg(
+            'WELCOME_SCOUT_DESC',
+            'Enable AI Scout to anonymously report new AI elements you encounter. Your reports help us detect changes faster and keep blocking rules up to date for everyone.',
+          ),
+        ),
+      ),
+    ),
+    h(
+      'div',
+      { class: 'welcome__scout-details' },
+      h('div', { class: 'welcome__scout-detail' }, icon('shield-check', 14), ' Anonymous — no personal data collected'),
+      h('div', { class: 'welcome__scout-detail' }, icon('filter', 14), ' Only reports AI elements on search pages'),
+      h('div', { class: 'welcome__scout-detail' }, icon('star', 14), ' Get notified when your reports are accepted'),
+    ),
+    h(
+      'div',
+      { class: 'welcome__scout-action' },
+      scoutBtn,
+      h('span', { class: 'welcome__scout-label' }, 'Status: ', scoutStatus),
+    ),
+  );
+
   // ── CTA ──
   const ctaText = msg('WELCOME_CTA', 'Open Side Panel');
   const ctaFallbackText = msg('WELCOME_CTA_FALLBACK', 'Click the Debloat icon in your toolbar to get started');
@@ -154,7 +221,7 @@ async function render() {
   );
 
   // ── Assemble ──
-  app.append(themeBtn, hero, featuresTitle, featuresGrid, howTitle, stepsRow, ctaBtn);
+  app.append(themeBtn, hero, featuresTitle, featuresGrid, howTitle, stepsRow, scoutSection, ctaBtn);
 }
 
 render();

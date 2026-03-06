@@ -30,11 +30,11 @@ No admin rights. No system modifications. No enterprise policies. Just a browser
 
 ## Install
 
-| Browser | Store | Status |
-|---|---|---|
-| Chrome | Chrome Web Store | Coming soon |
-| Edge | Edge Add-ons | Coming soon |
-| Firefox | Firefox Add-ons | Coming soon |
+| Browser | Store |
+|---|---|
+| Chrome | [Chrome Web Store](https://chromewebstore.google.com/detail/debloat/dijkbjgecffhihdbddoeamibbomhlpdm) |
+| Edge | [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/ofdaaeifdjdgpnclofbacljohlgplgbd) |
+| Firefox | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/debloat/) |
 
 ### Manual install (from release)
 
@@ -66,9 +66,20 @@ npm run check          # Typecheck + lint + tests
 - [Biome](https://biomejs.dev) — linter & formatter
 - [Vitest](https://vitest.dev) — unit tests with happy-dom
 
+## AI Scout
+
+Search engines and browsers constantly ship new AI interface elements. Debloat includes an opt-in detection system called **AI Scout** that helps keep selectors up to date:
+
+1. The extension collects metadata about hidden elements (opt-in, anonymous)
+2. Reports are sent to a [Cloudflare Worker](https://github.com/investblog/debloat-ai-scout) that scores and deduplicates findings
+3. Novel detections become GitHub Issues for review
+4. Confirmed selectors get added to the next release
+
+This creates a feedback loop: users help discover new AI clutter, maintainers ship fixes faster.
+
 ## Ecosystem
 
-- [Debloat AI Scout](https://github.com/investblog/debloat-ai-scout) — automated detection of new AI elements. Receives opt-in reports from extension users, runs heuristic analysis, creates GitHub Issues. Powered by Cloudflare Workers.
+- [Debloat AI Scout](https://github.com/investblog/debloat-ai-scout) — detection pipeline backend. Heuristic scoring, baseline diffing, deduplication, GitHub Issue creation. Powered by Cloudflare Workers + KV + R2.
 
 ## Inspiration & related projects
 

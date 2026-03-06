@@ -9,6 +9,9 @@ export const COPILOT_ANSWER = ['#copans_container', '#b_genserp_container'];
 /** QnA AI-generated answer block (quick answer with sources carousel) */
 export const QNA_ANSWER = ['.qna_tlgacont'];
 
+/** Copilot search result container (wraps AI-generated answer in results list) */
+export const COPILOT_CONTAINER = ['#b_copilot_container'];
+
 /** Copilot chat / follow-up composer on SERP */
 export const COPILOT_CHAT = [
   '#b_copilot_search',
@@ -28,4 +31,12 @@ export const SYDNEY_CONV = ['#b_sydConvOuter'];
 export const TRIVIA = ['#b_TriviaOverlay'];
 
 /** Combined: all AI elements to hide */
-export const ALL = [...COPILOT_ANSWER, ...QNA_ANSWER, ...COPILOT_CHAT, ...COPILOT_NAV, ...SYDNEY_CONV, ...TRIVIA];
+export const ALL = [
+  ...COPILOT_ANSWER,
+  ...COPILOT_CONTAINER,
+  ...QNA_ANSWER,
+  ...COPILOT_CHAT,
+  ...COPILOT_NAV,
+  ...SYDNEY_CONV,
+  ...TRIVIA,
+];
