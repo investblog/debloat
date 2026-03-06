@@ -66,6 +66,10 @@ npm run check          # Typecheck + lint + tests
 - [Biome](https://biomejs.dev) — linter & formatter
 - [Vitest](https://vitest.dev) — unit tests with happy-dom
 
+## Ecosystem
+
+- [Debloat AI Scout](https://github.com/investblog/debloat-ai-scout) — automated detection of new AI elements. Receives opt-in reports from extension users, runs heuristic analysis, creates GitHub Issues. Powered by Cloudflare Workers.
+
 ## Inspiration & related projects
 
 This extension stands on the shoulders of the browser debloating community:
