@@ -1,7 +1,7 @@
 {
   "name": "debloat",
   "version": "1.0.3",
-  "description": "Hide AI features, block sponsored content, stop telemetry. One click, no admin rights.",
+  "description": "Hide AI panels, sponsored blocks and browser clutter. Keep search pages clean without telemetry or tracking.",
   "type": "module",
   "scripts": {
     "dev": "wxt",

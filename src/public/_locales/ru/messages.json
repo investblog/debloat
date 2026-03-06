@@ -1,10 +1,10 @@
 {
   "EXTENSION_NAME": {
-    "message": "Debloat",
+    "message": "Debloat — Скрыть AI-мусор",
     "description": "Extension display name"
   },
   "EXTENSION_DESCRIPTION": {
-    "message": "Скройте AI-фичи, заблокируйте спонсированный контент, отключите телеметрию. Один клик, без прав админа.",
+    "message": "Скрывает AI-панели, спонсированные блоки и мусор из браузера. Чистый поиск без телеметрии и слежки.",
     "description": "Extension description for store listing"
   },
   "CATEGORY_AI": {

@@ -1,10 +1,10 @@
 {
   "EXTENSION_NAME": {
-    "message": "Debloat",
+    "message": "Debloat — Hide AI Clutter",
     "description": "Extension display name"
   },
   "EXTENSION_DESCRIPTION": {
-    "message": "Hide AI features, block sponsored content, stop telemetry. One click, no admin rights.",
+    "message": "Hide AI panels, sponsored blocks and browser clutter. Keep search pages clean without telemetry or tracking.",
     "description": "Extension description for store listing"
   },
   "CATEGORY_AI": {
