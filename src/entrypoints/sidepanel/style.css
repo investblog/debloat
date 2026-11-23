@@ -203,6 +203,52 @@ body {
   display: none;
 }
 
+/* ── Notice: one-line prompt with an action (e.g. all-sites permission) ── */
+
+.notice {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--gap-sm) var(--gap);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  line-height: 1.35;
+}
+
+.notice[hidden] {
+  display: none;
+}
+
+.notice__text {
+  flex: 1;
+}
+
+.notice__btn {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.notice__btn:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.notice__btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .quick__btn:hover {
   background: var(--color-surface-hover);
 }

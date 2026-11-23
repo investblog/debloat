@@ -374,5 +374,17 @@
   "SUB_AUTO_SIGNIN": {
     "message": "브라우저 자동 로그인 안내",
     "description": "Sub-toggle label (auto_signin)"
+  },
+  "SITE_ACCESS_NOTICE": {
+    "message": "모든 사이트에서 웹 AI API(window.ai)를 차단하려면 모든 사이트에 대한 액세스를 허용하세요",
+    "description": "Side panel notice (Chrome/Firefox): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_NOTICE_EDGE": {
+    "message": "모든 사이트에서 Copilot을 숨기고 웹 AI API(window.ai)를 차단하려면 모든 사이트에 대한 액세스를 허용하세요",
+    "description": "Side panel notice (Edge): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_GRANT": {
+    "message": "허용",
+    "description": "Button in the notice: request the all-sites permission"
   }
 }

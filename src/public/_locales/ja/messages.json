@@ -374,5 +374,17 @@
   "SUB_AUTO_SIGNIN": {
     "message": "ブラウザーへの自動サインインの案内",
     "description": "Sub-toggle label (auto_signin)"
+  },
+  "SITE_ACCESS_NOTICE": {
+    "message": "すべてのサイトで Web AI API（window.ai）をブロックするには、すべてのサイトへのアクセスを許可してください",
+    "description": "Side panel notice (Chrome/Firefox): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_NOTICE_EDGE": {
+    "message": "すべてのサイトで Copilot を非表示にし Web AI API（window.ai）をブロックするには、すべてのサイトへのアクセスを許可してください",
+    "description": "Side panel notice (Edge): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_GRANT": {
+    "message": "許可",
+    "description": "Button in the notice: request the all-sites permission"
   }
 }

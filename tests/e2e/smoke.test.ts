@@ -29,6 +29,29 @@ describe('extension loads', () => {
 });
 
 describe('side panel UI', () => {
+  it('asks for all-sites access (window.ai) until AI blocking is turned off', async () => {
+    const page = await openSidePanel(ctx);
+    try {
+      // Fresh profile: optional *://*/* is not granted, AI category is on
+      await page.waitForSelector('[data-testid="site-access"]:not([hidden])', { timeout: 5000 });
+      expect(await page.isVisible('[data-testid="grant-all-sites"]')).toBe(true);
+
+      await page.evaluate(async () => {
+        const { settings } = await chrome.storage.local.get('settings');
+        await chrome.storage.local.set({ settings: { ...(settings ?? {}), ai: false } });
+      });
+      await page.waitForSelector('[data-testid="site-access"][hidden]', { state: 'attached', timeout: 5000 });
+
+      await page.evaluate(async () => {
+        const { settings } = await chrome.storage.local.get('settings');
+        await chrome.storage.local.set({ settings: { ...(settings ?? {}), ai: true } });
+      });
+      await page.waitForSelector('[data-testid="site-access"]:not([hidden])', { timeout: 5000 });
+    } finally {
+      await page.close();
+    }
+  });
+
   it('renders header and 5 category cards', async () => {
     const page = await openSidePanel(ctx);
     try {

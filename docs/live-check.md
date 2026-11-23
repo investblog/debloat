@@ -33,6 +33,10 @@ Then per mode:
   "Show AI for this search" and it reloads once without `udm`; the next search is `udm=14` again.
 - **Pause (1h)** → everything reappears without reload; Resume hides again.
 - **Allow on site** for google.com → AI Overview visible; remove → hidden.
+- **All-sites access** notice under the quick controls → Allow → browser prompt → notice disappears
+  (and so does "All Google domains").
+  - Chrome / Firefox: on any site, DevTools console `typeof window.ai` → `"undefined"`.
+  - Edge: Copilot button/overlays on ordinary pages are hidden. Pause → they come back after reload.
 
 ## When something is missed
 

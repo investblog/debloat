@@ -1,5 +1,8 @@
 import type { Category, CategoryId, PresetId, Settings } from './types';
 
+/** The optional host permission in the manifest (not <all_urls>, which also covers file:// and is never granted) */
+export const ALL_SITES = '*://*/*';
+
 export const BADGE_COLOR = '#10B981';
 export const BADGE_FLASH_COLOR = '#FFB347';
 export const BADGE_FLASH_MS = 600;

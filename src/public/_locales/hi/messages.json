@@ -374,5 +374,17 @@
   "SUB_AUTO_SIGNIN": {
     "message": "ब्राउज़र में अपने-आप साइन इन का प्रॉम्प्ट",
     "description": "Sub-toggle label (auto_signin)"
+  },
+  "SITE_ACCESS_NOTICE": {
+    "message": "हर साइट पर वेब AI API (window.ai) ब्लॉक करने के लिए सभी साइटों का ऐक्सेस दें",
+    "description": "Side panel notice (Chrome/Firefox): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_NOTICE_EDGE": {
+    "message": "हर साइट पर Copilot छिपाने और वेब AI API (window.ai) ब्लॉक करने के लिए सभी साइटों का ऐक्सेस दें",
+    "description": "Side panel notice (Edge): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_GRANT": {
+    "message": "अनुमति दें",
+    "description": "Button in the notice: request the all-sites permission"
   }
 }

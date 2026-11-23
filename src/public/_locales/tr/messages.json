@@ -374,5 +374,17 @@
   "SUB_AUTO_SIGNIN": {
     "message": "Otomatik tarayıcı oturum açma istemi",
     "description": "Sub-toggle label (auto_signin)"
+  },
+  "SITE_ACCESS_NOTICE": {
+    "message": "Web yapay zeka API'lerini (window.ai) her sitede engellemek için tüm sitelere erişime izin verin",
+    "description": "Side panel notice (Chrome/Firefox): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_NOTICE_EDGE": {
+    "message": "Copilot'u gizlemek ve web yapay zeka API'lerini (window.ai) her sitede engellemek için tüm sitelere erişime izin verin",
+    "description": "Side panel notice (Edge): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_GRANT": {
+    "message": "İzin ver",
+    "description": "Button in the notice: request the all-sites permission"
   }
 }

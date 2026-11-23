@@ -374,5 +374,17 @@
   "SUB_AUTO_SIGNIN": {
     "message": "Lời nhắc tự động đăng nhập trình duyệt",
     "description": "Sub-toggle label (auto_signin)"
+  },
+  "SITE_ACCESS_NOTICE": {
+    "message": "Để chặn API AI trên web (window.ai) ở mọi trang, hãy cho phép truy cập tất cả các trang web",
+    "description": "Side panel notice (Chrome/Firefox): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_NOTICE_EDGE": {
+    "message": "Để ẩn Copilot và chặn API AI trên web (window.ai) ở mọi trang, hãy cho phép truy cập tất cả các trang web",
+    "description": "Side panel notice (Edge): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_GRANT": {
+    "message": "Cho phép",
+    "description": "Button in the notice: request the all-sites permission"
   }
 }

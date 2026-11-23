@@ -374,5 +374,17 @@
   "SUB_AUTO_SIGNIN": {
     "message": "瀏覽器自動登入提示",
     "description": "Sub-toggle label (auto_signin)"
+  },
+  "SITE_ACCESS_NOTICE": {
+    "message": "若要在所有網站上封鎖網頁 AI API（window.ai），請允許存取所有網站",
+    "description": "Side panel notice (Chrome/Firefox): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_NOTICE_EDGE": {
+    "message": "若要在所有網站上隱藏 Copilot 並封鎖網頁 AI API（window.ai），請允許存取所有網站",
+    "description": "Side panel notice (Edge): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_GRANT": {
+    "message": "允許",
+    "description": "Button in the notice: request the all-sites permission"
   }
 }

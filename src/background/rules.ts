@@ -1,7 +1,7 @@
 import { detectBrowser } from '@background/browser';
-import { CATEGORY_RULESETS } from '@shared/constants';
+import { ALL_SITES, CATEGORY_RULESETS } from '@shared/constants';
 import { GOOGLE_EXTRA_DOMAINS, googleOrigins, googleSearchMatches } from '@shared/google-domains';
-import { loadSettings } from '@shared/settings';
+import { isPaused, isSubEnabled, loadSettings } from '@shared/settings';
 import type { CategoryId, Settings } from '@shared/types';
 import { browser } from 'wxt/browser';
 
@@ -60,7 +60,7 @@ export async function toggleCategory(category: CategoryId, enabled: boolean): Pr
 
 async function hasAllUrlsPermission(): Promise<boolean> {
   try {
-    return await browser.permissions.contains({ origins: ['<all_urls>'] });
+    return await browser.permissions.contains({ origins: [ALL_SITES] });
   } catch {
     return false;
   }
@@ -81,7 +81,7 @@ async function enableEdgeUI(): Promise<void> {
     await browser.scripting.registerContentScripts([
       {
         id: EDGE_UI_SCRIPT_ID,
-        matches: ['<all_urls>'],
+        matches: [ALL_SITES],
         js: ['content-scripts/edge-ui.js'],
         runAt: 'document_idle',
       },
@@ -106,7 +106,7 @@ async function enableAiApis(): Promise<void> {
     await browser.scripting.registerContentScripts([
       {
         id: AI_APIS_SCRIPT_ID,
-        matches: ['<all_urls>'],
+        matches: [ALL_SITES],
         js: ['content-scripts/ai-apis.js'],
         runAt: 'document_start',
         world: 'MAIN',
@@ -161,19 +161,20 @@ async function applyDynamicScripts(): Promise<void> {
   const settings: Settings = await loadSettings();
   const currentBrowser = detectBrowser();
   const hasPermission = await hasAllUrlsPermission();
+  // The window.ai script runs in the page's MAIN world and can't read settings, so pause unregisters it
+  const paused = isPaused(settings);
 
   await applyGoogleExtraScript(await hasGoogleExtraPermission());
 
-  // Edge UI: register when ai or shopping enabled + has <all_urls> permission + is Edge
-  if (currentBrowser === 'edge' && hasPermission && (settings.ai || settings.shopping)) {
+  // Edge UI: register when ai or shopping enabled + has all-sites permission + is Edge
+  if (currentBrowser === 'edge' && hasPermission && !paused && (settings.ai || settings.shopping)) {
     await enableEdgeUI();
   } else {
     await disableEdgeUI();
   }
 
   // window.ai blocking: register when window_ai sub-toggle enabled + ai master on + has permission
-  const windowAiEnabled = settings.subToggles.window_ai ?? true;
-  if (hasPermission && settings.ai && windowAiEnabled) {
+  if (hasPermission && !paused && settings.ai && isSubEnabled(settings, 'window_ai')) {
     await enableAiApis();
   } else {
     await disableAiApis();

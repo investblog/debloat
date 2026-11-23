@@ -374,5 +374,17 @@
   "SUB_AUTO_SIGNIN": {
     "message": "Richiesta di accesso automatico al browser",
     "description": "Sub-toggle label (auto_signin)"
+  },
+  "SITE_ACCESS_NOTICE": {
+    "message": "Per bloccare le API di IA web (window.ai) su tutti i siti, consenti l'accesso a tutti i siti",
+    "description": "Side panel notice (Chrome/Firefox): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_NOTICE_EDGE": {
+    "message": "Per nascondere Copilot e bloccare le API di IA web (window.ai) su tutti i siti, consenti l'accesso a tutti i siti",
+    "description": "Side panel notice (Edge): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_GRANT": {
+    "message": "Consenti",
+    "description": "Button in the notice: request the all-sites permission"
   }
 }

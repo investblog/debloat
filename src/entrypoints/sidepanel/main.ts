@@ -1,5 +1,5 @@
 import { detectBrowser } from '@background/browser';
-import { CATEGORIES, PRESETS, STORE_URLS } from '@shared/constants';
+import { ALL_SITES, CATEGORIES, PRESETS, STORE_URLS } from '@shared/constants';
 import { GOOGLE_EXTRA_DOMAINS, googleOrigins as googleOriginsFor } from '@shared/google-domains';
 import { sendMessage } from '@shared/messaging';
 import { isSubEnabled, loadSettings, patchSettings, toggleCategory, toggleSubToggle } from '@shared/settings';
@@ -248,6 +248,58 @@ async function render() {
 
   const quickBar = h('div', { class: 'quick', 'data-testid': 'quick-controls' }, pauseBtn, googleAllBtn, showAiBtn);
 
+  // ── All-sites access: Copilot hiding (Edge) and window.ai blocking run on every site ──
+  const siteAccessBtn = h(
+    'button',
+    {
+      class: 'notice__btn',
+      'data-testid': 'grant-all-sites',
+      onClick: async () => {
+        // Must run directly in the click handler (user gesture)
+        const granted = await browser.permissions.request({ origins: [ALL_SITES] });
+        if (granted) syncSiteAccess();
+      },
+    },
+    t('SITE_ACCESS_GRANT', 'Allow'),
+  );
+  const siteAccess = h(
+    'div',
+    { class: 'notice', 'data-testid': 'site-access' },
+    h(
+      'span',
+      { class: 'notice__text' },
+      currentBrowser === 'edge'
+        ? t(
+            'SITE_ACCESS_NOTICE_EDGE',
+            'To hide Copilot and block web AI APIs (window.ai) on every site, allow access to all sites',
+          )
+        : t('SITE_ACCESS_NOTICE', 'To block web AI APIs (window.ai) on every site, allow access to all sites'),
+    ),
+    siteAccessBtn,
+  );
+  siteAccess.hidden = true;
+
+  async function syncSiteAccess(): Promise<void> {
+    let granted = false;
+    try {
+      granted = await browser.permissions.contains({ origins: [ALL_SITES] });
+    } catch {
+      // keep false
+    }
+    const needed = settings.ai && (currentBrowser === 'edge' || isSubEnabled(settings, 'window_ai'));
+    siteAccess.hidden = granted || !needed;
+    if (granted) googleAllBtn.hidden = true; // all sites include every Google domain
+  }
+  syncSiteAccess();
+
+  // Presets, Enable/Disable All and toggles all write settings — keep the conditional controls in sync
+  browser.storage.onChanged.addListener(async (changes, area) => {
+    if (area !== 'local' || !('settings' in changes)) return;
+    settings = await loadSettings();
+    syncSiteAccess();
+    syncShowAiBtn();
+  });
+
   // ── Category cards ──
   const cardsContainer = h('div', { class: 'cards', 'data-testid': 'categories' });
 
@@ -330,7 +382,7 @@ async function render() {
   const footer = h('footer', { class: 'footer' }, h('div', { class: 'footer__actions' }, enableAllBtn, disableAllBtn));
 
   // ── Assemble ──
-  app.append(header, presetBar, quickBar, cardsContainer, footer, activity.drawer);
+  app.append(header, presetBar, quickBar, siteAccess, cardsContainer, footer, activity.drawer);
 }
 
 render();

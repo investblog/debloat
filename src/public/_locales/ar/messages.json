@@ -374,5 +374,17 @@
   "SUB_AUTO_SIGNIN": {
     "message": "تنبيه تسجيل الدخول التلقائي إلى المتصفّح",
     "description": "Sub-toggle label (auto_signin)"
+  },
+  "SITE_ACCESS_NOTICE": {
+    "message": "لحظر واجهات الذكاء الاصطناعي على الويب (window.ai) في كل المواقع، اسمح بالوصول إلى جميع المواقع",
+    "description": "Side panel notice (Chrome/Firefox): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_NOTICE_EDGE": {
+    "message": "لإخفاء Copilot وحظر واجهات الذكاء الاصطناعي على الويب (window.ai) في كل المواقع، اسمح بالوصول إلى جميع المواقع",
+    "description": "Side panel notice (Edge): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_GRANT": {
+    "message": "السماح",
+    "description": "Button in the notice: request the all-sites permission"
   }
 }

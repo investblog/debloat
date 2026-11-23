@@ -16,6 +16,8 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   default, with a one-time "Show AI for this search" bypass in the side panel.
 - Google: "All Google domains" button — optional permission for the other 169 country domains
   (the manifest keeps the same 18, so updating doesn't re-prompt users).
+- Side panel asks for access to all sites when it's needed: hiding Copilot in Edge pages and blocking
+  web AI APIs (`window.ai`) never worked before, because nothing ever requested that optional permission.
 - 19 new interface languages (21 total); store name and description lead with
   "Hide Google AI Overview & AI Mode".
 
@@ -23,6 +25,10 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Sub-toggles, pause and the site allow-list apply to Google instantly, without reload.
 - Pause now also stops CSS hiding on Bing, Edge NTP and Edge UI (checked on page load).
 - Badge counts only blocked requests and hidden elements (not redirects/allow rules).
+
+### Fixed
+- The all-sites permission check looked for `<all_urls>` while the manifest offers `*://*/*`, so a
+  granted permission was never recognized. Edge UI / `window.ai` scripts are also unregistered while paused.
 
 ### Removed
 - AI Scout opt-in reporting: collector, Send Report button, Scout toggle, welcome opt-in, indigo badge state.
