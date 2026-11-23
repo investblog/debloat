@@ -1,6 +1,5 @@
 import { ALL } from '@selectors/bing-search';
 import { createHideReporter } from '@shared/report-hidden';
-import { createScoutCollector } from '@shared/scout-collector';
 import { loadSettings } from '@shared/settings';
 import { normalizeHost } from '@shared/url';
 import './style.css';
@@ -20,7 +19,6 @@ export default defineContentScript({
     }
 
     const reporter = createHideReporter('ai');
-    const scout = settings.scoutReporting ? createScoutCollector('bing-search') : null;
 
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
@@ -30,7 +28,6 @@ export default defineContentScript({
             const targets = node.matches(selector) ? [node] : [...node.querySelectorAll(selector)];
             for (const target of targets) {
               const el = target as HTMLElement;
-              if (scout) scout.track(el);
               el.style.display = 'none';
               reporter.track(el);
             }

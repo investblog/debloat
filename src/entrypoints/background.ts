@@ -1,13 +1,6 @@
 import { addCssHiddenCount, getTabCount, initBadge } from '@background/badge';
 import { initPause, pause, unpause } from '@background/pause';
 import { initRules } from '@background/rules';
-import {
-  cleanupScoutTab,
-  getScoutStatus,
-  resetScoutTab,
-  sendStoredReport,
-  storeScoutCandidates,
-} from '@background/scout';
 import type { Message, MessageResponse } from '@shared/messaging';
 import { addSiteWhitelist, removeSiteWhitelist } from '@shared/settings';
 import type { ActivityEntry } from '@shared/types';
@@ -41,13 +34,6 @@ export default defineBackground(async () => {
   // Cleanup on tab close
   browser.tabs.onRemoved.addListener((tabId) => {
     tabActivity.delete(tabId);
-    cleanupScoutTab(tabId);
-  });
-
-  // Reset scout data on navigation
-  browser.webNavigation.onCommitted.addListener((details) => {
-    if (details.frameId !== 0) return;
-    resetScoutTab(details.tabId);
   });
 
   // Welcome page on first install + uninstall URL
@@ -87,34 +73,6 @@ async function handleMessage(msg: Message, sender: { tab?: { id?: number } }): P
       const tabId = sender.tab?.id;
       if (tabId != null) {
         addCssHiddenCount(tabId, msg.count, msg.domain, msg.category, tabActivity);
-      }
-      return { type: 'OK' };
-    }
-
-    case 'SCOUT_CANDIDATES': {
-      const tabId = sender.tab?.id;
-      if (tabId != null) {
-        storeScoutCandidates(tabId, msg.surface, msg.pageUrl, msg.candidates, msg.viewport, msg.known);
-      }
-      return { type: 'OK' };
-    }
-
-    case 'GET_SCOUT_STATUS':
-      return { type: 'SCOUT_STATUS', status: getScoutStatus(msg.tabId) };
-
-    case 'SCOUT_SEND_REPORT': {
-      const notification = await sendStoredReport(msg.tabId);
-      if (notification) {
-        try {
-          browser.notifications.create({
-            type: 'basic',
-            iconUrl: browser.runtime.getURL('/icons/128.png'),
-            title: notification.title,
-            message: notification.message,
-          });
-        } catch {
-          // Notifications may not be available
-        }
       }
       return { type: 'OK' };
     }

@@ -26,7 +26,6 @@ export const BADGE_COLOR = '#10B981';
 export const BADGE_FLASH_COLOR = '#FFB347';
 export const BADGE_FLASH_MS = 600;
 export const BADGE_PAUSED_COLOR = '#6B7280';
-export const BADGE_SCOUT_COLOR = '#818CF8';
 export const BADGE_REFRESH_MS = 2000;
 export const ACTIVITY_BUFFER_SIZE = 100;
 export const PAUSE_DURATION_MS = 60 * 60 * 1000; // 1 hour
@@ -77,8 +76,6 @@ export const DEFAULT_SETTINGS: Settings = {
   preset: 'aggressive',
   siteWhitelist: {},
   pauseUntil: null,
-  scoutReporting: false,
-  scoutInstallId: '',
 };
 
 export const CATEGORIES: Category[] = [

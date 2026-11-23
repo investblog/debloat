@@ -49,6 +49,14 @@ describe('settings', () => {
       expect(settings.telemetry).toBe(true);
       expect(settings.siteWhitelist).toEqual({});
     });
+
+    it('should drop obsolete AI Scout keys from ≤1.0.3 storage', async () => {
+      storeRef.current.settings = { ai: false, scoutReporting: true, scoutInstallId: 'abc' };
+      const settings = await loadSettings();
+      expect(settings).not.toHaveProperty('scoutReporting');
+      expect(settings).not.toHaveProperty('scoutInstallId');
+      expect(settings.ai).toBe(false);
+    });
   });
 
   describe('saveSettings', () => {

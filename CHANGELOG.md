@@ -4,6 +4,14 @@ All notable changes to Debloat are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Removed
+- AI Scout opt-in reporting: collector, Send Report button, Scout toggle, welcome opt-in, indigo badge state.
+  The reporting endpoint was unreachable, so no reports were ever delivered.
+- `notifications` permission (it was used only by AI Scout).
+- Stored `scoutReporting` / `scoutInstallId` settings are cleaned up on load.
+
 ## [1.0.3] - 2026-03-07
 
 ### Added

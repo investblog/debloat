@@ -31,7 +31,6 @@ export default defineConfig({
       ...(browser !== 'firefox' ? ['declarativeNetRequestFeedback', 'sidePanel'] : []),
       'scripting',
       'webNavigation',
-      'notifications',
     ],
 
     ...(browser !== 'firefox' && {

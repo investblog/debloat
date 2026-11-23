@@ -1,6 +1,6 @@
 import { CATEGORIES } from '@shared/constants';
 import { sendMessage } from '@shared/messaging';
-import type { ActivityEntry, CategoryId, ScoutStatus } from '@shared/types';
+import type { ActivityEntry, CategoryId } from '@shared/types';
 import { h } from '@ui/dom';
 import { icon } from '@ui/icons';
 import { browser } from 'wxt/browser';
@@ -24,7 +24,6 @@ function formatTime(ts: number): string {
 
 interface ActivityDrawerOptions {
   onHasActivity?: (hasActivity: boolean) => void;
-  onScoutPending?: (pending: boolean) => void;
 }
 
 export function createActivityDrawer(opts?: ActivityDrawerOptions): { drawer: HTMLElement; open: () => void } {
@@ -92,14 +91,9 @@ export function createActivityDrawer(opts?: ActivityDrawerOptions): { drawer: HT
     try {
       const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
       if (!tab?.id) return;
-      const [actResp, scoutResp] = await Promise.all([
-        sendMessage({ type: 'GET_ACTIVITY', tabId: tab.id }),
-        sendMessage({ type: 'GET_SCOUT_STATUS', tabId: tab.id }),
-      ]);
+      const actResp = await sendMessage({ type: 'GET_ACTIVITY', tabId: tab.id });
       const entries = actResp.type === 'ACTIVITY' ? actResp.entries : [];
-      const scoutStatus = scoutResp.type === 'SCOUT_STATUS' ? scoutResp.status : null;
       opts?.onHasActivity?.(entries.length > 0);
-      opts?.onScoutPending?.(scoutStatus?.state === 'pending' && scoutStatus.unknownCount > 0);
     } catch {
       // ignore
     }
@@ -113,30 +107,19 @@ export function createActivityDrawer(opts?: ActivityDrawerOptions): { drawer: HT
     try {
       const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
       if (!tab?.id) return;
-      const [actResp, scoutResp] = await Promise.all([
-        sendMessage({ type: 'GET_ACTIVITY', tabId: tab.id }),
-        sendMessage({ type: 'GET_SCOUT_STATUS', tabId: tab.id }),
-      ]);
+      const actResp = await sendMessage({ type: 'GET_ACTIVITY', tabId: tab.id });
       const entries = actResp.type === 'ACTIVITY' ? actResp.entries : [];
-      const scoutStatus = scoutResp.type === 'SCOUT_STATUS' ? scoutResp.status : null;
-      const hasUnknown = scoutStatus?.state === 'pending' && scoutStatus.unknownCount > 0;
       opts?.onHasActivity?.(entries.length > 0);
-      opts?.onScoutPending?.(hasUnknown);
-      renderEntries(entries, hasUnknown ? scoutStatus : null, tab.id);
+      renderEntries(entries);
     } catch {
       // Side panel may not have an active tab
     }
   }
 
-  function renderEntries(entries: ActivityEntry[], scoutStatus?: ScoutStatus | null, tabId?: number) {
+  function renderEntries(entries: ActivityEntry[]) {
     list.textContent = '';
 
-    // ── Scout row for unknown elements (top) ──
-    if (scoutStatus && tabId != null) {
-      list.append(buildScoutRow(scoutStatus, tabId));
-    }
-
-    if (entries.length === 0 && !scoutStatus) {
+    if (entries.length === 0) {
       list.append(h('div', { class: 'activity__empty' }, 'No activity yet'));
       return;
     }
@@ -225,56 +208,6 @@ export function createActivityDrawer(opts?: ActivityDrawerOptions): { drawer: HT
       );
       list.append(row);
     }
-  }
-
-  function buildScoutRow(status: ScoutStatus, tabId: number): HTMLElement {
-    const radarIcon = h('span', { class: 'activity__icon activity__icon--scout' });
-    radarIcon.append(icon('radar', 14));
-
-    if (status.state === 'reported') {
-      return h(
-        'div',
-        { class: 'activity__scout-row activity__scout-row--done' },
-        radarIcon,
-        h('span', { class: 'activity__scout-text' }, status.resultMessage ?? 'Reported'),
-      );
-    }
-
-    if (status.state === 'sending') {
-      return h(
-        'div',
-        { class: 'activity__scout-row activity__scout-row--sending' },
-        radarIcon,
-        h('span', { class: 'activity__scout-text' }, 'Sending report...'),
-      );
-    }
-
-    const sendBtn = h(
-      'button',
-      {
-        class: 'activity__scout-send',
-        'data-testid': 'scout-send-report',
-        onClick: async () => {
-          sendBtn.textContent = 'Sending...';
-          sendBtn.disabled = true;
-          await sendMessage({ type: 'SCOUT_SEND_REPORT', tabId });
-          refresh();
-        },
-      },
-      'Send Report',
-    );
-
-    return h(
-      'div',
-      { class: 'activity__scout-row' },
-      radarIcon,
-      h(
-        'span',
-        { class: 'activity__scout-text' },
-        `${status.unknownCount} new AI element${status.unknownCount > 1 ? 's' : ''} detected`,
-      ),
-      sendBtn,
-    );
   }
 
   return { drawer, open };

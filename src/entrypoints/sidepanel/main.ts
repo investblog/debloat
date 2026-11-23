@@ -1,7 +1,7 @@
 import { detectBrowser } from '@background/browser';
 import { CATEGORIES, PRESETS, STORE_URLS } from '@shared/constants';
 import { sendMessage } from '@shared/messaging';
-import { loadSettings, patchSettings, setScoutReporting, toggleCategory, toggleSubToggle } from '@shared/settings';
+import { loadSettings, patchSettings, toggleCategory, toggleSubToggle } from '@shared/settings';
 import type { CategoryId, PresetId } from '@shared/types';
 import { createActivityDrawer } from '@ui/components/activity-drawer';
 import { createCategoryCard } from '@ui/components/category-card';
@@ -92,9 +92,6 @@ async function render() {
   const activity = createActivityDrawer({
     onHasActivity: (has) => {
       logsBtn.classList.toggle('btn-icon--active-log', has);
-    },
-    onScoutPending: (pending) => {
-      logsBtn.classList.toggle('btn-icon--scout', pending);
     },
   });
   logsBtn.addEventListener('click', () => activity.open());
@@ -190,21 +187,7 @@ async function render() {
     pauseBtn.append(icon('pause', 14), ' Pause (1h)');
   }
 
-  // ── Scout toggle ──
-  const scoutBtn = h('button', {
-    class: `quick__btn${settings.scoutReporting ? ' quick__btn--active' : ''}`,
-    'data-testid': 'scout-toggle',
-    onClick: async () => {
-      const nowEnabled = !settings.scoutReporting;
-      settings = await setScoutReporting(nowEnabled);
-      scoutBtn.classList.toggle('quick__btn--active', nowEnabled);
-      scoutBtn.textContent = '';
-      scoutBtn.append(icon('radar', 14), nowEnabled ? ' Scout: On' : ' Scout: Off');
-    },
-  });
-  scoutBtn.append(icon('radar', 14), settings.scoutReporting ? ' Scout: On' : ' Scout: Off');
-
-  const quickBar = h('div', { class: 'quick', 'data-testid': 'quick-controls' }, pauseBtn, scoutBtn);
+  const quickBar = h('div', { class: 'quick', 'data-testid': 'quick-controls' }, pauseBtn);
 
   // ── Category cards ──
   const cardsContainer = h('div', { class: 'cards', 'data-testid': 'categories' });
