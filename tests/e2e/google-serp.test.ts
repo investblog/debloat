@@ -22,6 +22,10 @@ const FIXTURE = `<!doctype html><html><head><meta charset="utf-8"><title>q - Goo
   <div class="g" id="r1"><a href="https://example.com/1"><h3>Result 1</h3></a></div>
   <div><div id="paa"><div data-initq="q"><div class="related-question-pair">Question?</div></div></div></div>
   <div class="g" id="r2"><a href="https://example.com/2"><h3>Result 2</h3></a></div>
+  <div><div id="ttk"><div class="list">
+    <div id="ttk-a"><div data-attrid="lab/title/a">Topic A</div></div>
+    <div id="ttk-b"><div data-attrid="lab/title/b">Topic B</div></div>
+  </div></div></div>
 </div></div></div>
 </body></html>`;
 
@@ -86,6 +90,28 @@ describe('Google SERP (routed fixture)', () => {
     }
   });
 
+  it('unhides "Things to know" parts once Google loads their real content', async () => {
+    await setSubToggles({});
+    const page = await openSerp();
+    try {
+      // Both sections have only a title so far → whole block counts as AI
+      expect(await visible(page, '#ttk')).toBe(false);
+      // Google fills in content for section A later
+      await page.evaluate(() => {
+        const content = document.createElement('div');
+        content.setAttribute('data-attrid', 'lab/content/a');
+        content.textContent = 'Real content';
+        document.getElementById('ttk-a')?.append(content);
+      });
+      await page.waitForTimeout(150);
+      expect(await visible(page, '#ttk')).toBe(true);
+      expect(await visible(page, '#ttk-a')).toBe(true);
+      expect(await visible(page, '#ttk-b')).toBe(false);
+    } finally {
+      await page.close();
+    }
+  });
+
   it('reacts to a sub-toggle change without reload', async () => {
     await setSubToggles({});
     const page = await openSerp();
@@ -124,6 +150,10 @@ describe('Google SERP (routed fixture)', () => {
       await panel.close();
       await page.waitForURL((u) => !u.searchParams.has('udm'), { timeout: 5000 });
       expect(new URL(page.url()).searchParams.get('q')).toBe('dogs');
+      // …and the AI Overview is actually shown on that load
+      await page.waitForSelector('html[data-debloat-allow-ai]', { state: 'attached', timeout: 5000 });
+      expect(await visible(page, '#aio')).toBe(true);
+      expect(await visible(page, '#B2Jtyd')).toBe(true);
 
       // The next search is classic again
       await page.goto('https://www.google.com/search?q=birds', { waitUntil: 'domcontentloaded' });

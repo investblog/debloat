@@ -1,5 +1,6 @@
-import { findGoogleAi, type GoogleAiKind, holdsResults } from '@shared/google-ai-detect';
+import { findGoogleAi, type GoogleAiKind } from '@shared/google-ai-detect';
 import { GOOGLE_CORE_DOMAINS, googleSearchMatches } from '@shared/google-domains';
+import type { MessageResponse } from '@shared/messaging';
 import { createHideReporter } from '@shared/report-hidden';
 import { isPaused, isSubEnabled, loadSettings } from '@shared/settings';
 import type { Settings } from '@shared/types';
@@ -26,6 +27,15 @@ function msg(key: string, fallback: string): string {
   }
 }
 
+async function askAiShown(): Promise<boolean> {
+  try {
+    const resp = (await browser.runtime.sendMessage({ type: 'IS_AI_SHOWN' })) as MessageResponse | undefined;
+    return resp?.type === 'AI_SHOWN' && resp.shown;
+  } catch {
+    return false;
+  }
+}
+
 export default defineContentScript({
   matches: googleSearchMatches(GOOGLE_CORE_DOMAINS),
   runAt: 'document_start',
@@ -34,29 +44,34 @@ export default defineContentScript({
     const root = document.documentElement;
     const reporter = createHideReporter('ai');
     let enabled = new Set<GoogleAiKind>();
+    /** The user asked to see AI for this search ("Show AI for this search" in classic results mode) */
+    let aiShown = false;
 
     /** Mirror settings onto <html> attributes; CSS reacts without a rescan */
     function apply(settings: Settings): void {
       const host = normalizeHost(location.hostname);
-      const active = settings.ai && !isPaused(settings) && !(settings.siteWhitelist[host] ?? []).includes('ai');
+      const active =
+        settings.ai && !aiShown && !isPaused(settings) && !(settings.siteWhitelist[host] ?? []).includes('ai');
       root.toggleAttribute('data-debloat-allow-ai', !active);
       enabled = new Set(active ? KINDS.filter((k) => isSubEnabled(settings, k)) : []);
       for (const kind of KINDS) root.toggleAttribute(`data-debloat-allow-${kind}`, !enabled.has(kind));
       root.toggleAttribute('data-debloat-ai-minimize', isSubEnabled(settings, MINIMIZE_SUB));
     }
 
+    /**
+     * Reconcile marks with what the detector finds now. The page loads in pieces:
+     * a block marked early may turn out to wrap results, or a "Things to know"
+     * section may get its non-AI content later — those lose their mark.
+     */
     function scan(): void {
-      // The page loads in pieces: a block marked before the results arrived may
-      // turn out to wrap them — unmark it so this pass picks a smaller one.
-      for (const el of document.querySelectorAll(`[${HIDE_ATTR}]`)) {
-        if (el.getAttribute(HIDE_ATTR) !== 'people_also_ask' && holdsResults(el)) {
+      for (const kind of enabled) {
+        const found = new Set(findGoogleAi(document, kind));
+        for (const el of document.querySelectorAll(`[${HIDE_ATTR}="${kind}"]`)) {
+          if (found.has(el)) continue;
           el.removeAttribute(HIDE_ATTR);
           minibarFor(el)?.remove();
         }
-      }
-
-      for (const kind of enabled) {
-        for (const el of findGoogleAi(document, kind)) {
+        for (const el of found) {
           if (el.getAttribute(HIDE_ATTR) === kind) continue;
           el.setAttribute(HIDE_ATTR, kind);
           reporter.track(el as HTMLElement);
@@ -103,7 +118,9 @@ export default defineContentScript({
       });
     }
 
-    apply(await loadSettings());
+    const [settings, shown] = await Promise.all([loadSettings(), askAiShown()]);
+    aiShown = shown;
+    apply(settings);
     new MutationObserver(scheduleScan).observe(root, { childList: true, subtree: true });
     scheduleScan();
 

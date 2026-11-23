@@ -16,11 +16,13 @@ export type Message =
   | { type: 'WHITELIST_SITE'; domain: string; categories: CategoryId[] }
   | { type: 'UNWHITELIST_SITE'; domain: string }
   | { type: 'REPORT_CSS_HIDDEN'; domain: string; count: number; category: CategoryId }
-  | { type: 'SHOW_AI_ONCE'; tabId: number };
+  | { type: 'SHOW_AI_ONCE'; tabId: number }
+  | { type: 'IS_AI_SHOWN' };
 
 export type MessageResponse =
   | { type: 'TAB_COUNT'; count: number }
   | { type: 'ACTIVITY'; entries: ActivityEntry[] }
+  | { type: 'AI_SHOWN'; shown: boolean }
   | { type: 'OK' };
 
 export function sendMessage(msg: Message): Promise<MessageResponse> {

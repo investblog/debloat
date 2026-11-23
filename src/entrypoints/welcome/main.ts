@@ -18,6 +18,8 @@ async function render() {
   const initialTheme = (stored.theme as string) ?? 'dark';
   document.documentElement.setAttribute('data-theme', initialTheme);
   document.documentElement.lang = browser.i18n.getUILanguage();
+  document.documentElement.dir =
+    browser.i18n.getMessage('@@bidi_dir' as Parameters<typeof browser.i18n.getMessage>[0]) || 'ltr';
 
   let currentTheme = initialTheme;
   const themeIcon = h('span', { class: 'theme-toggle__icon' });

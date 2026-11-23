@@ -30,28 +30,58 @@ type DnrRule = Parameters<typeof browser.declarativeNetRequest.updateDynamicRule
     : never
   : never;
 
+/** Tabs whose next main-frame navigation must pass the redirect */
 const pendingBypass = new Set<number>();
+/** Tabs showing Google's AI view on request: tabId → the search query it was shown for */
+const aiShownFor = new Map<number, string>();
+
+/** True if the page at `url` in `tabId` is the search the user asked to see with AI */
+export function isAiShown(tabId: number, url: string): boolean {
+  const q = aiShownFor.get(tabId);
+  if (q == null) return false;
+  try {
+    const u = new URL(url);
+    return u.searchParams.get('q') === q && !u.searchParams.has('udm');
+  } catch {
+    return false;
+  }
+}
+
+function removeBypassRule(tabId: number): void {
+  browser.declarativeNetRequest.updateSessionRules({ removeRuleIds: [BYPASS_RULE_ID_BASE + tabId] }).catch(() => {});
+}
 
 export function initClassicResults(): void {
   applyClassicResults();
+  clearStaleBypassRules();
   browser.storage.onChanged.addListener((changes, area) => {
     if (area === 'local' && 'settings' in changes) applyClassicResults();
   });
   browser.permissions.onAdded.addListener(() => applyClassicResults());
   browser.permissions.onRemoved.addListener(() => applyClassicResults());
 
-  // A bypass covers exactly one navigation of its tab
   browser.webNavigation.onCommitted.addListener((details) => {
-    if (details.frameId !== 0 || !pendingBypass.has(details.tabId)) return;
-    pendingBypass.delete(details.tabId);
-    browser.declarativeNetRequest
-      .updateSessionRules({ removeRuleIds: [BYPASS_RULE_ID_BASE + details.tabId] })
-      .catch(() => {});
+    if (details.frameId !== 0) return;
+    // A bypass rule covers exactly one navigation of its tab
+    if (pendingBypass.delete(details.tabId)) removeBypassRule(details.tabId);
+    // Leaving that search ends "show AI" for the tab
+    if (aiShownFor.has(details.tabId) && !isAiShown(details.tabId, details.url)) aiShownFor.delete(details.tabId);
   });
   browser.tabs.onRemoved.addListener((tabId) => {
-    if (!pendingBypass.delete(tabId)) return;
-    browser.declarativeNetRequest.updateSessionRules({ removeRuleIds: [BYPASS_RULE_ID_BASE + tabId] }).catch(() => {});
+    aiShownFor.delete(tabId);
+    if (pendingBypass.delete(tabId)) removeBypassRule(tabId);
   });
+}
+
+/** After a service-worker restart the in-memory bypass state is gone; drop leftover per-tab rules */
+async function clearStaleBypassRules(): Promise<void> {
+  try {
+    const rules = await browser.declarativeNetRequest.getSessionRules();
+    const stale = rules.map((r) => r.id).filter((id) => id >= BYPASS_RULE_ID_BASE);
+    if (stale.length) await browser.declarativeNetRequest.updateSessionRules({ removeRuleIds: stale });
+  } catch {
+    // Session rules unsupported — nothing to clear
+  }
 }
 
 /** Google domains (bare, e.g. google.de) the redirect applies to, minus allow-listed ones */
@@ -128,5 +158,6 @@ export async function showAiOnce(tabId: number): Promise<void> {
     ] as DnrRule[],
   });
   pendingBypass.add(tabId);
+  aiShownFor.set(tabId, url.searchParams.get('q') ?? '');
   await browser.tabs.update(tabId, { url: url.toString() });
 }

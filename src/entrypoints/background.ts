@@ -1,5 +1,5 @@
 import { addCssHiddenCount, getTabCount, initBadge } from '@background/badge';
-import { initClassicResults, showAiOnce } from '@background/classic-results';
+import { initClassicResults, isAiShown, showAiOnce } from '@background/classic-results';
 import { initPause, pause, unpause } from '@background/pause';
 import { initRules } from '@background/rules';
 import type { Message, MessageResponse } from '@shared/messaging';
@@ -26,7 +26,7 @@ export default defineBackground(async () => {
   // Message handler for Side Panel / Sidebar
   browser.runtime.onMessage.addListener(((
     msg: Message,
-    sender: { tab?: { id?: number } },
+    sender: { tab?: { id?: number; url?: string } },
     sendResponse: (resp: MessageResponse) => void,
   ) => {
     handleMessage(msg, sender).then(sendResponse);
@@ -47,7 +47,7 @@ export default defineBackground(async () => {
   });
 });
 
-async function handleMessage(msg: Message, sender: { tab?: { id?: number } }): Promise<MessageResponse> {
+async function handleMessage(msg: Message, sender: { tab?: { id?: number; url?: string } }): Promise<MessageResponse> {
   switch (msg.type) {
     case 'GET_TAB_COUNT':
       return { type: 'TAB_COUNT', count: getTabCount(msg.tabId) };
@@ -82,5 +82,10 @@ async function handleMessage(msg: Message, sender: { tab?: { id?: number } }): P
     case 'SHOW_AI_ONCE':
       await showAiOnce(msg.tabId);
       return { type: 'OK' };
+
+    case 'IS_AI_SHOWN': {
+      const { id, url } = sender.tab ?? {};
+      return { type: 'AI_SHOWN', shown: id != null && url != null && isAiShown(id, url) };
+    }
   }
 }

@@ -22,6 +22,8 @@ domain (e.g. google.at) after granting **All Google domains**:
 | `what is photosynthesis` | AI Overview hidden, organic results intact, no empty gap at the top |
 | `best laptop 2026` | AI Overview + "People also ask" hidden; shopping/ads untouched by the AI category |
 | `2+2`, `weather london`, `usd to eur` | calculator / weather / converter **visible** |
+| `photosynthsis` (typo) | "Did you mean / Showing results for" line **visible** |
+| `car insurance quote` | top ads untouched by the AI category (only the Sponsored category may hide them) |
 | any query | AI Mode tab hidden; All / Images / News / Videos tabs visible |
 
 Then per mode:
