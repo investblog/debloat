@@ -115,6 +115,14 @@
     "message": "Show",
     "description": "Collapsed AI Overview bar: button to expand"
   },
+  "GOOGLE_ALL_BTN": {
+    "message": "All Google domains",
+    "description": "Side panel button: grant access to every Google country domain"
+  },
+  "GOOGLE_ALL_TOOLTIP": {
+    "message": "Hide AI on Google in every country, not only the 18 largest",
+    "description": "Tooltip for the All Google domains button"
+  },
   "MINIBAR_HIDE": {
     "message": "Hide",
     "description": "Collapsed AI Overview bar: button to collapse again"

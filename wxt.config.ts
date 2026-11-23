@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { defineConfig } from 'wxt';
+import { GOOGLE_CORE_DOMAINS } from './src/shared/google-domains';
 
 export default defineConfig({
   srcDir: 'src',
@@ -50,24 +51,7 @@ export default defineConfig({
     }),
 
     host_permissions: [
-      '*://www.google.com/*',
-      '*://www.google.co.uk/*',
-      '*://www.google.de/*',
-      '*://www.google.fr/*',
-      '*://www.google.co.jp/*',
-      '*://www.google.co.in/*',
-      '*://www.google.com.br/*',
-      '*://www.google.ca/*',
-      '*://www.google.com.au/*',
-      '*://www.google.ru/*',
-      '*://www.google.it/*',
-      '*://www.google.es/*',
-      '*://www.google.com.mx/*',
-      '*://www.google.co.kr/*',
-      '*://www.google.nl/*',
-      '*://www.google.pl/*',
-      '*://www.google.com.tr/*',
-      '*://www.google.co.id/*',
+      ...GOOGLE_CORE_DOMAINS.map((h) => `*://${h}/*`),
       '*://ntp.msn.com/*',
       '*://edge.microsoft.com/*',
       '*://*.bing.com/*',

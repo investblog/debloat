@@ -1,4 +1,5 @@
 import { findGoogleAi, type GoogleAiKind, holdsResults } from '@shared/google-ai-detect';
+import { GOOGLE_CORE_DOMAINS, googleSearchMatches } from '@shared/google-domains';
 import { createHideReporter } from '@shared/report-hidden';
 import { isPaused, isSubEnabled, loadSettings } from '@shared/settings';
 import type { Settings } from '@shared/types';
@@ -26,26 +27,7 @@ function msg(key: string, fallback: string): string {
 }
 
 export default defineContentScript({
-  matches: [
-    '*://www.google.com/search*',
-    '*://www.google.co.uk/search*',
-    '*://www.google.de/search*',
-    '*://www.google.fr/search*',
-    '*://www.google.co.jp/search*',
-    '*://www.google.co.in/search*',
-    '*://www.google.com.br/search*',
-    '*://www.google.ca/search*',
-    '*://www.google.com.au/search*',
-    '*://www.google.ru/search*',
-    '*://www.google.it/search*',
-    '*://www.google.es/search*',
-    '*://www.google.com.mx/search*',
-    '*://www.google.co.kr/search*',
-    '*://www.google.nl/search*',
-    '*://www.google.pl/search*',
-    '*://www.google.com.tr/search*',
-    '*://www.google.co.id/search*',
-  ],
+  matches: googleSearchMatches(GOOGLE_CORE_DOMAINS),
   runAt: 'document_start',
 
   async main() {

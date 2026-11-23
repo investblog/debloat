@@ -1,5 +1,6 @@
 import { detectBrowser } from '@background/browser';
 import { CATEGORIES, PRESETS, STORE_URLS } from '@shared/constants';
+import { GOOGLE_EXTRA_DOMAINS, googleOrigins as googleOriginsFor } from '@shared/google-domains';
 import { sendMessage } from '@shared/messaging';
 import { loadSettings, patchSettings, toggleCategory, toggleSubToggle } from '@shared/settings';
 import type { CategoryId, PresetId } from '@shared/types';
@@ -187,7 +188,33 @@ async function render() {
     pauseBtn.append(icon('pause', 14), ' Pause (1h)');
   }
 
-  const quickBar = h('div', { class: 'quick', 'data-testid': 'quick-controls' }, pauseBtn);
+  // ── All Google country domains (optional permission; 18 are covered by the manifest) ──
+  const googleOrigins = googleOriginsFor(GOOGLE_EXTRA_DOMAINS);
+  const googleAllBtn = h('button', {
+    class: 'quick__btn',
+    'data-testid': 'google-all-domains',
+    title:
+      browser.i18n.getMessage('GOOGLE_ALL_TOOLTIP' as MsgKey) ||
+      'Hide AI on Google in every country, not only the 18 largest',
+    onClick: async () => {
+      // Must run directly in the click handler (user gesture)
+      const granted = await browser.permissions.request({ origins: googleOrigins });
+      googleAllBtn.hidden = granted;
+    },
+  });
+  googleAllBtn.append(
+    icon('web-plus', 14),
+    ` ${browser.i18n.getMessage('GOOGLE_ALL_BTN' as MsgKey) || 'All Google domains'}`,
+  );
+  googleAllBtn.hidden = true;
+  browser.permissions
+    .contains({ origins: googleOrigins })
+    .then((has) => {
+      googleAllBtn.hidden = has;
+    })
+    .catch(() => {});
+
+  const quickBar = h('div', { class: 'quick', 'data-testid': 'quick-controls' }, pauseBtn, googleAllBtn);
 
   // ── Category cards ──
   const cardsContainer = h('div', { class: 'cards', 'data-testid': 'categories' });

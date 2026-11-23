@@ -199,6 +199,10 @@ body {
   transition: background var(--transition);
 }
 
+.quick__btn[hidden] {
+  display: none;
+}
+
 .quick__btn:hover {
   background: var(--color-surface-hover);
 }

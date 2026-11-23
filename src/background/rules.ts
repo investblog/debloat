@@ -1,16 +1,22 @@
 import { detectBrowser } from '@background/browser';
 import { CATEGORY_RULESETS } from '@shared/constants';
+import { GOOGLE_EXTRA_DOMAINS, googleOrigins, googleSearchMatches } from '@shared/google-domains';
 import { loadSettings } from '@shared/settings';
 import type { CategoryId, Settings } from '@shared/types';
 import { browser } from 'wxt/browser';
 
 const EDGE_UI_SCRIPT_ID = 'debloat-edge-ui';
 const AI_APIS_SCRIPT_ID = 'debloat-ai-apis';
+const GOOGLE_EXTRA_SCRIPT_ID = 'debloat-google-extra';
 
 export function initRules(): void {
   // Apply saved settings on startup
   applyAllRulesets();
   applyDynamicScripts();
+
+  // Optional host permissions granted/revoked (side panel button or browser UI)
+  browser.permissions.onAdded.addListener(() => applyDynamicScripts());
+  browser.permissions.onRemoved.addListener(() => applyDynamicScripts());
 
   // React to storage changes from Side Panel
   browser.storage.onChanged.addListener((changes, area) => {
@@ -120,10 +126,43 @@ async function disableAiApis(): Promise<void> {
   }
 }
 
+/** Has the user granted the extra Google country domains (or all sites)? */
+async function hasGoogleExtraPermission(): Promise<boolean> {
+  try {
+    return await browser.permissions.contains({ origins: googleOrigins(GOOGLE_EXTRA_DOMAINS) });
+  } catch {
+    return false;
+  }
+}
+
+/** Same Google content script as the manifest one, on the extra domains. It reads settings itself. */
+async function applyGoogleExtraScript(granted: boolean): Promise<void> {
+  const registered = await isScriptRegistered(GOOGLE_EXTRA_SCRIPT_ID);
+  try {
+    if (granted && !registered) {
+      await browser.scripting.registerContentScripts([
+        {
+          id: GOOGLE_EXTRA_SCRIPT_ID,
+          matches: googleSearchMatches(GOOGLE_EXTRA_DOMAINS.map((d) => `*.${d}`)),
+          js: ['content-scripts/google-search.js'],
+          css: ['content-scripts/google-search.css'],
+          runAt: 'document_start',
+        },
+      ]);
+    } else if (!granted && registered) {
+      await browser.scripting.unregisterContentScripts({ ids: [GOOGLE_EXTRA_SCRIPT_ID] });
+    }
+  } catch {
+    // May fail for unpacked extensions
+  }
+}
+
 async function applyDynamicScripts(): Promise<void> {
   const settings: Settings = await loadSettings();
   const currentBrowser = detectBrowser();
   const hasPermission = await hasAllUrlsPermission();
+
+  await applyGoogleExtraScript(await hasGoogleExtraPermission());
 
   // Edge UI: register when ai or shopping enabled + has <all_urls> permission + is Edge
   if (currentBrowser === 'edge' && hasPermission && (settings.ai || settings.shopping)) {
