@@ -7,6 +7,8 @@ export type PresetId = 'aggressive' | 'balanced' | 'minimal' | 'custom';
 export interface SubToggle {
   id: string;
   label: string;
+  /** Optional caveat shown under the label */
+  hint?: string;
   browsers: BrowserType[];
   /** dNR ruleset IDs this sub-toggle controls (empty = CSS/DOM only) */
   rulesetIds?: string[];

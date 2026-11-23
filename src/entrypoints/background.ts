@@ -1,4 +1,5 @@
 import { addCssHiddenCount, getTabCount, initBadge } from '@background/badge';
+import { initClassicResults, showAiOnce } from '@background/classic-results';
 import { initPause, pause, unpause } from '@background/pause';
 import { initRules } from '@background/rules';
 import type { Message, MessageResponse } from '@shared/messaging';
@@ -13,6 +14,7 @@ export default defineBackground(async () => {
   initBadge(tabActivity);
   initRules();
   initPause();
+  initClassicResults();
 
   // Chrome/Edge: click icon → open Side Panel
   if ((browser as unknown as { sidePanel?: { setPanelBehavior: (o: object) => void } }).sidePanel?.setPanelBehavior) {
@@ -76,5 +78,9 @@ async function handleMessage(msg: Message, sender: { tab?: { id?: number } }): P
       }
       return { type: 'OK' };
     }
+
+    case 'SHOW_AI_ONCE':
+      await showAiOnce(msg.tabId);
+      return { type: 'OK' };
   }
 }

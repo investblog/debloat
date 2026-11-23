@@ -165,7 +165,8 @@ async function refreshBadge(tabId: number, tabActivity: Map<number, ActivityEntr
         }) => Promise<{ rulesMatchedInfo: { rule: { rulesetId: string }; timeStamp?: number }[] }>;
       }
     ).getMatchedRules({ tabId });
-    const count = rulesMatchedInfo.length;
+    // Count only static block rulesets; dynamic/session rules (classic results redirect, allow) are not blocks
+    const count = rulesMatchedInfo.filter((info) => rulesetToCategory.has(info.rule.rulesetId)).length;
     const prevCount = tabCounts.get(tabId) ?? 0;
     tabCounts.set(tabId, count);
 

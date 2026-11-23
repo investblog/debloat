@@ -123,6 +123,10 @@
     "message": "Hide AI on Google in every country, not only the 18 largest",
     "description": "Tooltip for the All Google domains button"
   },
+  "SHOW_AI_ONCE_BTN": {
+    "message": "Show AI for this search",
+    "description": "Side panel button: reload the current Google search once without classic results mode"
+  },
   "MINIBAR_HIDE": {
     "message": "Hide",
     "description": "Collapsed AI Overview bar: button to collapse again"

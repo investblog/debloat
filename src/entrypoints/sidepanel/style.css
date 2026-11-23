@@ -337,6 +337,14 @@ body {
   color: var(--color-text-secondary);
 }
 
+.card__sub-hint {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--color-text-secondary);
+}
+
 /* ── Toggle ── */
 
 .toggle {

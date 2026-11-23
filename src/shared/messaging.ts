@@ -15,7 +15,8 @@ export type Message =
   | { type: 'UNPAUSE' }
   | { type: 'WHITELIST_SITE'; domain: string; categories: CategoryId[] }
   | { type: 'UNWHITELIST_SITE'; domain: string }
-  | { type: 'REPORT_CSS_HIDDEN'; domain: string; count: number; category: CategoryId };
+  | { type: 'REPORT_CSS_HIDDEN'; domain: string; count: number; category: CategoryId }
+  | { type: 'SHOW_AI_ONCE'; tabId: number };
 
 export type MessageResponse =
   | { type: 'TAB_COUNT'; count: number }

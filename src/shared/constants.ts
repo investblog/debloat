@@ -72,6 +72,13 @@ export const CATEGORIES: Category[] = [
       },
       { id: 'ai_mode', label: 'Google AI Mode', browsers: ['chrome', 'edge', 'firefox'], defaultEnabled: true },
       {
+        id: 'classic_results',
+        label: 'Google: classic web results only',
+        hint: 'No AI is generated at all, but calculator, weather and knowledge panels disappear too',
+        browsers: ['chrome', 'edge', 'firefox'],
+        defaultEnabled: false,
+      },
+      {
         id: 'people_also_ask',
         label: 'Google "People also ask"',
         browsers: ['chrome', 'edge', 'firefox'],

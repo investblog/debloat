@@ -2,7 +2,7 @@ import { detectBrowser } from '@background/browser';
 import { CATEGORIES, PRESETS, STORE_URLS } from '@shared/constants';
 import { GOOGLE_EXTRA_DOMAINS, googleOrigins as googleOriginsFor } from '@shared/google-domains';
 import { sendMessage } from '@shared/messaging';
-import { loadSettings, patchSettings, toggleCategory, toggleSubToggle } from '@shared/settings';
+import { isSubEnabled, loadSettings, patchSettings, toggleCategory, toggleSubToggle } from '@shared/settings';
 import type { CategoryId, PresetId } from '@shared/types';
 import { createActivityDrawer } from '@ui/components/activity-drawer';
 import { createCategoryCard } from '@ui/components/category-card';
@@ -214,7 +214,43 @@ async function render() {
     })
     .catch(() => {});
 
-  const quickBar = h('div', { class: 'quick', 'data-testid': 'quick-controls' }, pauseBtn, googleAllBtn);
+  // ── Classic results bypass: show Google's AI view for the current search, once ──
+  const showAiBtn = h('button', {
+    class: 'quick__btn',
+    'data-testid': 'show-ai-once',
+    onClick: async () => {
+      const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+      if (tab?.id != null) await sendMessage({ type: 'SHOW_AI_ONCE', tabId: tab.id });
+    },
+  });
+  showAiBtn.append(
+    icon('lightbulb-alert', 14),
+    ` ${browser.i18n.getMessage('SHOW_AI_ONCE_BTN' as MsgKey) || 'Show AI for this search'}`,
+  );
+  showAiBtn.hidden = true;
+
+  async function syncShowAiBtn(): Promise<void> {
+    try {
+      const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+      const url = tab?.url ? new URL(tab.url) : null;
+      showAiBtn.hidden = !(
+        url &&
+        /(^|\.)google\.[a-z.]+$/.test(url.hostname) &&
+        url.pathname === '/search' &&
+        url.searchParams.get('udm') === '14' &&
+        isSubEnabled(settings, 'classic_results')
+      );
+    } catch {
+      showAiBtn.hidden = true;
+    }
+  }
+  syncShowAiBtn();
+  browser.tabs.onActivated.addListener(() => syncShowAiBtn());
+  browser.tabs.onUpdated.addListener((_id, info) => {
+    if (info.url || info.status === 'complete') syncShowAiBtn();
+  });
+
+  const quickBar = h('div', { class: 'quick', 'data-testid': 'quick-controls' }, pauseBtn, googleAllBtn, showAiBtn);
 
   // ── Category cards ──
   const cardsContainer = h('div', { class: 'cards', 'data-testid': 'categories' });
@@ -237,6 +273,7 @@ async function render() {
         onToggleSub: async (id: string, enabled: boolean) => {
           settings = await toggleSubToggle(id, enabled);
           presetSelect.value = 'custom';
+          syncShowAiBtn();
         },
       });
       cardsContainer.append(card);

@@ -42,7 +42,9 @@ export function createCategoryCard({
       'div',
       { class: 'card__sub-row', 'data-testid': `sub-row-${sub.id}` },
       subToggle,
-      h('span', { class: 'card__sub-label' }, sub.label),
+      sub.hint
+        ? h('span', { class: 'card__sub-label' }, sub.label, h('span', { class: 'card__sub-hint' }, sub.hint))
+        : h('span', { class: 'card__sub-label' }, sub.label),
     );
     subContainer.append(subRow);
   }

@@ -99,6 +99,41 @@ describe('Google SERP (routed fixture)', () => {
     }
   });
 
+  it('classic results mode redirects to udm=14, and "show AI once" bypasses it for one load', async () => {
+    await setSubToggles({ classic_results: true });
+    await new Promise((r) => setTimeout(r, 300)); // background applies dynamic rules
+    const page = await ctx.context.newPage();
+    try {
+      await page.goto('https://www.google.com/search?q=cats', { waitUntil: 'domcontentloaded' });
+      expect(new URL(page.url()).searchParams.get('udm')).toBe('14');
+
+      // Images vertical is left alone
+      await page.goto('https://www.google.com/search?q=cats&udm=2', { waitUntil: 'domcontentloaded' });
+      expect(new URL(page.url()).searchParams.get('udm')).toBe('2');
+
+      // Bypass: same search without udm, once
+      await page.goto('https://www.google.com/search?q=dogs', { waitUntil: 'domcontentloaded' });
+      const tabId = await sw.evaluate(async () => {
+        const [tab] = await chrome.tabs.query({ url: 'https://www.google.com/search*udm=14*' });
+        return tab?.id ?? -1;
+      });
+      expect(tabId).toBeGreaterThan(-1);
+      const panel = await ctx.context.newPage();
+      await panel.goto(`chrome-extension://${ctx.extensionId}/sidepanel.html`);
+      await panel.evaluate((id) => chrome.runtime.sendMessage({ type: 'SHOW_AI_ONCE', tabId: id }), tabId);
+      await panel.close();
+      await page.waitForURL((u) => !u.searchParams.has('udm'), { timeout: 5000 });
+      expect(new URL(page.url()).searchParams.get('q')).toBe('dogs');
+
+      // The next search is classic again
+      await page.goto('https://www.google.com/search?q=birds', { waitUntil: 'domcontentloaded' });
+      expect(new URL(page.url()).searchParams.get('udm')).toBe('14');
+    } finally {
+      await page.close();
+      await setSubToggles({});
+    }
+  });
+
   it('minimize mode shows a bar that expands the AI Overview', async () => {
     await setSubToggles({ ai_overview_minimize: true });
     const page = await openSerp();
