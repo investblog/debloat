@@ -7,6 +7,7 @@ import {
   BADGE_REFRESH_MS,
   CATEGORY_RULESETS,
 } from '@shared/constants';
+import { t } from '@shared/i18n';
 import { loadSettings } from '@shared/settings';
 import type { ActivityEntry, CategoryId } from '@shared/types';
 import { browser } from 'wxt/browser';
@@ -94,7 +95,7 @@ export async function showPausedBadge(): Promise<void> {
   try {
     await actionApi.setBadgeText({ text: '⏸' });
     await actionApi.setBadgeBackgroundColor({ color: BADGE_PAUSED_COLOR });
-    await actionApi.setTitle({ title: 'Debloat: paused' });
+    await actionApi.setTitle({ title: t('BADGE_PAUSED', 'Debloat: paused') });
   } catch {
     // Extension context may be invalid
   }
@@ -149,7 +150,10 @@ async function renderBadge(tabId: number, merged: number): Promise<void> {
   const text = merged > 999 ? '1k+' : merged > 0 ? String(merged) : '';
   await actionApi.setBadgeText({ text, tabId });
   await actionApi.setBadgeBackgroundColor({ color: BADGE_COLOR, tabId });
-  await actionApi.setTitle({ title: merged > 0 ? `Debloat: ${merged} blocked` : 'Debloat', tabId });
+  await actionApi.setTitle({
+    title: merged > 0 ? t('BADGE_BLOCKED', 'Debloat: $1 blocked', merged) : 'Debloat',
+    tabId,
+  });
 }
 
 async function refreshBadge(tabId: number, tabActivity: Map<number, ActivityEntry[]>): Promise<void> {

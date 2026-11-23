@@ -1,0 +1,378 @@
+{
+  "EXTENSION_NAME": {
+    "message": "Debloat — Sin Vista creada con IA ni Modo IA",
+    "description": "Extension name (store listing title, ≤ 45 chars)"
+  },
+  "EXTENSION_DESCRIPTION": {
+    "message": "Oculta la Vista creada con IA, el Modo IA y Más preguntas de Google. Quita Copilot, patrocinados y telemetría. Sin rastreo.",
+    "description": "Extension description (≤ 132 chars)"
+  },
+  "CATEGORY_AI": {
+    "message": "Funciones de IA",
+    "description": "AI Features category name"
+  },
+  "CATEGORY_AI_DESC": {
+    "message": "Vista creada con IA, Modo IA, Más preguntas, Gemini, Copilot",
+    "description": "AI category subtitle"
+  },
+  "CATEGORY_SPONSORED": {
+    "message": "Contenido patrocinado",
+    "description": "Sponsored Content category name"
+  },
+  "CATEGORY_SPONSORED_DESC": {
+    "message": "Feed de nueva pestaña, sitios patrocinados, historias recomendadas",
+    "description": "Sponsored Content category description"
+  },
+  "CATEGORY_SHOPPING": {
+    "message": "Compras",
+    "description": "Shopping category name"
+  },
+  "CATEGORY_SHOPPING_DESC": {
+    "message": "Comparador de precios, cupones, asistente de compras",
+    "description": "Shopping category description"
+  },
+  "CATEGORY_TELEMETRY": {
+    "message": "Telemetría",
+    "description": "Telemetry category name"
+  },
+  "CATEGORY_TELEMETRY_DESC": {
+    "message": "Datos de diagnóstico, informes de uso, Estudios de Firefox",
+    "description": "Telemetry category description"
+  },
+  "CATEGORY_ANNOYANCES": {
+    "message": "Molestias",
+    "description": "Annoyances category name"
+  },
+  "CATEGORY_ANNOYANCES_DESC": {
+    "message": "Avisos de Rewards, consejos, predicción de texto, botón de Acrobat",
+    "description": "Annoyances category description"
+  },
+  "RATE_CHROME": {
+    "message": "Valorar en Chrome Web Store",
+    "description": "Footer link to rate extension on Chrome Web Store"
+  },
+  "RATE_EDGE": {
+    "message": "Valorar en Edge Add-ons",
+    "description": "Footer link to rate extension on Edge Add-ons"
+  },
+  "RATE_FIREFOX": {
+    "message": "Valorar en Firefox Add-ons",
+    "description": "Footer link to rate extension on Firefox Add-ons"
+  },
+  "WELCOME_TAGLINE": {
+    "message": "Tu navegador, sin estorbos",
+    "description": "Welcome page hero tagline"
+  },
+  "WELCOME_FEATURES_TITLE": {
+    "message": "Qué bloquea",
+    "description": "Welcome page features section title"
+  },
+  "WELCOME_HOW_TITLE": {
+    "message": "Cómo funciona",
+    "description": "Welcome page how-it-works section title"
+  },
+  "WELCOME_STEP1_TITLE": {
+    "message": "Instalar",
+    "description": "Welcome page step 1 title"
+  },
+  "WELCOME_STEP1_DESC": {
+    "message": "Añade la extensión, sin permisos de administrador",
+    "description": "Welcome page step 1 description"
+  },
+  "WELCOME_STEP2_TITLE": {
+    "message": "Personalizar",
+    "description": "Welcome page step 2 title"
+  },
+  "WELCOME_STEP2_DESC": {
+    "message": "Elige qué categorías bloquear o permitir",
+    "description": "Welcome page step 2 description"
+  },
+  "WELCOME_STEP3_TITLE": {
+    "message": "Navegar",
+    "description": "Welcome page step 3 title"
+  },
+  "WELCOME_STEP3_DESC": {
+    "message": "Disfruta de un navegador más limpio y rápido",
+    "description": "Welcome page step 3 description"
+  },
+  "WELCOME_CTA": {
+    "message": "Abrir panel lateral",
+    "description": "Welcome page CTA button text"
+  },
+  "WELCOME_CTA_FALLBACK": {
+    "message": "Haz clic en el icono de Debloat de la barra de herramientas para empezar",
+    "description": "Welcome page CTA fallback text when sidePanel API is unavailable"
+  },
+  "ACTIVITY_ELEMENTS_HIDDEN": {
+    "message": "elementos ocultos",
+    "description": "Activity drawer label for CSS/DOM hidden element count"
+  },
+  "MINIBAR_LABEL": {
+    "message": "Vista creada con IA ocultada por Debloat",
+    "description": "Collapsed bar shown on Google in place of a minimized AI Overview"
+  },
+  "MINIBAR_SHOW": {
+    "message": "Mostrar",
+    "description": "Collapsed AI Overview bar: button to expand"
+  },
+  "GOOGLE_ALL_BTN": {
+    "message": "Todos los dominios de Google",
+    "description": "Side panel button: grant access to every Google country domain"
+  },
+  "GOOGLE_ALL_TOOLTIP": {
+    "message": "Ocultar la IA de Google en todos los países, no solo en los 18 más grandes",
+    "description": "Tooltip for the All Google domains button"
+  },
+  "SHOW_AI_ONCE_BTN": {
+    "message": "Mostrar IA en esta búsqueda",
+    "description": "Side panel button: reload the current Google search once without classic results mode"
+  },
+  "MINIBAR_HIDE": {
+    "message": "Ocultar",
+    "description": "Collapsed AI Overview bar: button to collapse again"
+  },
+  "ACTIVITY_LOG": {
+    "message": "Registro de actividad",
+    "description": "Header button tooltip: open the activity log"
+  },
+  "PRESET_AGGRESSIVE": {
+    "message": "Agresivo",
+    "description": "Preset name: everything on"
+  },
+  "PRESET_BALANCED": {
+    "message": "Equilibrado",
+    "description": "Preset name: AI and telemetry only"
+  },
+  "PRESET_MINIMAL": {
+    "message": "Mínimo",
+    "description": "Preset name: telemetry only"
+  },
+  "PRESET_CUSTOM": {
+    "message": "Personalizado",
+    "description": "Preset name: user-defined"
+  },
+  "PAUSE_1H": {
+    "message": "Pausar (1 h)",
+    "description": "Quick control: pause all blocking for one hour"
+  },
+  "RESUME": {
+    "message": "Reanudar",
+    "description": "Quick control: end the pause"
+  },
+  "ENABLE_ALL": {
+    "message": "Activar todo",
+    "description": "Footer button"
+  },
+  "DISABLE_ALL": {
+    "message": "Desactivar todo",
+    "description": "Footer button"
+  },
+  "ACTIVITY_CLEAR": {
+    "message": "Borrar",
+    "description": "Activity log: clear the list"
+  },
+  "ACTIVITY_EMPTY": {
+    "message": "Aún no hay actividad",
+    "description": "Activity log: empty state"
+  },
+  "ACTIVITY_ALLOW": {
+    "message": "Permitir en el sitio",
+    "description": "Activity log: stop hiding this category on this site"
+  },
+  "ACTIVITY_RULESET": {
+    "message": "Conjunto de reglas: $1",
+    "description": "Activity log tooltip; $1 = ruleset id"
+  },
+  "SUB_TOGGLES_COUNT": {
+    "message": "$1 subopciones",
+    "description": "Category card: number of sub-toggles; $1 = count"
+  },
+  "BADGE_BLOCKED": {
+    "message": "Debloat: $1 bloqueados",
+    "description": "Toolbar tooltip; $1 = number of blocked items"
+  },
+  "BADGE_PAUSED": {
+    "message": "Debloat: en pausa",
+    "description": "Toolbar tooltip while paused"
+  },
+  "THEME_TOGGLE_TOOLTIP": {
+    "message": "Cambiar tema",
+    "description": "Header button tooltip"
+  },
+  "WHITELIST_SITE_TOOLTIP": {
+    "message": "Permitir en este sitio",
+    "description": "Header button tooltip"
+  },
+  "SUB_AI_OVERVIEW": {
+    "message": "Vista creada con IA de Google",
+    "description": "Sub-toggle label (ai_overview)"
+  },
+  "SUB_AI_OVERVIEW_MINIMIZE": {
+    "message": "Vista creada con IA: contraer en una barra en lugar de quitarla",
+    "description": "Sub-toggle label (ai_overview_minimize)"
+  },
+  "SUB_AI_MODE": {
+    "message": "Modo IA de Google",
+    "description": "Sub-toggle label (ai_mode)"
+  },
+  "SUB_CLASSIC_RESULTS": {
+    "message": "Google: solo resultados web clásicos",
+    "description": "Sub-toggle label (classic_results)"
+  },
+  "SUB_CLASSIC_RESULTS_HINT": {
+    "message": "No se genera nada con IA, pero también desaparecen la calculadora, el tiempo y los paneles de información",
+    "description": "Sub-toggle caveat (classic_results)"
+  },
+  "SUB_PEOPLE_ALSO_ASK": {
+    "message": "\"Más preguntas\" de Google",
+    "description": "Sub-toggle label (people_also_ask)"
+  },
+  "SUB_THINGS_TO_KNOW": {
+    "message": "\"Cosas que debes saber\" de Google (partes con IA)",
+    "description": "Sub-toggle label (things_to_know)"
+  },
+  "SUB_GEMINI_SUGGESTIONS": {
+    "message": "Sugerencias de Gemini",
+    "description": "Sub-toggle label (gemini_suggestions)"
+  },
+  "SUB_HELP_ME_WRITE": {
+    "message": "Ayúdame a escribir / Reescribir con Copilot",
+    "description": "Sub-toggle label (help_me_write)"
+  },
+  "SUB_COPILOT_SIDEBAR": {
+    "message": "Barra lateral e icono de Copilot",
+    "description": "Sub-toggle label (copilot_sidebar)"
+  },
+  "SUB_COPILOT_CONTEXT": {
+    "message": "Acceso de Copilot al contenido de la página",
+    "description": "Sub-toggle label (copilot_context)"
+  },
+  "SUB_VISUAL_SEARCH": {
+    "message": "Superposición de Búsqueda visual",
+    "description": "Sub-toggle label (visual_search)"
+  },
+  "SUB_AI_HISTORY": {
+    "message": "Búsqueda en el historial con IA",
+    "description": "Sub-toggle label (ai_history)"
+  },
+  "SUB_TEXT_PREDICTION": {
+    "message": "Predicción de texto (Turing)",
+    "description": "Sub-toggle label (text_prediction)"
+  },
+  "SUB_AI_TABS": {
+    "message": "Comparar / organizar pestañas con IA",
+    "description": "Sub-toggle label (ai_tabs)"
+  },
+  "SUB_WINDOW_AI": {
+    "message": "API web de IA (window.ai)",
+    "description": "Sub-toggle label (window_ai)"
+  },
+  "SUB_AI_SIDEBAR_FF": {
+    "message": "Barra lateral de IA y chatbots",
+    "description": "Sub-toggle label (ai_sidebar_ff)"
+  },
+  "SUB_AI_PREVIEWS_FF": {
+    "message": "Vistas previas de enlaces con IA",
+    "description": "Sub-toggle label (ai_previews_ff)"
+  },
+  "SUB_AI_TABGROUP_FF": {
+    "message": "Sugerencias de grupos de pestañas con IA",
+    "description": "Sub-toggle label (ai_tabgroup_ff)"
+  },
+  "SUB_MSN_FEED": {
+    "message": "Feed de MSN / noticias en nueva pestaña",
+    "description": "Sub-toggle label (msn_feed)"
+  },
+  "SUB_SPONSORED_TILES": {
+    "message": "Sitios principales patrocinados en nueva pestaña",
+    "description": "Sub-toggle label (sponsored_tiles)"
+  },
+  "SUB_SPOTLIGHT": {
+    "message": "Experiencias y recomendaciones de Spotlight",
+    "description": "Sub-toggle label (spotlight)"
+  },
+  "SUB_FF_SPONSORED_STORIES": {
+    "message": "Historias patrocinadas en el Inicio de Firefox",
+    "description": "Sub-toggle label (ff_sponsored_stories)"
+  },
+  "SUB_FF_SPONSORED_TILES": {
+    "message": "Sitios populares patrocinados en el Inicio de Firefox",
+    "description": "Sub-toggle label (ff_sponsored_tiles)"
+  },
+  "SUB_FF_RECOMMENDED": {
+    "message": "Historias recomendadas en el Inicio de Firefox",
+    "description": "Sub-toggle label (ff_recommended)"
+  },
+  "SUB_CHROME_DISCOVER": {
+    "message": "Tarjetas tipo Google Discover",
+    "description": "Sub-toggle label (chrome_discover)"
+  },
+  "SUB_FF_PERPLEXITY": {
+    "message": "Perplexity en los buscadores",
+    "description": "Sub-toggle label (ff_perplexity)"
+  },
+  "SUB_SHOPPING_ASSISTANT": {
+    "message": "Asistente de compras",
+    "description": "Sub-toggle label (shopping_assistant)"
+  },
+  "SUB_PRICE_COMPARE": {
+    "message": "Ventanas emergentes de comparación de precios",
+    "description": "Sub-toggle label (price_compare)"
+  },
+  "SUB_COUPONS": {
+    "message": "Avisos de cupones y reembolsos",
+    "description": "Sub-toggle label (coupons)"
+  },
+  "SUB_EXPRESS_CHECKOUT": {
+    "message": "Sugerencias de pago rápido",
+    "description": "Sub-toggle label (express_checkout)"
+  },
+  "SUB_TELE_CHROME": {
+    "message": "Servidores de diagnóstico de Google",
+    "description": "Sub-toggle label (tele_chrome)"
+  },
+  "SUB_TELE_EDGE": {
+    "message": "Datos de diagnóstico de Microsoft",
+    "description": "Sub-toggle label (tele_edge)"
+  },
+  "SUB_TELE_FIREFOX": {
+    "message": "Telemetría de Mozilla",
+    "description": "Sub-toggle label (tele_firefox)"
+  },
+  "SUB_FF_STUDIES": {
+    "message": "Estudios de Firefox (Shield)",
+    "description": "Sub-toggle label (ff_studies)"
+  },
+  "SUB_CRASH_REPORTING": {
+    "message": "Servidores de informes de uso y fallos",
+    "description": "Sub-toggle label (crash_reporting)"
+  },
+  "SUB_REWARDS": {
+    "message": "Avisos de Microsoft Rewards",
+    "description": "Sub-toggle label (rewards)"
+  },
+  "SUB_FEATURE_BANNERS": {
+    "message": "Banners de funciones recomendadas",
+    "description": "Sub-toggle label (feature_banners)"
+  },
+  "SUB_ACROBAT_BUTTON": {
+    "message": "Botón \"Editar con Acrobat\"",
+    "description": "Sub-toggle label (acrobat_button)"
+  },
+  "SUB_DEFAULT_PROMPT": {
+    "message": "Avisos de \"Establecer como navegador predeterminado\"",
+    "description": "Sub-toggle label (default_prompt)"
+  },
+  "SUB_DALLE_THEMES": {
+    "message": "Sugerencias de temas DALL-E / IA",
+    "description": "Sub-toggle label (dalle_themes)"
+  },
+  "SUB_BING_REDIRECT": {
+    "message": "Búsqueda de nueva pestaña redirigida a Bing",
+    "description": "Sub-toggle label (bing_redirect)"
+  },
+  "SUB_AUTO_SIGNIN": {
+    "message": "Aviso de inicio de sesión automático en el navegador",
+    "description": "Sub-toggle label (auto_signin)"
+  }
+}

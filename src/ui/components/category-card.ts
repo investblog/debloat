@@ -1,3 +1,4 @@
+import { subToggleKey, t } from '@shared/i18n';
 import { isSubEnabled } from '@shared/settings';
 import type { BrowserType, Category, CategoryId, Settings } from '@shared/types';
 import { h } from '@ui/dom';
@@ -43,8 +44,13 @@ export function createCategoryCard({
       { class: 'card__sub-row', 'data-testid': `sub-row-${sub.id}` },
       subToggle,
       sub.hint
-        ? h('span', { class: 'card__sub-label' }, sub.label, h('span', { class: 'card__sub-hint' }, sub.hint))
-        : h('span', { class: 'card__sub-label' }, sub.label),
+        ? h(
+            'span',
+            { class: 'card__sub-label' },
+            t(subToggleKey(sub.id), sub.label),
+            h('span', { class: 'card__sub-hint' }, t(`${subToggleKey(sub.id)}_HINT`, sub.hint)),
+          )
+        : h('span', { class: 'card__sub-label' }, t(subToggleKey(sub.id), sub.label)),
     );
     subContainer.append(subRow);
   }
@@ -67,7 +73,7 @@ export function createCategoryCard({
       },
     },
     chevron,
-    ` ${visibleSubs.length} sub-toggles`,
+    ` ${t('SUB_TOGGLES_COUNT', '$1 sub-toggles', visibleSubs.length)}`,
   );
 
   const masterToggle = createToggle({

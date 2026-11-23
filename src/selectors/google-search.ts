@@ -22,6 +22,7 @@ export const AI_OVERVIEW = [
   'div[data-subtree="mfc"]',
   '[data-async-type="folsrch"]',
   '[id^="folsrch"]',
+  '[data-content-feature="ai_overview"]', // used by a competitor (Nov 2026), not yet seen live
   'div.M8OgIe', // ≤1.0.3, class may be reused — container guard applies
   'div[jsname="Cpkphb"]', // ≤1.0.3, same caveat
 ];
@@ -77,7 +78,7 @@ export const AI_OVERVIEW_HEADINGS: RegExp[] = [
   /^обзор от ии$/i, // ru (verified)
   /^übersicht mit ki$/i, // de (verified)
   /^aperçu (?:ia|généré par l['’]ia)$/i, // fr (verified: "Aperçu IA")
-  /^vista creada con ia$/i, // es (verified)
+  /^(?:vista creada con ia|visión general creada por ia|resumen creado con ia)$/i, // es (verified), es_419
   /^ai による概要$/, // ja (verified)
   /^ai 摘要$/i, // zh_TW (verified)
   /^ai-overzicht$/i, // nl (verified)
@@ -86,15 +87,15 @@ export const AI_OVERVIEW_HEADINGS: RegExp[] = [
   /^prezentare generală generată de ai$/i, // ro (verified)
   /^ai 概览$/i, // zh_CN
   /^ai 개요$/i, // ko
-  /^visão geral criada por ia$/i, // pt
-  /^panoramica (?:ia|creata dall['’]ia)$/i, // it
-  /^przegląd od ai$/i, // pl
+  /^(?:visão geral criada por ia|vista geral de ia)$/i, // pt_BR, pt_PT (Google PT blog)
+  /^panoramica (?:ai|ia)$/i, // it (Google: "Panoramiche AI")
+  /^przegląd od ai$/i, // pl (Google blog: "Przegląd od AI")
   /^огляд від ші$/i, // uk
-  /^yapay zeka (?:genel bakışı|özeti)$/i, // tr
+  /^(?:ai bakışı|yapay zeka genel bakışı)$/i, // tr (Google TR help: "AI Bakışı")
   /^ringkasan ai$/i, // id
   /^tổng quan về ai$/i, // vi
   /^نظرة عامة (?:مولّدة )?بالذكاء الاصطناعي$/, // ar
-  /^एआई (?:से खास जानकारी|अवलोकन)$/, // hi
+  /^(?:ai|एआई) (?:से खास जानकारी|अवलोकन)$/i, // hi
 ];
 
 /** Combined static selectors (kept for the selector module test) */

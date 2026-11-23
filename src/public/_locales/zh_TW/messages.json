@@ -1,0 +1,378 @@
+{
+  "EXTENSION_NAME": {
+    "message": "Debloat — 隱藏 Google AI 摘要和 AI 模式",
+    "description": "Extension name (store listing title, ≤ 45 chars)"
+  },
+  "EXTENSION_DESCRIPTION": {
+    "message": "隱藏 Google AI 摘要、AI 模式和「其他人也問了以下問題」。移除 Copilot、贊助內容和遙測。不追蹤。",
+    "description": "Extension description (≤ 132 chars)"
+  },
+  "CATEGORY_AI": {
+    "message": "AI 功能",
+    "description": "AI Features category name"
+  },
+  "CATEGORY_AI_DESC": {
+    "message": "AI 摘要、AI 模式、其他人也問了以下問題、Gemini、Copilot",
+    "description": "AI category subtitle"
+  },
+  "CATEGORY_SPONSORED": {
+    "message": "贊助內容",
+    "description": "Sponsored Content category name"
+  },
+  "CATEGORY_SPONSORED_DESC": {
+    "message": "新分頁動態消息、贊助圖塊、推薦文章",
+    "description": "Sponsored Content category description"
+  },
+  "CATEGORY_SHOPPING": {
+    "message": "購物",
+    "description": "Shopping category name"
+  },
+  "CATEGORY_SHOPPING_DESC": {
+    "message": "比價、折價券、購物助理",
+    "description": "Shopping category description"
+  },
+  "CATEGORY_TELEMETRY": {
+    "message": "遙測",
+    "description": "Telemetry category name"
+  },
+  "CATEGORY_TELEMETRY_DESC": {
+    "message": "診斷資料、使用情況報告、Firefox 研究",
+    "description": "Telemetry category description"
+  },
+  "CATEGORY_ANNOYANCES": {
+    "message": "惱人項目",
+    "description": "Annoyances category name"
+  },
+  "CATEGORY_ANNOYANCES_DESC": {
+    "message": "Rewards 提示、功能提示、文字預測、Acrobat 按鈕",
+    "description": "Annoyances category description"
+  },
+  "RATE_CHROME": {
+    "message": "在 Chrome Web Store 評分",
+    "description": "Footer link to rate extension on Chrome Web Store"
+  },
+  "RATE_EDGE": {
+    "message": "在 Edge Add-ons 評分",
+    "description": "Footer link to rate extension on Edge Add-ons"
+  },
+  "RATE_FIREFOX": {
+    "message": "在 Firefox Add-ons 評分",
+    "description": "Footer link to rate extension on Firefox Add-ons"
+  },
+  "WELCOME_TAGLINE": {
+    "message": "讓瀏覽器清爽無負擔",
+    "description": "Welcome page hero tagline"
+  },
+  "WELCOME_FEATURES_TITLE": {
+    "message": "封鎖項目",
+    "description": "Welcome page features section title"
+  },
+  "WELCOME_HOW_TITLE": {
+    "message": "運作方式",
+    "description": "Welcome page how-it-works section title"
+  },
+  "WELCOME_STEP1_TITLE": {
+    "message": "安裝",
+    "description": "Welcome page step 1 title"
+  },
+  "WELCOME_STEP1_DESC": {
+    "message": "新增擴充功能 — 不需要管理員權限",
+    "description": "Welcome page step 1 description"
+  },
+  "WELCOME_STEP2_TITLE": {
+    "message": "自訂",
+    "description": "Welcome page step 2 title"
+  },
+  "WELCOME_STEP2_DESC": {
+    "message": "選擇要封鎖或允許的類別",
+    "description": "Welcome page step 2 description"
+  },
+  "WELCOME_STEP3_TITLE": {
+    "message": "瀏覽",
+    "description": "Welcome page step 3 title"
+  },
+  "WELCOME_STEP3_DESC": {
+    "message": "享受更清爽、更快速的瀏覽器",
+    "description": "Welcome page step 3 description"
+  },
+  "WELCOME_CTA": {
+    "message": "開啟側邊面板",
+    "description": "Welcome page CTA button text"
+  },
+  "WELCOME_CTA_FALLBACK": {
+    "message": "按一下工具列中的 Debloat 圖示即可開始",
+    "description": "Welcome page CTA fallback text when sidePanel API is unavailable"
+  },
+  "ACTIVITY_ELEMENTS_HIDDEN": {
+    "message": "個元素已隱藏",
+    "description": "Activity drawer label for CSS/DOM hidden element count"
+  },
+  "MINIBAR_LABEL": {
+    "message": "AI 摘要已由 Debloat 隱藏",
+    "description": "Collapsed bar shown on Google in place of a minimized AI Overview"
+  },
+  "MINIBAR_SHOW": {
+    "message": "顯示",
+    "description": "Collapsed AI Overview bar: button to expand"
+  },
+  "GOOGLE_ALL_BTN": {
+    "message": "所有 Google 網域",
+    "description": "Side panel button: grant access to every Google country domain"
+  },
+  "GOOGLE_ALL_TOOLTIP": {
+    "message": "在所有國家/地區的 Google 隱藏 AI，而不只限於 18 個最大的",
+    "description": "Tooltip for the All Google domains button"
+  },
+  "SHOW_AI_ONCE_BTN": {
+    "message": "本次搜尋顯示 AI",
+    "description": "Side panel button: reload the current Google search once without classic results mode"
+  },
+  "MINIBAR_HIDE": {
+    "message": "隱藏",
+    "description": "Collapsed AI Overview bar: button to collapse again"
+  },
+  "ACTIVITY_LOG": {
+    "message": "活動記錄",
+    "description": "Header button tooltip: open the activity log"
+  },
+  "PRESET_AGGRESSIVE": {
+    "message": "積極",
+    "description": "Preset name: everything on"
+  },
+  "PRESET_BALANCED": {
+    "message": "平衡",
+    "description": "Preset name: AI and telemetry only"
+  },
+  "PRESET_MINIMAL": {
+    "message": "精簡",
+    "description": "Preset name: telemetry only"
+  },
+  "PRESET_CUSTOM": {
+    "message": "自訂",
+    "description": "Preset name: user-defined"
+  },
+  "PAUSE_1H": {
+    "message": "暫停（1 小時）",
+    "description": "Quick control: pause all blocking for one hour"
+  },
+  "RESUME": {
+    "message": "繼續",
+    "description": "Quick control: end the pause"
+  },
+  "ENABLE_ALL": {
+    "message": "全部啟用",
+    "description": "Footer button"
+  },
+  "DISABLE_ALL": {
+    "message": "全部停用",
+    "description": "Footer button"
+  },
+  "ACTIVITY_CLEAR": {
+    "message": "清除",
+    "description": "Activity log: clear the list"
+  },
+  "ACTIVITY_EMPTY": {
+    "message": "尚無活動",
+    "description": "Activity log: empty state"
+  },
+  "ACTIVITY_ALLOW": {
+    "message": "在網站上允許",
+    "description": "Activity log: stop hiding this category on this site"
+  },
+  "ACTIVITY_RULESET": {
+    "message": "規則集：$1",
+    "description": "Activity log tooltip; $1 = ruleset id"
+  },
+  "SUB_TOGGLES_COUNT": {
+    "message": "$1 個子開關",
+    "description": "Category card: number of sub-toggles; $1 = count"
+  },
+  "BADGE_BLOCKED": {
+    "message": "Debloat：已封鎖 $1",
+    "description": "Toolbar tooltip; $1 = number of blocked items"
+  },
+  "BADGE_PAUSED": {
+    "message": "Debloat：已暫停",
+    "description": "Toolbar tooltip while paused"
+  },
+  "THEME_TOGGLE_TOOLTIP": {
+    "message": "切換主題",
+    "description": "Header button tooltip"
+  },
+  "WHITELIST_SITE_TOOLTIP": {
+    "message": "在此網站允許",
+    "description": "Header button tooltip"
+  },
+  "SUB_AI_OVERVIEW": {
+    "message": "Google AI 摘要",
+    "description": "Sub-toggle label (ai_overview)"
+  },
+  "SUB_AI_OVERVIEW_MINIMIZE": {
+    "message": "AI 摘要：摺疊成橫條而非移除",
+    "description": "Sub-toggle label (ai_overview_minimize)"
+  },
+  "SUB_AI_MODE": {
+    "message": "Google AI 模式",
+    "description": "Sub-toggle label (ai_mode)"
+  },
+  "SUB_CLASSIC_RESULTS": {
+    "message": "Google：僅顯示傳統網頁結果",
+    "description": "Sub-toggle label (classic_results)"
+  },
+  "SUB_CLASSIC_RESULTS_HINT": {
+    "message": "完全不產生 AI 內容，但計算機、天氣和知識面板也會消失",
+    "description": "Sub-toggle caveat (classic_results)"
+  },
+  "SUB_PEOPLE_ALSO_ASK": {
+    "message": "Google「其他人也問了以下問題」",
+    "description": "Sub-toggle label (people_also_ask)"
+  },
+  "SUB_THINGS_TO_KNOW": {
+    "message": "Google「須知事項」（AI 部分）",
+    "description": "Sub-toggle label (things_to_know)"
+  },
+  "SUB_GEMINI_SUGGESTIONS": {
+    "message": "Gemini 建議",
+    "description": "Sub-toggle label (gemini_suggestions)"
+  },
+  "SUB_HELP_ME_WRITE": {
+    "message": "協助我撰寫 / 使用 Copilot 重寫",
+    "description": "Sub-toggle label (help_me_write)"
+  },
+  "SUB_COPILOT_SIDEBAR": {
+    "message": "Copilot 側邊欄和工具列圖示",
+    "description": "Sub-toggle label (copilot_sidebar)"
+  },
+  "SUB_COPILOT_CONTEXT": {
+    "message": "Copilot 存取網頁內容",
+    "description": "Sub-toggle label (copilot_context)"
+  },
+  "SUB_VISUAL_SEARCH": {
+    "message": "視覺搜尋疊加層",
+    "description": "Sub-toggle label (visual_search)"
+  },
+  "SUB_AI_HISTORY": {
+    "message": "AI 歷史記錄搜尋",
+    "description": "Sub-toggle label (ai_history)"
+  },
+  "SUB_TEXT_PREDICTION": {
+    "message": "文字預測（Turing）",
+    "description": "Sub-toggle label (text_prediction)"
+  },
+  "SUB_AI_TABS": {
+    "message": "AI 分頁比較 / 整理",
+    "description": "Sub-toggle label (ai_tabs)"
+  },
+  "SUB_WINDOW_AI": {
+    "message": "網頁 AI API（window.ai）",
+    "description": "Sub-toggle label (window_ai)"
+  },
+  "SUB_AI_SIDEBAR_FF": {
+    "message": "AI 側邊欄和聊天機器人",
+    "description": "Sub-toggle label (ai_sidebar_ff)"
+  },
+  "SUB_AI_PREVIEWS_FF": {
+    "message": "AI 連結預覽",
+    "description": "Sub-toggle label (ai_previews_ff)"
+  },
+  "SUB_AI_TABGROUP_FF": {
+    "message": "AI 分頁群組建議",
+    "description": "Sub-toggle label (ai_tabgroup_ff)"
+  },
+  "SUB_MSN_FEED": {
+    "message": "新分頁的 MSN / 新聞動態",
+    "description": "Sub-toggle label (msn_feed)"
+  },
+  "SUB_SPONSORED_TILES": {
+    "message": "新分頁的贊助熱門網站",
+    "description": "Sub-toggle label (sponsored_tiles)"
+  },
+  "SUB_SPOTLIGHT": {
+    "message": "Spotlight 體驗和推薦",
+    "description": "Sub-toggle label (spotlight)"
+  },
+  "SUB_FF_SPONSORED_STORIES": {
+    "message": "Firefox 首頁的贊助文章",
+    "description": "Sub-toggle label (ff_sponsored_stories)"
+  },
+  "SUB_FF_SPONSORED_TILES": {
+    "message": "Firefox 首頁的贊助熱門網站",
+    "description": "Sub-toggle label (ff_sponsored_tiles)"
+  },
+  "SUB_FF_RECOMMENDED": {
+    "message": "Firefox 首頁的推薦文章",
+    "description": "Sub-toggle label (ff_recommended)"
+  },
+  "SUB_CHROME_DISCOVER": {
+    "message": "Google Discover 風格卡片",
+    "description": "Sub-toggle label (chrome_discover)"
+  },
+  "SUB_FF_PERPLEXITY": {
+    "message": "搜尋引擎中的 Perplexity",
+    "description": "Sub-toggle label (ff_perplexity)"
+  },
+  "SUB_SHOPPING_ASSISTANT": {
+    "message": "購物助理",
+    "description": "Sub-toggle label (shopping_assistant)"
+  },
+  "SUB_PRICE_COMPARE": {
+    "message": "比價彈出視窗",
+    "description": "Sub-toggle label (price_compare)"
+  },
+  "SUB_COUPONS": {
+    "message": "折價券和現金回饋通知",
+    "description": "Sub-toggle label (coupons)"
+  },
+  "SUB_EXPRESS_CHECKOUT": {
+    "message": "快速結帳建議",
+    "description": "Sub-toggle label (express_checkout)"
+  },
+  "SUB_TELE_CHROME": {
+    "message": "Google 診斷端點",
+    "description": "Sub-toggle label (tele_chrome)"
+  },
+  "SUB_TELE_EDGE": {
+    "message": "Microsoft 診斷資料",
+    "description": "Sub-toggle label (tele_edge)"
+  },
+  "SUB_TELE_FIREFOX": {
+    "message": "Mozilla 遙測",
+    "description": "Sub-toggle label (tele_firefox)"
+  },
+  "SUB_FF_STUDIES": {
+    "message": "Firefox 研究（Shield）",
+    "description": "Sub-toggle label (ff_studies)"
+  },
+  "SUB_CRASH_REPORTING": {
+    "message": "使用情況/當機回報端點",
+    "description": "Sub-toggle label (crash_reporting)"
+  },
+  "SUB_REWARDS": {
+    "message": "Microsoft Rewards 提示",
+    "description": "Sub-toggle label (rewards)"
+  },
+  "SUB_FEATURE_BANNERS": {
+    "message": "功能推薦橫幅",
+    "description": "Sub-toggle label (feature_banners)"
+  },
+  "SUB_ACROBAT_BUTTON": {
+    "message": "「使用 Acrobat 編輯」按鈕",
+    "description": "Sub-toggle label (acrobat_button)"
+  },
+  "SUB_DEFAULT_PROMPT": {
+    "message": "「設為預設瀏覽器」提示",
+    "description": "Sub-toggle label (default_prompt)"
+  },
+  "SUB_DALLE_THEMES": {
+    "message": "DALL-E / AI 主題建議",
+    "description": "Sub-toggle label (dalle_themes)"
+  },
+  "SUB_BING_REDIRECT": {
+    "message": "新分頁搜尋框重新導向至 Bing",
+    "description": "Sub-toggle label (bing_redirect)"
+  },
+  "SUB_AUTO_SIGNIN": {
+    "message": "瀏覽器自動登入提示",
+    "description": "Sub-toggle label (auto_signin)"
+  }
+}

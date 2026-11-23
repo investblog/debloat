@@ -17,6 +17,7 @@ async function render() {
   const stored = await browser.storage.local.get('theme');
   const initialTheme = (stored.theme as string) ?? 'dark';
   document.documentElement.setAttribute('data-theme', initialTheme);
+  document.documentElement.lang = browser.i18n.getUILanguage();
 
   let currentTheme = initialTheme;
   const themeIcon = h('span', { class: 'theme-toggle__icon' });

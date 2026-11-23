@@ -1,4 +1,5 @@
 import { CATEGORIES } from '@shared/constants';
+import { t } from '@shared/i18n';
 import { sendMessage } from '@shared/messaging';
 import type { ActivityEntry, CategoryId } from '@shared/types';
 import { h } from '@ui/dom';
@@ -40,7 +41,7 @@ export function createActivityDrawer(opts?: ActivityDrawerOptions): { drawer: HT
         list.textContent = '';
       },
     },
-    'Clear',
+    t('ACTIVITY_CLEAR', 'Clear'),
   );
 
   const closeIcon = h('span', { class: 'btn-icon__inner' });
@@ -120,7 +121,7 @@ export function createActivityDrawer(opts?: ActivityDrawerOptions): { drawer: HT
     list.textContent = '';
 
     if (entries.length === 0) {
-      list.append(h('div', { class: 'activity__empty' }, 'No activity yet'));
+      list.append(h('div', { class: 'activity__empty' }, t('ACTIVITY_EMPTY', 'No activity yet')));
       return;
     }
 
@@ -185,7 +186,7 @@ export function createActivityDrawer(opts?: ActivityDrawerOptions): { drawer: HT
             if (tab?.id) browser.tabs.reload(tab.id);
           },
         },
-        'Allow on site',
+        t('ACTIVITY_ALLOW', 'Allow on site'),
       );
 
       const elementsHiddenLabel = browser.i18n.getMessage('ACTIVITY_ELEMENTS_HIDDEN' as MsgKey) || 'elements hidden';
@@ -196,7 +197,7 @@ export function createActivityDrawer(opts?: ActivityDrawerOptions): { drawer: HT
       const categoryLabel = browser.i18n.getMessage(CATEGORY_LABEL_KEYS[entry.category] as MsgKey) || entry.category;
       const tooltip = isCss
         ? `${categoryLabel}\n${entry.domain} \u2014 ${entry.count} ${elementsHiddenLabel}\n${formatTime(entry.time)}`
-        : `${categoryLabel}\n${entry.domain}\nRuleset: ${entry.rulesetId}\n${formatTime(entry.time)}`;
+        : `${categoryLabel}\n${entry.domain}\n${t('ACTIVITY_RULESET', 'Ruleset: $1', entry.rulesetId)}\n${formatTime(entry.time)}`;
 
       const row = h(
         'div',

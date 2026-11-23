@@ -10,6 +10,7 @@ import { $, h } from '@ui/dom';
 import { icon } from '@ui/icons';
 import { browser } from 'wxt/browser';
 import '../../assets/styles/tokens.css';
+import { t } from '@shared/i18n';
 
 type MsgKey = Parameters<typeof browser.i18n.getMessage>[0];
 
@@ -22,6 +23,7 @@ async function render() {
   const stored = await browser.storage.local.get('theme');
   const initialTheme = (stored.theme as string) ?? 'dark';
   document.documentElement.setAttribute('data-theme', initialTheme);
+  document.documentElement.lang = browser.i18n.getUILanguage();
 
   let currentTheme = initialTheme;
   const themeIcon = h('span', { class: 'theme-toggle__icon' });
@@ -32,7 +34,7 @@ async function render() {
     {
       class: 'theme-toggle',
       'data-testid': 'theme-toggle',
-      title: browser.i18n.getMessage('THEME_TOGGLE_TOOLTIP' as MsgKey) || 'Toggle theme',
+      title: t('THEME_TOGGLE_TOOLTIP', 'Toggle theme'),
       onClick: async () => {
         currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', currentTheme);
@@ -52,7 +54,7 @@ async function render() {
   const siteBtn = h('button', {
     class: 'btn-icon',
     'data-testid': 'whitelist-site',
-    title: browser.i18n.getMessage('WHITELIST_SITE_TOOLTIP' as MsgKey) || 'Allow on this site',
+    title: t('WHITELIST_SITE_TOOLTIP', 'Allow on this site'),
     onClick: () => {
       if (siteWhitelisted) {
         // Revert to default
@@ -85,7 +87,7 @@ async function render() {
   const logsBtn = h('button', {
     class: 'btn-icon',
     'data-testid': 'activity-log',
-    title: 'Activity log',
+    title: t('ACTIVITY_LOG', 'Activity log'),
   });
   logsBtn.append(h('span', { class: 'btn-icon__inner' }, icon('console-log', 16)));
 
@@ -115,16 +117,16 @@ async function render() {
       ),
       h('div', { class: 'header__actions' }, logsBtn, siteBtn, themeBtn),
     ),
-    h('div', { class: 'header__subtitle' }, 'Your browser, decluttered'),
+    h('div', { class: 'header__subtitle' }, t('WELCOME_TAGLINE', 'Your browser, decluttered')),
   );
 
   // ── Preset pills ──
   const presetIds: PresetId[] = ['aggressive', 'balanced', 'minimal', 'custom'];
   const presetLabels: Record<PresetId, string> = {
-    aggressive: 'Aggressive',
-    balanced: 'Balanced',
-    minimal: 'Minimal',
-    custom: 'Custom',
+    aggressive: t('PRESET_AGGRESSIVE', 'Aggressive'),
+    balanced: t('PRESET_BALANCED', 'Balanced'),
+    minimal: t('PRESET_MINIMAL', 'Minimal'),
+    custom: t('PRESET_CUSTOM', 'Custom'),
   };
 
   const presetBar = h('div', { class: 'presets', 'data-testid': 'preset-selector' });
@@ -171,21 +173,21 @@ async function render() {
       if (settings.pauseUntil && settings.pauseUntil > Date.now()) {
         await sendMessage({ type: 'UNPAUSE' });
         pauseBtn.textContent = '';
-        pauseBtn.append(icon('pause', 14), ' Pause (1h)');
+        pauseBtn.append(icon('pause', 14), ` ${t('PAUSE_1H', 'Pause (1h)')}`);
         pauseBtn.classList.remove('quick__btn--active');
       } else {
         await sendMessage({ type: 'PAUSE', durationMs: 60 * 60 * 1000 });
         pauseBtn.textContent = '';
-        pauseBtn.append(icon('play', 14), ' Resume');
+        pauseBtn.append(icon('play', 14), ` ${t('RESUME', 'Resume')}`);
         pauseBtn.classList.add('quick__btn--active');
       }
       settings = await loadSettings();
     },
   });
   if (settings.pauseUntil && settings.pauseUntil > Date.now()) {
-    pauseBtn.append(icon('play', 14), ' Resume');
+    pauseBtn.append(icon('play', 14), ` ${t('RESUME', 'Resume')}`);
   } else {
-    pauseBtn.append(icon('pause', 14), ' Pause (1h)');
+    pauseBtn.append(icon('pause', 14), ` ${t('PAUSE_1H', 'Pause (1h)')}`);
   }
 
   // ── All Google country domains (optional permission; 18 are covered by the manifest) ──
@@ -193,19 +195,14 @@ async function render() {
   const googleAllBtn = h('button', {
     class: 'quick__btn',
     'data-testid': 'google-all-domains',
-    title:
-      browser.i18n.getMessage('GOOGLE_ALL_TOOLTIP' as MsgKey) ||
-      'Hide AI on Google in every country, not only the 18 largest',
+    title: t('GOOGLE_ALL_TOOLTIP', 'Hide AI on Google in every country, not only the 18 largest'),
     onClick: async () => {
       // Must run directly in the click handler (user gesture)
       const granted = await browser.permissions.request({ origins: googleOrigins });
       googleAllBtn.hidden = granted;
     },
   });
-  googleAllBtn.append(
-    icon('web-plus', 14),
-    ` ${browser.i18n.getMessage('GOOGLE_ALL_BTN' as MsgKey) || 'All Google domains'}`,
-  );
+  googleAllBtn.append(icon('web-plus', 14), ` ${t('GOOGLE_ALL_BTN', 'All Google domains')}`);
   googleAllBtn.hidden = true;
   browser.permissions
     .contains({ origins: googleOrigins })
@@ -223,10 +220,7 @@ async function render() {
       if (tab?.id != null) await sendMessage({ type: 'SHOW_AI_ONCE', tabId: tab.id });
     },
   });
-  showAiBtn.append(
-    icon('lightbulb-alert', 14),
-    ` ${browser.i18n.getMessage('SHOW_AI_ONCE_BTN' as MsgKey) || 'Show AI for this search'}`,
-  );
+  showAiBtn.append(icon('lightbulb-alert', 14), ` ${t('SHOW_AI_ONCE_BTN', 'Show AI for this search')}`);
   showAiBtn.hidden = true;
 
   async function syncShowAiBtn(): Promise<void> {
@@ -304,7 +298,7 @@ async function render() {
         renderCards();
       },
     },
-    'Enable All',
+    t('ENABLE_ALL', 'Enable All'),
   );
 
   const disableAllBtn = h(
@@ -325,7 +319,7 @@ async function render() {
         renderCards();
       },
     },
-    'Disable All',
+    t('DISABLE_ALL', 'Disable All'),
   );
 
   // Review link goes inside scrollable area

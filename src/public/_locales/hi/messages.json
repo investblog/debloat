@@ -1,0 +1,378 @@
+{
+  "EXTENSION_NAME": {
+    "message": "Debloat — AI से खास जानकारी व AI मोड छिपाएं",
+    "description": "Extension name (store listing title, ≤ 45 chars)"
+  },
+  "EXTENSION_DESCRIPTION": {
+    "message": "Google पर AI से खास जानकारी, AI मोड और लोगों ने यह भी पूछा छिपाएं। Copilot, प्रायोजित ब्लॉक और टेलीमेट्री हटाएं। कोई ट्रैकिंग नहीं।",
+    "description": "Extension description (≤ 132 chars)"
+  },
+  "CATEGORY_AI": {
+    "message": "AI सुविधाएं",
+    "description": "AI Features category name"
+  },
+  "CATEGORY_AI_DESC": {
+    "message": "AI से खास जानकारी, AI मोड, लोगों ने यह भी पूछा, Gemini, Copilot",
+    "description": "AI category subtitle"
+  },
+  "CATEGORY_SPONSORED": {
+    "message": "प्रायोजित कॉन्टेंट",
+    "description": "Sponsored Content category name"
+  },
+  "CATEGORY_SPONSORED_DESC": {
+    "message": "नए टैब पेज की फ़ीड, प्रायोजित टाइल, सुझाई गई खबरें",
+    "description": "Sponsored Content category description"
+  },
+  "CATEGORY_SHOPPING": {
+    "message": "शॉपिंग",
+    "description": "Shopping category name"
+  },
+  "CATEGORY_SHOPPING_DESC": {
+    "message": "कीमत की तुलना, कूपन, शॉपिंग असिस्टेंट",
+    "description": "Shopping category description"
+  },
+  "CATEGORY_TELEMETRY": {
+    "message": "टेलीमेट्री",
+    "description": "Telemetry category name"
+  },
+  "CATEGORY_TELEMETRY_DESC": {
+    "message": "डाइग्नोस्टिक डेटा, इस्तेमाल की रिपोर्ट, Firefox Studies",
+    "description": "Telemetry category description"
+  },
+  "CATEGORY_ANNOYANCES": {
+    "message": "परेशान करने वाली चीज़ें",
+    "description": "Annoyances category name"
+  },
+  "CATEGORY_ANNOYANCES_DESC": {
+    "message": "Rewards के प्रॉम्प्ट, सुविधा से जुड़ी सलाह, टेक्स्ट का अनुमान, Acrobat बटन",
+    "description": "Annoyances category description"
+  },
+  "RATE_CHROME": {
+    "message": "Chrome Web Store पर रेटिंग दें",
+    "description": "Footer link to rate extension on Chrome Web Store"
+  },
+  "RATE_EDGE": {
+    "message": "Edge Add-ons पर रेटिंग दें",
+    "description": "Footer link to rate extension on Edge Add-ons"
+  },
+  "RATE_FIREFOX": {
+    "message": "Firefox Add-ons पर रेटिंग दें",
+    "description": "Footer link to rate extension on Firefox Add-ons"
+  },
+  "WELCOME_TAGLINE": {
+    "message": "आपका ब्राउज़र, बिना फ़ालतू चीज़ों के",
+    "description": "Welcome page hero tagline"
+  },
+  "WELCOME_FEATURES_TITLE": {
+    "message": "यह क्या ब्लॉक करता है",
+    "description": "Welcome page features section title"
+  },
+  "WELCOME_HOW_TITLE": {
+    "message": "यह कैसे काम करता है",
+    "description": "Welcome page how-it-works section title"
+  },
+  "WELCOME_STEP1_TITLE": {
+    "message": "इंस्टॉल करें",
+    "description": "Welcome page step 1 title"
+  },
+  "WELCOME_STEP1_DESC": {
+    "message": "एक्सटेंशन जोड़ें — एडमिन अधिकारों की ज़रूरत नहीं",
+    "description": "Welcome page step 1 description"
+  },
+  "WELCOME_STEP2_TITLE": {
+    "message": "पसंद के मुताबिक बनाएं",
+    "description": "Welcome page step 2 title"
+  },
+  "WELCOME_STEP2_DESC": {
+    "message": "चुनें कि कौनसी कैटगरी ब्लॉक करनी है या अनुमति देनी है",
+    "description": "Welcome page step 2 description"
+  },
+  "WELCOME_STEP3_TITLE": {
+    "message": "ब्राउज़ करें",
+    "description": "Welcome page step 3 title"
+  },
+  "WELCOME_STEP3_DESC": {
+    "message": "साफ़-सुथरे और तेज़ ब्राउज़र का आनंद लें",
+    "description": "Welcome page step 3 description"
+  },
+  "WELCOME_CTA": {
+    "message": "साइड पैनल खोलें",
+    "description": "Welcome page CTA button text"
+  },
+  "WELCOME_CTA_FALLBACK": {
+    "message": "शुरू करने के लिए टूलबार में Debloat आइकॉन पर क्लिक करें",
+    "description": "Welcome page CTA fallback text when sidePanel API is unavailable"
+  },
+  "ACTIVITY_ELEMENTS_HIDDEN": {
+    "message": "एलिमेंट छिपाए गए",
+    "description": "Activity drawer label for CSS/DOM hidden element count"
+  },
+  "MINIBAR_LABEL": {
+    "message": "Debloat ने AI से खास जानकारी छिपाई",
+    "description": "Collapsed bar shown on Google in place of a minimized AI Overview"
+  },
+  "MINIBAR_SHOW": {
+    "message": "दिखाएं",
+    "description": "Collapsed AI Overview bar: button to expand"
+  },
+  "GOOGLE_ALL_BTN": {
+    "message": "Google के सभी डोमेन",
+    "description": "Side panel button: grant access to every Google country domain"
+  },
+  "GOOGLE_ALL_TOOLTIP": {
+    "message": "हर देश में Google पर AI छिपाएं, सिर्फ़ 18 सबसे बड़े देशों में नहीं",
+    "description": "Tooltip for the All Google domains button"
+  },
+  "SHOW_AI_ONCE_BTN": {
+    "message": "इस खोज के लिए AI दिखाएं",
+    "description": "Side panel button: reload the current Google search once without classic results mode"
+  },
+  "MINIBAR_HIDE": {
+    "message": "छिपाएं",
+    "description": "Collapsed AI Overview bar: button to collapse again"
+  },
+  "ACTIVITY_LOG": {
+    "message": "गतिविधि लॉग",
+    "description": "Header button tooltip: open the activity log"
+  },
+  "PRESET_AGGRESSIVE": {
+    "message": "सख्त",
+    "description": "Preset name: everything on"
+  },
+  "PRESET_BALANCED": {
+    "message": "संतुलित",
+    "description": "Preset name: AI and telemetry only"
+  },
+  "PRESET_MINIMAL": {
+    "message": "न्यूनतम",
+    "description": "Preset name: telemetry only"
+  },
+  "PRESET_CUSTOM": {
+    "message": "कस्टम",
+    "description": "Preset name: user-defined"
+  },
+  "PAUSE_1H": {
+    "message": "रोकें (1 घंटा)",
+    "description": "Quick control: pause all blocking for one hour"
+  },
+  "RESUME": {
+    "message": "फिर से शुरू करें",
+    "description": "Quick control: end the pause"
+  },
+  "ENABLE_ALL": {
+    "message": "सभी चालू करें",
+    "description": "Footer button"
+  },
+  "DISABLE_ALL": {
+    "message": "सभी बंद करें",
+    "description": "Footer button"
+  },
+  "ACTIVITY_CLEAR": {
+    "message": "साफ़ करें",
+    "description": "Activity log: clear the list"
+  },
+  "ACTIVITY_EMPTY": {
+    "message": "अभी तक कोई गतिविधि नहीं",
+    "description": "Activity log: empty state"
+  },
+  "ACTIVITY_ALLOW": {
+    "message": "साइट पर अनुमति दें",
+    "description": "Activity log: stop hiding this category on this site"
+  },
+  "ACTIVITY_RULESET": {
+    "message": "नियमों का सेट: $1",
+    "description": "Activity log tooltip; $1 = ruleset id"
+  },
+  "SUB_TOGGLES_COUNT": {
+    "message": "$1 सब-टॉगल",
+    "description": "Category card: number of sub-toggles; $1 = count"
+  },
+  "BADGE_BLOCKED": {
+    "message": "Debloat: $1 ब्लॉक किए गए",
+    "description": "Toolbar tooltip; $1 = number of blocked items"
+  },
+  "BADGE_PAUSED": {
+    "message": "Debloat: रोका गया",
+    "description": "Toolbar tooltip while paused"
+  },
+  "THEME_TOGGLE_TOOLTIP": {
+    "message": "थीम बदलें",
+    "description": "Header button tooltip"
+  },
+  "WHITELIST_SITE_TOOLTIP": {
+    "message": "इस साइट पर अनुमति दें",
+    "description": "Header button tooltip"
+  },
+  "SUB_AI_OVERVIEW": {
+    "message": "Google AI से खास जानकारी",
+    "description": "Sub-toggle label (ai_overview)"
+  },
+  "SUB_AI_OVERVIEW_MINIMIZE": {
+    "message": "AI से खास जानकारी: हटाने के बजाय एक बार में छोटा करें",
+    "description": "Sub-toggle label (ai_overview_minimize)"
+  },
+  "SUB_AI_MODE": {
+    "message": "Google AI मोड",
+    "description": "Sub-toggle label (ai_mode)"
+  },
+  "SUB_CLASSIC_RESULTS": {
+    "message": "Google: सिर्फ़ क्लासिक वेब नतीजे",
+    "description": "Sub-toggle label (classic_results)"
+  },
+  "SUB_CLASSIC_RESULTS_HINT": {
+    "message": "कोई AI कॉन्टेंट नहीं बनता, लेकिन कैलकुलेटर, मौसम और नॉलेज पैनल भी गायब हो जाते हैं",
+    "description": "Sub-toggle caveat (classic_results)"
+  },
+  "SUB_PEOPLE_ALSO_ASK": {
+    "message": "Google \"लोगों ने यह भी पूछा\"",
+    "description": "Sub-toggle label (people_also_ask)"
+  },
+  "SUB_THINGS_TO_KNOW": {
+    "message": "Google \"जानने लायक बातें\" (AI वाले हिस्से)",
+    "description": "Sub-toggle label (things_to_know)"
+  },
+  "SUB_GEMINI_SUGGESTIONS": {
+    "message": "Gemini के सुझाव",
+    "description": "Sub-toggle label (gemini_suggestions)"
+  },
+  "SUB_HELP_ME_WRITE": {
+    "message": "लिखने में मदद / Copilot से दोबारा लिखें",
+    "description": "Sub-toggle label (help_me_write)"
+  },
+  "SUB_COPILOT_SIDEBAR": {
+    "message": "Copilot साइडबार और टूलबार आइकॉन",
+    "description": "Sub-toggle label (copilot_sidebar)"
+  },
+  "SUB_COPILOT_CONTEXT": {
+    "message": "Copilot को पेज के कॉन्टेक्स्ट का ऐक्सेस",
+    "description": "Sub-toggle label (copilot_context)"
+  },
+  "SUB_VISUAL_SEARCH": {
+    "message": "विज़ुअल सर्च ओवरले",
+    "description": "Sub-toggle label (visual_search)"
+  },
+  "SUB_AI_HISTORY": {
+    "message": "AI से इतिहास में खोजें",
+    "description": "Sub-toggle label (ai_history)"
+  },
+  "SUB_TEXT_PREDICTION": {
+    "message": "टेक्स्ट का अनुमान (Turing)",
+    "description": "Sub-toggle label (text_prediction)"
+  },
+  "SUB_AI_TABS": {
+    "message": "AI से टैब की तुलना / व्यवस्थित करना",
+    "description": "Sub-toggle label (ai_tabs)"
+  },
+  "SUB_WINDOW_AI": {
+    "message": "वेब AI API (window.ai)",
+    "description": "Sub-toggle label (window_ai)"
+  },
+  "SUB_AI_SIDEBAR_FF": {
+    "message": "AI साइडबार और चैटबॉट",
+    "description": "Sub-toggle label (ai_sidebar_ff)"
+  },
+  "SUB_AI_PREVIEWS_FF": {
+    "message": "AI लिंक प्रीव्यू",
+    "description": "Sub-toggle label (ai_previews_ff)"
+  },
+  "SUB_AI_TABGROUP_FF": {
+    "message": "AI से टैब ग्रुप के सुझाव",
+    "description": "Sub-toggle label (ai_tabgroup_ff)"
+  },
+  "SUB_MSN_FEED": {
+    "message": "नए टैब पेज पर MSN / खबरों की फ़ीड",
+    "description": "Sub-toggle label (msn_feed)"
+  },
+  "SUB_SPONSORED_TILES": {
+    "message": "नए टैब पेज पर प्रायोजित टॉप साइटें",
+    "description": "Sub-toggle label (sponsored_tiles)"
+  },
+  "SUB_SPOTLIGHT": {
+    "message": "Spotlight अनुभव और सुझाव",
+    "description": "Sub-toggle label (spotlight)"
+  },
+  "SUB_FF_SPONSORED_STORIES": {
+    "message": "Firefox होम पर प्रायोजित खबरें",
+    "description": "Sub-toggle label (ff_sponsored_stories)"
+  },
+  "SUB_FF_SPONSORED_TILES": {
+    "message": "Firefox होम पर प्रायोजित टॉप साइटें",
+    "description": "Sub-toggle label (ff_sponsored_tiles)"
+  },
+  "SUB_FF_RECOMMENDED": {
+    "message": "Firefox होम पर सुझाई गई खबरें",
+    "description": "Sub-toggle label (ff_recommended)"
+  },
+  "SUB_CHROME_DISCOVER": {
+    "message": "Google Discover जैसे कार्ड",
+    "description": "Sub-toggle label (chrome_discover)"
+  },
+  "SUB_FF_PERPLEXITY": {
+    "message": "सर्च इंजन में Perplexity",
+    "description": "Sub-toggle label (ff_perplexity)"
+  },
+  "SUB_SHOPPING_ASSISTANT": {
+    "message": "शॉपिंग असिस्टेंट",
+    "description": "Sub-toggle label (shopping_assistant)"
+  },
+  "SUB_PRICE_COMPARE": {
+    "message": "कीमत की तुलना वाले पॉप-अप",
+    "description": "Sub-toggle label (price_compare)"
+  },
+  "SUB_COUPONS": {
+    "message": "कूपन और कैशबैक की सूचनाएं",
+    "description": "Sub-toggle label (coupons)"
+  },
+  "SUB_EXPRESS_CHECKOUT": {
+    "message": "एक्सप्रेस चेकआउट के सुझाव",
+    "description": "Sub-toggle label (express_checkout)"
+  },
+  "SUB_TELE_CHROME": {
+    "message": "Google डाइग्नोस्टिक एंडपॉइंट",
+    "description": "Sub-toggle label (tele_chrome)"
+  },
+  "SUB_TELE_EDGE": {
+    "message": "Microsoft डाइग्नोस्टिक डेटा",
+    "description": "Sub-toggle label (tele_edge)"
+  },
+  "SUB_TELE_FIREFOX": {
+    "message": "Mozilla टेलीमेट्री",
+    "description": "Sub-toggle label (tele_firefox)"
+  },
+  "SUB_FF_STUDIES": {
+    "message": "Firefox Studies (Shield)",
+    "description": "Sub-toggle label (ff_studies)"
+  },
+  "SUB_CRASH_REPORTING": {
+    "message": "इस्तेमाल/क्रैश रिपोर्टिंग एंडपॉइंट",
+    "description": "Sub-toggle label (crash_reporting)"
+  },
+  "SUB_REWARDS": {
+    "message": "Microsoft Rewards के प्रॉम्प्ट",
+    "description": "Sub-toggle label (rewards)"
+  },
+  "SUB_FEATURE_BANNERS": {
+    "message": "सुविधाओं के सुझाव वाले बैनर",
+    "description": "Sub-toggle label (feature_banners)"
+  },
+  "SUB_ACROBAT_BUTTON": {
+    "message": "\"Acrobat में बदलाव करें\" बटन",
+    "description": "Sub-toggle label (acrobat_button)"
+  },
+  "SUB_DEFAULT_PROMPT": {
+    "message": "\"डिफ़ॉल्ट ब्राउज़र के तौर पर सेट करें\" प्रॉम्प्ट",
+    "description": "Sub-toggle label (default_prompt)"
+  },
+  "SUB_DALLE_THEMES": {
+    "message": "DALL-E / AI थीम के सुझाव",
+    "description": "Sub-toggle label (dalle_themes)"
+  },
+  "SUB_BING_REDIRECT": {
+    "message": "नए टैब पेज का सर्च बॉक्स Bing पर रीडायरेक्ट",
+    "description": "Sub-toggle label (bing_redirect)"
+  },
+  "SUB_AUTO_SIGNIN": {
+    "message": "ब्राउज़र में अपने-आप साइन इन का प्रॉम्प्ट",
+    "description": "Sub-toggle label (auto_signin)"
+  }
+}
