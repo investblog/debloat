@@ -9,7 +9,7 @@
 import { ALL as COPILOT_SELECTORS } from '@selectors/edge-copilot';
 import { ALL as SHOPPING_SELECTORS } from '@selectors/edge-shopping';
 import { createHideReporter } from '@shared/report-hidden';
-import { loadSettings } from '@shared/settings';
+import { isPaused, loadSettings } from '@shared/settings';
 import type { CategoryId } from '@shared/types';
 import { normalizeHost } from '@shared/url';
 
@@ -20,6 +20,7 @@ export default defineContentScript({
 
   async main() {
     const settings = await loadSettings();
+    if (isPaused(settings)) return;
     const host = normalizeHost(location.hostname);
     const whitelisted = settings.siteWhitelist[host] ?? [];
 

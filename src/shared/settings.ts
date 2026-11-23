@@ -1,5 +1,5 @@
 import { browser } from 'wxt/browser';
-import { DEFAULT_SETTINGS } from './constants';
+import { CATEGORIES, DEFAULT_SETTINGS } from './constants';
 import type { CategoryId, Settings } from './types';
 import { normalizeHost } from './url';
 
@@ -13,6 +13,20 @@ export async function loadSettings(): Promise<Settings> {
   const stored = { ...(result[STORAGE_KEY] as Record<string, unknown> | undefined) };
   for (const key of OBSOLETE_KEYS) delete stored[key];
   return { ...DEFAULT_SETTINGS, ...(stored as Partial<Settings>) };
+}
+
+/** Sub-toggle state: the saved override, else the sub-toggle's default */
+export function isSubEnabled(settings: Settings, subId: string): boolean {
+  if (subId in settings.subToggles) return settings.subToggles[subId];
+  for (const cat of CATEGORIES) {
+    const sub = cat.subToggles.find((s) => s.id === subId);
+    if (sub) return sub.defaultEnabled;
+  }
+  return true;
+}
+
+export function isPaused(settings: Settings, now = Date.now()): boolean {
+  return settings.pauseUntil != null && settings.pauseUntil > now;
 }
 
 export async function saveSettings(settings: Settings): Promise<void> {

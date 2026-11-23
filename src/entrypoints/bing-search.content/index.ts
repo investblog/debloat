@@ -1,6 +1,6 @@
 import { ALL } from '@selectors/bing-search';
 import { createHideReporter } from '@shared/report-hidden';
-import { loadSettings } from '@shared/settings';
+import { isPaused, loadSettings } from '@shared/settings';
 import { normalizeHost } from '@shared/url';
 import './style.css';
 
@@ -13,7 +13,7 @@ export default defineContentScript({
     const host = normalizeHost(location.hostname);
     const whitelisted = settings.siteWhitelist[host] ?? [];
 
-    if (!settings.ai || whitelisted.includes('ai')) {
+    if (!settings.ai || isPaused(settings) || whitelisted.includes('ai')) {
       document.documentElement.setAttribute('data-debloat-allow-ai', '');
       return;
     }

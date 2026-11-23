@@ -1,20 +1,90 @@
 /*
  * Google Search AI element hiding — injected at document_start.
- * Selectors may break when Google updates its UI.
- * Rules scoped with html:not([data-debloat-allow-ai]) so the content script
- * can disable hiding when the site is whitelisted.
+ * Selectors may break when Google updates its UI (see src/selectors/google-search.ts).
+ *
+ * The content script mirrors settings onto <html>:
+ *   data-debloat-allow-ai            category off, paused or site allow-listed
+ *   data-debloat-allow-<kind>        sub-toggle off (ai_overview, ai_mode, people_also_ask, things_to_know)
+ *   data-debloat-ai-minimize         show a collapsed bar instead of removing AI Overview
+ * and marks blocks with data-debloat-hide="<kind>". Every rule below is scoped by
+ * those attributes, so toggling settings needs no reload.
  */
 
-/* AI Overview */
-html:not([data-debloat-allow-ai]) #ai-overview-card,
-html:not([data-debloat-allow-ai]) div[data-attrid="AIOverview"],
-html:not([data-debloat-allow-ai]) div.M8OgIe,
-html:not([data-debloat-allow-ai]) div[jsname="Cpkphb"] {
+/* ── Blocks found by the content script ── */
+
+html:not([data-debloat-allow-ai]):not([data-debloat-allow-ai_overview])
+  [data-debloat-hide="ai_overview"]:not([data-debloat-expanded]),
+html:not([data-debloat-allow-ai]):not([data-debloat-allow-ai_mode]) [data-debloat-hide="ai_mode"],
+html:not([data-debloat-allow-ai]):not([data-debloat-allow-people_also_ask]) [data-debloat-hide="people_also_ask"],
+html:not([data-debloat-allow-ai]):not([data-debloat-allow-things_to_know]) [data-debloat-hide="things_to_know"] {
   display: none !important;
 }
 
-/* AI Mode button and results */
-html:not([data-debloat-allow-ai]) a[href*="/search?udm=50"],
-html:not([data-debloat-allow-ai]) div[data-udm="50"] {
+/* ── Instant hiding before the content script runs (stable ids only, no flash) ── */
+
+html:not([data-debloat-allow-ai]):not([data-debloat-allow-ai_overview])
+  :is(
+    #ai-overview-card,
+    div[data-attrid="AIOverview"],
+    #Odp5De,
+    #dEwkXc,
+    #B2Jtyd,
+    #m-x-content,
+    #eKIzJc,
+    #SePcAf,
+    div[data-subtree="mfc"]
+  ):not([data-debloat-expanded], [data-debloat-expanded] *),
+html:not([data-debloat-allow-ai]):not([data-debloat-allow-ai_overview])
+  div.ULSxyf:has(#Odp5De, #dEwkXc, #B2Jtyd, #m-x-content, #eKIzJc, #SePcAf, div[data-subtree="mfc"]):not(
+    :has(#rso, a[href] h3, [data-debloat-expanded]),
+    [data-debloat-expanded]
+  ) {
   display: none !important;
+}
+
+html:not([data-debloat-allow-ai]):not([data-debloat-allow-ai_mode]) a[href*="/search?udm=50"],
+html:not([data-debloat-allow-ai]):not([data-debloat-allow-ai_mode]) div[data-udm="50"] {
+  display: none !important;
+}
+
+/* ── Minimize mode: collapsed bar before a hidden AI Overview ── */
+
+.debloat-minibar {
+  display: none;
+}
+
+html[data-debloat-ai-minimize]:not([data-debloat-allow-ai]):not([data-debloat-allow-ai_overview]) .debloat-minibar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 8px 12px;
+  border: 1px solid rgb(128 128 128 / 35%);
+  border-radius: 8px;
+  background: rgb(128 128 128 / 8%);
+  color: inherit;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.debloat-minibar button {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.debloat-minibar button:hover {
+  background: rgb(128 128 128 / 15%);
+}
+
+.debloat-minibar button:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
 }

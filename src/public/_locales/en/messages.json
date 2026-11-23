@@ -106,5 +106,17 @@
   "ACTIVITY_ELEMENTS_HIDDEN": {
     "message": "elements hidden",
     "description": "Activity drawer label for CSS/DOM hidden element count"
+  },
+  "MINIBAR_LABEL": {
+    "message": "AI Overview hidden by Debloat",
+    "description": "Collapsed bar shown on Google in place of a minimized AI Overview"
+  },
+  "MINIBAR_SHOW": {
+    "message": "Show",
+    "description": "Collapsed AI Overview bar: button to expand"
+  },
+  "MINIBAR_HIDE": {
+    "message": "Hide",
+    "description": "Collapsed AI Overview bar: button to collapse again"
   }
 }

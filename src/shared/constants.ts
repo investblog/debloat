@@ -85,8 +85,26 @@ export const CATEGORIES: Category[] = [
     labelKey: 'CATEGORY_AI',
     descriptionKey: 'CATEGORY_AI_DESC',
     subToggles: [
-      { id: 'ai_overview', label: 'Google AI Overview', browsers: ['chrome', 'edge'], defaultEnabled: true },
-      { id: 'ai_mode', label: 'Google AI Mode', browsers: ['chrome', 'edge'], defaultEnabled: true },
+      { id: 'ai_overview', label: 'Google AI Overview', browsers: ['chrome', 'edge', 'firefox'], defaultEnabled: true },
+      {
+        id: 'ai_overview_minimize',
+        label: 'AI Overview: collapse to a bar instead of removing',
+        browsers: ['chrome', 'edge', 'firefox'],
+        defaultEnabled: false,
+      },
+      { id: 'ai_mode', label: 'Google AI Mode', browsers: ['chrome', 'edge', 'firefox'], defaultEnabled: true },
+      {
+        id: 'people_also_ask',
+        label: 'Google "People also ask"',
+        browsers: ['chrome', 'edge', 'firefox'],
+        defaultEnabled: true,
+      },
+      {
+        id: 'things_to_know',
+        label: 'Google "Things to know" (AI parts)',
+        browsers: ['chrome', 'edge', 'firefox'],
+        defaultEnabled: true,
+      },
       {
         id: 'gemini_suggestions',
         label: 'Gemini suggestions',

@@ -1,3 +1,4 @@
+import { isSubEnabled } from '@shared/settings';
 import type { BrowserType, Category, CategoryId, Settings } from '@shared/types';
 import { h } from '@ui/dom';
 import { icon } from '@ui/icons';
@@ -29,7 +30,7 @@ export function createCategoryCard({
   subContainer.style.display = 'none';
 
   for (const sub of visibleSubs) {
-    const subEnabled = settings.subToggles[sub.id] ?? sub.defaultEnabled;
+    const subEnabled = isSubEnabled(settings, sub.id);
     const subToggle = createToggle({
       checked: subEnabled && masterEnabled,
       onChange: (val) => onToggleSub(sub.id, val),
