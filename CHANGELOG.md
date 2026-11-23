@@ -4,7 +4,25 @@ All notable changes to Debloat are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.0] - Unreleased
+
+### Added
+- Google: new AI Overview detection (current markers + localized "AI Overview" headings),
+  climbing to the module container without ever hiding organic results.
+- Google: "People also ask" and AI parts of "Things to know" sub-toggles; AI Mode tab found by its
+  `udm=50` link in every language. Google sub-toggles now also show (and work) on Firefox.
+- Google: "Collapse to a bar" option — AI Overview becomes a slim bar with a Show/Hide button.
+- Google: optional "Classic web results" mode (`udm=14` via a dynamic dNR redirect), off by
+  default, with a one-time "Show AI for this search" bypass in the side panel.
+- Google: "All Google domains" button — optional permission for the other 169 country domains
+  (the manifest keeps the same 18, so updating doesn't re-prompt users).
+- 19 new interface languages (21 total); store name and description lead with
+  "Hide Google AI Overview & AI Mode".
+
+### Changed
+- Sub-toggles, pause and the site allow-list apply to Google instantly, without reload.
+- Pause now also stops CSS hiding on Bing, Edge NTP and Edge UI (checked on page load).
+- Badge counts only blocked requests and hidden elements (not redirects/allow rules).
 
 ### Removed
 - AI Scout opt-in reporting: collector, Send Report button, Scout toggle, welcome opt-in, indigo badge state.
