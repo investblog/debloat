@@ -38,6 +38,12 @@ Then per mode:
   - Chrome / Firefox: on any site, DevTools console `typeof window.ai` → `"undefined"`.
   - Edge: Copilot button/overlays on ordinary pages are hidden. Pause → they come back after reload.
 
+Once per browser (fresh install of the build):
+
+- Welcome page → **Open Side Panel** opens the panel (Edge included) instead of switching to the
+  "Click the Debloat icon…" hint.
+- Toolbar icon opens the side panel (Chrome/Edge) or toggles the sidebar (Firefox) — never a popup.
+
 ## When something is missed
 
 1. In DevTools, find the smallest stable marker of the block (id, `data-*`, `jsname`, a

@@ -16,10 +16,18 @@ export default defineBackground(async () => {
   initPause();
   initClassicResults();
 
-  // Chrome/Edge: click icon → open Side Panel
-  if ((browser as unknown as { sidePanel?: { setPanelBehavior: (o: object) => void } }).sidePanel?.setPanelBehavior) {
-    (browser as unknown as { sidePanel: { setPanelBehavior: (o: object) => void } }).sidePanel.setPanelBehavior({
-      openPanelOnActionClick: true,
+  // Toolbar icon, no popup: Chrome/Edge open the side panel; Firefox toggles the sidebar
+  // straight from the click (sidebarAction needs the user gesture). Runs on every worker start.
+  const b = browser as unknown as {
+    sidePanel?: { setPanelBehavior?: (o: object) => Promise<void> };
+    sidebarAction?: { toggle?: () => Promise<void>; open: () => Promise<void> };
+    browserAction?: { onClicked: { addListener: (cb: () => void) => void } };
+  };
+  b.sidePanel?.setPanelBehavior?.({ openPanelOnActionClick: true })?.catch(() => undefined);
+  if (b.sidebarAction && b.browserAction) {
+    const sidebar = b.sidebarAction;
+    b.browserAction.onClicked.addListener(() => {
+      (sidebar.toggle ? sidebar.toggle() : sidebar.open()).catch(() => undefined);
     });
   }
 

@@ -42,6 +42,8 @@ export default defineConfig({
     }),
 
     ...(browser === 'firefox' && {
+      // A bindable "toggle the sidebar" shortcut (the toolbar button toggles it too)
+      commands: { _execute_sidebar_action: { description: 'Toggle the Debloat sidebar' } },
       browser_specific_settings: {
         gecko: {
           id: 'debloat@debloat.click',
@@ -70,8 +72,9 @@ export default defineConfig({
       ],
     },
 
-    // Toolbar button (Chrome/Edge: click → sidePanel via setPanelBehavior;
-    // Firefox: hook below adds default_popup so click opens panel as popup)
+    // Toolbar button without a popup: Chrome/Edge open the side panel via setPanelBehavior,
+    // Firefox toggles the sidebar from browserAction.onClicked (both in background).
+    // The side panel / sidebar is the only UI.
     action: {
       default_icon: {
         16: 'icons/16.png',
@@ -108,18 +111,14 @@ export default defineConfig({
         manifest.optional_permissions = [];
       }
 
-      // Firefox MV2: no sidePanel API — enrich auto-generated sidebar_action
-      // and set popup on action (WXT converts action → browser_action for MV2)
+      // Firefox MV2: no sidePanel API — enrich the auto-generated sidebar_action
+      // (WXT converts action → browser_action for MV2; no popup, the click toggles the sidebar)
       if (wxt.config.browser === 'firefox') {
         const sa = manifest as unknown as Record<string, unknown>;
         if (sa.sidebar_action && typeof sa.sidebar_action === 'object') {
           const sidebar = sa.sidebar_action as Record<string, unknown>;
           sidebar.open_at_install = false;
           sidebar.default_icon = { '16': 'icons/16.png', '32': 'icons/32.png' };
-        }
-        // Toolbar icon click → open sidepanel as popup
-        if (manifest.action) {
-          manifest.action.default_popup = 'sidepanel.html';
         }
         // MV2 has no optional_host_permissions — merge into optional_permissions
         const ohp = (manifest as unknown as Record<string, unknown>).optional_host_permissions as string[] | undefined;

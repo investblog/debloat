@@ -9,6 +9,15 @@ function msg(key: string, fallback: string): string {
   return browser.i18n.getMessage(key as Parameters<typeof browser.i18n.getMessage>[0]) || fallback;
 }
 
+// sidePanel.open must run while the click's user gesture is active: read the window id up front
+let windowId: number | undefined;
+browser.windows
+  ?.getCurrent()
+  .then((w) => {
+    windowId = w.id;
+  })
+  .catch(() => undefined);
+
 async function render() {
   const app = $('#app')!;
   const currentBrowser = detectBrowser();
@@ -132,25 +141,24 @@ async function render() {
     'button',
     {
       class: 'welcome__cta',
-      onClick: async () => {
-        try {
-          if (currentBrowser === 'firefox') {
-            // @ts-expect-error -- Firefox sidebar API via globalThis
-            await globalThis.browser.sidebarAction.open();
-          } else if ((browser as unknown as { sidePanel?: { open: (o: object) => Promise<void> } }).sidePanel?.open) {
-            const win = await browser.windows.getCurrent();
-            if (!win.id) throw new Error('no-window');
-            await (browser as unknown as { sidePanel: { open: (o: object) => Promise<void> } }).sidePanel.open({
-              windowId: win.id,
-            });
-          } else {
-            throw new Error('no-api');
-          }
-        } catch {
+      onClick: () => {
+        // No await before open(): Edge drops the user gesture across an await and refuses
+        // to open the panel (the window id is read at page load instead).
+        const panels = browser as unknown as {
+          sidePanel?: { open: (o: object) => Promise<void> };
+          sidebarAction?: { open: () => Promise<void> };
+        };
+        let opening: Promise<void> | undefined;
+        if (currentBrowser !== 'firefox' && panels.sidePanel?.open && windowId !== undefined) {
+          opening = panels.sidePanel.open({ windowId });
+        } else if (panels.sidebarAction?.open) {
+          opening = panels.sidebarAction.open();
+        }
+        (opening ?? Promise.reject(new Error('no-api'))).catch(() => {
           ctaBtn.textContent = ctaFallbackText;
           ctaBtn.disabled = true;
           ctaBtn.classList.add('welcome__cta--fallback');
-        }
+        });
       },
     },
     ctaText,

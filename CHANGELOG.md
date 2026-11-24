@@ -25,10 +25,13 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Sub-toggles, pause and the site allow-list apply to Google instantly, without reload.
 - Pause now also stops CSS hiding on Bing, Edge NTP and Edge UI (checked on page load).
 - Badge counts only blocked requests and hidden elements (not redirects/allow rules).
+- Side panel only, no popup: in Firefox the toolbar button now toggles the sidebar (also bindable
+  as a keyboard shortcut) instead of opening the panel as a popup.
 
 ### Fixed
 - The all-sites permission check looked for `<all_urls>` while the manifest offers `*://*/*`, so a
   granted permission was never recognized. Edge UI / `window.ai` scripts are also unregistered while paused.
+- Welcome page "Open Side Panel" did nothing in Edge (the click's user gesture was lost before the call).
 
 ### Removed
 - AI Scout opt-in reporting: collector, Send Report button, Scout toggle, welcome opt-in, indigo badge state.

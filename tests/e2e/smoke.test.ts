@@ -128,6 +128,22 @@ describe('side panel UI', () => {
   });
 });
 
+describe('welcome page', () => {
+  it('"Open Side Panel" opens the panel instead of falling back to the hint', async () => {
+    const page = await ctx.context.newPage();
+    try {
+      await page.goto(`chrome-extension://${ctx.extensionId}/welcome.html`);
+      await page.waitForSelector('.welcome__cta', { timeout: 5000 });
+      await page.waitForTimeout(300); // window id is read at load
+      await page.click('.welcome__cta');
+      await page.waitForTimeout(500);
+      expect(await page.$('.welcome__cta--fallback')).toBeNull();
+    } finally {
+      await page.close();
+    }
+  });
+});
+
 describe('dNR blocking', () => {
   it('blocks telemetry endpoint', async () => {
     const page = await ctx.context.newPage();
