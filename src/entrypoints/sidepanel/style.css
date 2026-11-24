@@ -460,22 +460,31 @@ body {
   border-top: 1px solid var(--color-border);
 }
 
-.footer__review {
+/* Icon links as in the other 301.st extensions (dimmed until hover or focus) */
+.footer__links {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
-  padding-bottom: var(--gap-sm);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  text-decoration: none;
-  transition: color var(--transition);
+  justify-content: center;
+  gap: var(--gap-sm);
+  padding-top: var(--gap-sm);
 }
 
-.footer__review:hover {
+.footer__links a {
+  display: inline-flex;
   color: var(--color-text);
+  opacity: 0.45;
+  transition: opacity var(--transition);
 }
 
-.footer__review svg {
+.footer__links a:hover,
+.footer__links a:focus-visible {
+  opacity: 1;
+}
+
+.footer__sep {
+  width: 1px;
+  height: 12px;
+  background: var(--color-border);
   flex-shrink: 0;
 }
 

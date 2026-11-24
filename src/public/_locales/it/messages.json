@@ -386,5 +386,13 @@
   "SITE_ACCESS_GRANT": {
     "message": "Consenti",
     "description": "Button in the notice: request the all-sites permission"
+  },
+  "FOOTER_ISSUES": {
+    "message": "Segnala un problema",
+    "description": "Side panel footer: GitHub icon link to report a bug"
+  },
+  "FOOTER_SUPPORT": {
+    "message": "Chat di supporto (Telegram)",
+    "description": "Side panel footer: Telegram icon link to the support chat"
   }
 }

@@ -7,12 +7,10 @@ import type { CategoryId, PresetId } from '@shared/types';
 import { createActivityDrawer } from '@ui/components/activity-drawer';
 import { createCategoryCard } from '@ui/components/category-card';
 import { $, h } from '@ui/dom';
-import { icon } from '@ui/icons';
+import { brandIcon, icon } from '@ui/icons';
 import { browser } from 'wxt/browser';
 import '../../assets/styles/tokens.css';
 import { t } from '@shared/i18n';
-
-type MsgKey = Parameters<typeof browser.i18n.getMessage>[0];
 
 async function render() {
   const app = $('#app')!;
@@ -329,16 +327,23 @@ async function render() {
   }
   renderCards();
 
-  // ── Review link ──
+  // ── Footer links: icon row as in the other 301.st extensions (label in title + aria-label) ──
+  const link = (glyph: Element, label: string, href: string) =>
+    h('a', { href, target: '_blank', rel: 'noopener', title: label, 'aria-label': label }, glyph);
+  const sep = () => h('span', { class: 'footer__sep', 'aria-hidden': 'true' });
   const storeInfo = STORE_URLS[currentBrowser];
-  const reviewLink = storeInfo
-    ? h(
-        'a',
-        { class: 'footer__review', href: storeInfo.url, target: '_blank' },
-        icon(storeInfo.icon, 16),
-        browser.i18n.getMessage(storeInfo.labelKey as MsgKey) || 'Rate this extension',
-      )
-    : null;
+  const storeGlyph = currentBrowser === 'firefox' ? 'mozilla' : currentBrowser === 'edge' ? 'edge' : 'chrome';
+  const footerLinks = h(
+    'nav',
+    { class: 'footer__links' },
+    link(icon('help-circle', 16), t('WELCOME_HOW_TITLE', 'How it works'), browser.runtime.getURL('/welcome.html')),
+    sep(),
+    ...(storeInfo ? [link(brandIcon(storeGlyph), t(storeInfo.labelKey, 'Rate this extension'), storeInfo.url)] : []),
+    link(brandIcon('github'), t('FOOTER_ISSUES', 'Report a problem'), 'https://github.com/investblog/debloat/issues'),
+    sep(),
+    link(brandIcon('301'), '301.st', 'https://301.st/?utm_source=debloat&utm_medium=extension&utm_campaign=footer'),
+    link(brandIcon('telegram'), t('FOOTER_SUPPORT', 'Support chat (Telegram)'), 'https://t.me/traffic301'),
+  );
 
   // ── Footer ──
   const enableAllBtn = h(
@@ -376,10 +381,12 @@ async function render() {
     t('DISABLE_ALL', 'Disable All'),
   );
 
-  // Review link goes inside scrollable area
-  if (reviewLink) cardsContainer.append(reviewLink);
-
-  const footer = h('footer', { class: 'footer' }, h('div', { class: 'footer__actions' }, enableAllBtn, disableAllBtn));
+  const footer = h(
+    'footer',
+    { class: 'footer' },
+    h('div', { class: 'footer__actions' }, enableAllBtn, disableAllBtn),
+    footerLinks,
+  );
 
   // ── Assemble ──
   app.append(header, presetBar, quickBar, siteAccess, cardsContainer, footer, activity.drawer);

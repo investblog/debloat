@@ -52,6 +52,28 @@ describe('side panel UI', () => {
     }
   });
 
+  it('footer has the icon links, 301.st included, and they survive a re-render', async () => {
+    const page = await openSidePanel(ctx);
+    try {
+      await page.waitForSelector('.footer__links a', { timeout: 5000 });
+      await page.click('[data-testid="enable-all"]'); // re-renders the cards
+      await page.waitForTimeout(300);
+      const links = await page.$$eval('.footer__links a', (as) =>
+        as.map((a) => ({ href: (a as HTMLAnchorElement).href, label: a.getAttribute('aria-label') })),
+      );
+      expect(links.map((l) => new URL(l.href).hostname)).toEqual([
+        ctx.extensionId,
+        'chromewebstore.google.com',
+        'github.com',
+        '301.st',
+        't.me',
+      ]);
+      expect(links.every((l) => l.label)).toBe(true);
+    } finally {
+      await page.close();
+    }
+  });
+
   it('renders header and 5 category cards', async () => {
     const page = await openSidePanel(ctx);
     try {

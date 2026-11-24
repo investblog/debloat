@@ -18,6 +18,8 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   (the manifest keeps the same 18, so updating doesn't re-prompt users).
 - Side panel asks for access to all sites when it's needed: hiding Copilot in Edge pages and blocking
   web AI APIs (`window.ai`) never worked before, because nothing ever requested that optional permission.
+- Side panel footer: icon links as in the other 301.st extensions — How it works, Rate, GitHub issues,
+  301.st, Telegram support chat. (The old "Rate" link vanished after the first re-render of the cards.)
 - 19 new interface languages (21 total); store name and description lead with
   "Hide Google AI Overview & AI Mode".
 

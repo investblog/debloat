@@ -386,5 +386,13 @@
   "SITE_ACCESS_GRANT": {
     "message": "允许",
     "description": "Button in the notice: request the all-sites permission"
+  },
+  "FOOTER_ISSUES": {
+    "message": "报告问题",
+    "description": "Side panel footer: GitHub icon link to report a bug"
+  },
+  "FOOTER_SUPPORT": {
+    "message": "支持聊天 (Telegram)",
+    "description": "Side panel footer: Telegram icon link to the support chat"
   }
 }

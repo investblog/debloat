@@ -386,5 +386,13 @@
   "SITE_ACCESS_GRANT": {
     "message": "अनुमति दें",
     "description": "Button in the notice: request the all-sites permission"
+  },
+  "FOOTER_ISSUES": {
+    "message": "समस्या की रिपोर्ट करें",
+    "description": "Side panel footer: GitHub icon link to report a bug"
+  },
+  "FOOTER_SUPPORT": {
+    "message": "सहायता चैट (Telegram)",
+    "description": "Side panel footer: Telegram icon link to the support chat"
   }
 }
