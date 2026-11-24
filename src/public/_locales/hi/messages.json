@@ -208,7 +208,7 @@
     "description": "Sub-toggle label (ai_overview)"
   },
   "SUB_AI_OVERVIEW_MINIMIZE": {
-    "message": "AI से खास जानकारी: हटाने के बजाय एक बार में छोटा करें",
+    "message": "AI से खास जानकारी: हटाने के बजाय पतली पट्टी में छोटा करें",
     "description": "Sub-toggle label (ai_overview_minimize)"
   },
   "SUB_AI_MODE": {
