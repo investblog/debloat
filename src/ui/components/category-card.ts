@@ -4,7 +4,7 @@ import type { BrowserType, Category, CategoryId, Settings } from '@shared/types'
 import { h } from '@ui/dom';
 import { icon } from '@ui/icons';
 import { browser as webBrowser } from 'wxt/browser';
-import { createToggle } from './toggle';
+import { createToggle, setToggleState } from './toggle';
 
 export interface CategoryCardOptions {
   category: Category;
@@ -30,14 +30,22 @@ export function createCategoryCard({
   const subContainer = h('div', { class: 'card__subs' });
   subContainer.style.display = 'none';
 
+  // Each sub-toggle's own setting, kept current so the master toggle can redraw them in place.
+  const subToggles: Array<{ id: string; el: HTMLElement }> = [];
+  const subOn = new Map(visibleSubs.map((s) => [s.id, isSubEnabled(settings, s.id)]));
+
   for (const sub of visibleSubs) {
     const subEnabled = isSubEnabled(settings, sub.id);
     const subToggle = createToggle({
       checked: subEnabled && masterEnabled,
-      onChange: (val) => onToggleSub(sub.id, val),
+      onChange: (val) => {
+        subOn.set(sub.id, val);
+        onToggleSub(sub.id, val);
+      },
       size: 'small',
       testId: `sub-toggle-${sub.id}`,
     });
+    subToggles.push({ id: sub.id, el: subToggle });
 
     const subRow = h(
       'div',
@@ -78,7 +86,12 @@ export function createCategoryCard({
 
   const masterToggle = createToggle({
     checked: masterEnabled,
-    onChange: (val) => onToggleCategory(category.id, val),
+    onChange: (val) => {
+      // The cards are not re-rendered on a master switch: redraw this one in place.
+      card.classList.toggle('card--off', !val);
+      for (const { id, el } of subToggles) setToggleState(el, val && (subOn.get(id) ?? false));
+      onToggleCategory(category.id, val);
+    },
     testId: `master-toggle-${category.id}`,
   });
 

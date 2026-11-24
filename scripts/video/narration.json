@@ -1,0 +1,13 @@
+{
+  "voice": "en_US-ljspeech-high",
+  "note": "Piper voice (public domain, LJ Speech). `say` is the spoken form; `text` is the caption shown in the .srt.",
+  "lines": [
+    { "id": "intro", "text": "Debloat hides Google's AI Overview and AI Mode, in Chrome, Edge and Firefox.", "say": "Debloat hides Google's A.I. Overview, and A.I. Mode. In Chrome, Edge, and Firefox." },
+    { "id": "before", "text": "This is a regular Google search. The AI answer pushes the results down.", "say": "This is a regular Google search. The A.I. answer pushes the results down." },
+    { "id": "hide", "text": "Turn on AI features in the side panel, and it's gone. No reload needed.", "say": "Turn on A.I. features in the side panel, and it's gone. No reload needed." },
+    { "id": "collapse", "text": "Prefer to keep it close? Collapse it to a slim bar, and open it with one click.", "say": "Prefer to keep it close? Collapse it to a slim bar, and open it with one click." },
+    { "id": "pause", "text": "Need it back for a while? Pause Debloat for an hour.", "say": "Need it back for a while? Pause Debloat for an hour." },
+    { "id": "more", "text": "It also hides sponsored content, shopping tools, Copilot prompts and telemetry.", "say": "It also hides sponsored content, shopping tools, Copilot prompts, and telemetry." },
+    { "id": "outro", "text": "Debloat. Free, open source, and no data collected.", "say": "Debloat. Free, open source, and no data collected." }
+  ]
+}

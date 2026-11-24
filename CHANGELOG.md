@@ -4,7 +4,13 @@ All notable changes to Debloat are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.1] - Unreleased
+## [1.1.2] - 2026-11-24
+
+### Fixed
+- Side panel: switching a category on left its card greyed out with every sub-toggle shown off
+  until the panel was reopened (the card is now redrawn in place). Present since 1.0.
+
+## [1.1.1] - 2026-11-24
 
 ### Fixed
 - Google "Collapse to a bar": on Google's current grid layout the bar landed in the left gutter as a

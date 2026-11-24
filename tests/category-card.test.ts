@@ -69,6 +69,29 @@ describe('createCategoryCard()', () => {
     expect(card.classList.contains('card--off')).toBe(false);
   });
 
+  it('master toggle updates the card and its sub-toggles in place', () => {
+    const onToggleCategory = vi.fn();
+    const settings: Settings = { ...DEFAULT_SETTINGS, ai: false };
+    const card = makeCard({ settings, onToggleCategory });
+    const master = card.querySelector<HTMLInputElement>('[data-testid="master-toggle-ai"]')!;
+    const sub = card.querySelector<HTMLInputElement>('[data-testid="sub-toggle-ai_overview"]')!;
+    expect(sub.checked).toBe(false); // shown off while the category is off
+    const flip = (on: boolean) => {
+      master.checked = on;
+      master.dispatchEvent(new Event('change'));
+    };
+
+    flip(true);
+    expect(onToggleCategory).toHaveBeenCalledWith('ai', true);
+    expect(card.classList.contains('card--off')).toBe(false);
+    expect(sub.checked).toBe(true);
+    expect(sub.closest('.toggle')!.classList.contains('toggle--on')).toBe(true);
+
+    flip(false);
+    expect(card.classList.contains('card--off')).toBe(true);
+    expect(sub.checked).toBe(false);
+  });
+
   it('sub-toggles filtered by browser — chrome sees chrome subs only', () => {
     const card = makeCard({ browser: 'chrome' });
     const subRows = card.querySelectorAll('.card__sub-row');
