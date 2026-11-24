@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Debloat — promo video</title>
+<!-- 1280×720 CSS px, captured at 1.5× = 1920×1080 by scripts/video/film.mjs. Served as a page of a
+     filming copy of the built extension, so both iframes are the real thing: the side panel, and a
+     saved Google results page with the real content script running in it. Every visual state is a
+     function of time (stage.js __seek), so frames are exact however slow the capture is. -->
+<style>
+  :root { --bg: #05191e; --text: #f4f4f5; --muted: #b6c4c8; --accent: #10B981; }
+  html, body { margin: 0; width: 1280px; height: 720px; overflow: hidden; background: var(--bg);
+    font: 16px/1.5 "Segoe UI", system-ui, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+  .scene { position: absolute; inset: 0; opacity: 0; }
+  .bg { position: absolute; inset: 0; background: url(art/bg.png) center / cover no-repeat; }
+  .shade { position: absolute; inset: 0; }
+  .brand { display: flex; align-items: center; gap: 14px; color: var(--accent); font-weight: 700; font-size: 28px; }
+  .brand img { width: 52px; height: 52px; }
+  h1 { margin: 0; font-size: 52px; line-height: 1.08; font-weight: 800; letter-spacing: -.02em; }
+  h2 { margin: 0; font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -.015em; }
+  h1 span, h2 span { color: var(--accent); }
+  .sub { color: var(--muted); font-size: 21px; margin: 0; }
+  .backdrop { background: radial-gradient(1100px 650px at 0% 0%, #0f4a55 0%, #082d35 45%, #05191e 100%); }
+
+  /* 0 — 301.st card (frame 0, the thumbnail) */
+  #studio { display: grid; place-items: center; background: radial-gradient(800px 500px at 50% 50%, #0f4a55 0%, #082d35 55%, #05191e 100%); }
+  #studio img { width: 420px; height: auto; }
+
+  /* A — intro */
+  #intro .bg { left: 220px; }
+  #intro .shade { background: linear-gradient(90deg, #082d35 0%, #082d35 22%, rgba(8,45,53,.85) 40%, rgba(8,45,53,0) 62%); }
+  #intro .copy { position: absolute; left: 84px; top: 180px; width: 600px; display: flex; flex-direction: column; gap: 24px; }
+
+  /* B — the browser window: saved Google results + the side panel */
+  .step { position: absolute; left: 40px; top: 24px; height: 48px; display: flex; align-items: center; gap: 14px; font-size: 24px; font-weight: 600; }
+  .step b { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: #05191e; font-size: 18px; }
+  .win { position: absolute; left: 40px; top: 90px; width: 1200px; height: 612px; border-radius: 12px; overflow: hidden;
+    background: #202124; box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.10); }
+  .win__bar { height: 38px; display: flex; align-items: center; gap: 8px; padding: 0 14px; background: #2b2d31; }
+  .win__bar i { width: 11px; height: 11px; border-radius: 50%; background: #4a4d55; }
+  .win__url { margin-left: 14px; height: 24px; flex: 0 0 520px; border-radius: 12px; background: #1d1e21; color: #a8abb2;
+    font-size: 13px; display: flex; align-items: center; padding: 0 14px; }
+  .win__body { position: absolute; top: 38px; left: 0; right: 0; bottom: 0; display: flex; }
+  .win__page { position: relative; width: 840px; height: 100%; overflow: hidden; background: #202124; }
+  .win__page iframe { position: absolute; left: 0; top: 0; width: 1000px; height: 684px; border: 0; transform-origin: 0 0; transform: scale(.84); }
+  .win__side { width: 360px; height: 100%; border-left: 1px solid #3a3d44; }
+  .win__side iframe, .frame iframe { width: 100%; height: 100%; border: 0; display: block; background: #111; }
+
+  /* C — more than Google: the side panel up close */
+  #more .copy { position: absolute; left: 96px; top: 196px; width: 600px; display: flex; flex-direction: column; gap: 18px; }
+  #more ul { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  #more li { display: flex; gap: 12px; align-items: center; font-size: 20px; }
+  #more li::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .frame { position: absolute; right: 120px; top: 40px; width: 400px; height: 640px; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.10); }
+
+  /* D — outro */
+  #outro .shade { background: rgba(5,25,30,.78); }
+  #outro .copy { position: absolute; left: 0; right: 0; top: 168px; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+  #outro .brand { font-size: 48px; gap: 20px; }
+  #outro .brand img { width: 84px; height: 84px; }
+  #outro .pills { display: flex; gap: 12px; }
+  #outro .pills span { padding: 8px 18px; border-radius: 999px; background: rgba(16,185,129,.14); border: 1px solid rgba(16,185,129,.4); font-size: 18px; }
+
+  /* cursor and click ripple */
+  #cursor { position: absolute; left: 0; top: 0; width: 26px; height: 26px; z-index: 10; opacity: 0; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
+  .ripple { position: absolute; z-index: 9; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; border: 3px solid var(--accent); opacity: 0; }
+</style>
+</head>
+<body>
+  <section class="scene" id="studio"><img src="art/301-full.svg" alt="301.st"></section>
+
+  <section class="scene" id="intro">
+    <div class="bg"></div><div class="shade"></div>
+    <div class="copy">
+      <div class="brand reveal"><img src="icons/128.png" alt="">Debloat</div>
+      <h1 class="reveal" data-delay=".2">Hide Google<br>AI Overview <span>&amp; AI Mode</span></h1>
+      <p class="sub reveal" data-delay=".4">One click in the side panel. Chrome, Edge and Firefox.</p>
+    </div>
+  </section>
+
+  <section class="scene backdrop" id="demo">
+    <div class="step"><b id="step-n">1</b><span id="step-text"></span></div>
+    <div class="win">
+      <div class="win__bar"><i></i><i></i><i></i><div class="win__url">google.com/search?q=what+is+photosynthesis</div></div>
+      <div class="win__body">
+        <div class="win__page"><iframe id="serp"></iframe></div>
+        <div class="win__side"><iframe id="side1"></iframe></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene backdrop" id="more">
+    <div class="copy">
+      <h2 class="reveal">Not just <span>Google</span></h2>
+      <p class="sub reveal" data-delay=".15">Every category has its own switches.</p>
+      <ul class="reveal" data-delay=".3">
+        <li>Sponsored tiles and the MSN feed on Edge's new tab</li>
+        <li>Copilot and shopping overlays in Edge</li>
+        <li>Browser telemetry and usage reports</li>
+        <li>Rewards prompts and other annoyances</li>
+      </ul>
+    </div>
+    <div class="frame"><iframe id="side2"></iframe></div>
+  </section>
+
+  <section class="scene" id="outro">
+    <div class="bg"></div><div class="shade"></div>
+    <div class="copy">
+      <div class="brand reveal"><img src="icons/128.png" alt="">Debloat</div>
+      <p class="sub reveal" data-delay=".2" style="font-size:25px;color:var(--text)">Free · Open source · No data collected</p>
+      <div class="pills reveal" data-delay=".4"><span>Chrome</span><span>Edge</span><span>Firefox</span></div>
+      <p class="sub reveal" data-delay=".6">by 301.st</p>
+    </div>
+  </section>
+
+  <svg id="cursor" viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-7.9L21 10.5z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg>
+
+<script src="stage.js"></script>
+</body>
+</html>
