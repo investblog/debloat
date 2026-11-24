@@ -27,4 +27,11 @@ Outputs live in `store-assets/video/` (gitignored, owner's machine only): the `.
 4. `node scripts/video/render.mjs <framesDir> store-assets/video/lines store-assets/video/debloat-promo-en.mp4`
    — H.264 + AAC, −16 LUFS, `.srt` next to it.
 
-The Chrome Web Store takes a video as a YouTube link; upload it with the `.srt` as subtitles.
+## Publish
+
+1. **YouTube** — upload the `.mp4` (public or unlisted). Title, description, chapters and tags come
+   from `store-assets/video/youtube-description.txt` (same layout as the other 301.st videos: links,
+   chapters, how it works, what you get, privacy, voice credit). Add the `.srt` as English subtitles.
+   Chapter times must match the cues in the `.srt`; update both when the narration changes.
+2. **Stores** — the Chrome Web Store takes the video as a YouTube link (listing → "YouTube video");
+   Edge Add-ons has the same field ("YouTube video URL"). AMO has no video field.
