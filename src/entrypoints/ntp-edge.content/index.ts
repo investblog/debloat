@@ -1,6 +1,6 @@
 import { COPILOT_DISCOVER, MSN_FEED, REWARDS, SHOPPING, SPONSORED_TILES } from '@selectors/edge-ntp';
 import { createHideReporter } from '@shared/report-hidden';
-import { loadSettings } from '@shared/settings';
+import { isPaused, loadSettings } from '@shared/settings';
 import type { CategoryId } from '@shared/types';
 import { normalizeHost } from '@shared/url';
 import './style.css';
@@ -18,12 +18,13 @@ export default defineContentScript({
     // so the injected CSS rules are neutralized
     const allCategories: CategoryId[] = ['sponsored', 'ai', 'shopping', 'annoyances'];
     for (const cat of allCategories) {
-      if (!settings[cat] || whitelisted.includes(cat)) {
+      if (!settings[cat] || isPaused(settings) || whitelisted.includes(cat)) {
         document.documentElement.setAttribute(`data-debloat-allow-${cat}`, '');
       }
     }
 
     // Only proceed if at least one relevant category is enabled and not whitelisted
+    if (isPaused(settings)) return;
     if (!settings.sponsored && !settings.ai && !settings.annoyances && !settings.shopping) return;
 
     // Map selector groups to categories

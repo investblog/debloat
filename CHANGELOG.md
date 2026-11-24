@@ -4,6 +4,43 @@ All notable changes to Debloat are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - Unreleased
+
+### Added
+- Google: new AI Overview detection (current markers + localized "AI Overview" headings),
+  climbing to the module container without ever hiding organic results.
+- Google: "People also ask" and AI parts of "Things to know" sub-toggles; AI Mode tab found by its
+  `udm=50` link in every language. Google sub-toggles now also show (and work) on Firefox.
+- Google: "Collapse to a bar" option — AI Overview becomes a slim bar with a Show/Hide button.
+- Google: optional "Classic web results" mode (`udm=14` via a dynamic dNR redirect), off by
+  default, with a one-time "Show AI for this search" bypass in the side panel.
+- Google: "All Google domains" button — optional permission for the other 169 country domains
+  (the manifest keeps the same 18, so updating doesn't re-prompt users).
+- Side panel asks for access to all sites when it's needed: hiding Copilot in Edge pages and blocking
+  web AI APIs (`window.ai`) never worked before, because nothing ever requested that optional permission.
+- Side panel footer: icon links as in the other 301.st extensions — How it works, Rate, GitHub issues,
+  301.st, Telegram support chat. (The old "Rate" link vanished after the first re-render of the cards.)
+- 19 new interface languages (21 total); store name and description lead with
+  "Hide Google AI Overview & AI Mode".
+
+### Changed
+- Sub-toggles, pause and the site allow-list apply to Google instantly, without reload.
+- Pause now also stops CSS hiding on Bing, Edge NTP and Edge UI (checked on page load).
+- Badge counts only blocked requests and hidden elements (not redirects/allow rules).
+- Side panel only, no popup: in Firefox the toolbar button now toggles the sidebar (also bindable
+  as a keyboard shortcut) instead of opening the panel as a popup.
+
+### Fixed
+- The all-sites permission check looked for `<all_urls>` while the manifest offers `*://*/*`, so a
+  granted permission was never recognized. Edge UI / `window.ai` scripts are also unregistered while paused.
+- Welcome page "Open Side Panel" did nothing in Edge (the click's user gesture was lost before the call).
+
+### Removed
+- AI Scout opt-in reporting: collector, Send Report button, Scout toggle, welcome opt-in, indigo badge state.
+  The reporting endpoint was unreachable, so no reports were ever delivered.
+- `notifications` permission (it was used only by AI Scout).
+- Stored `scoutReporting` / `scoutInstallId` settings are cleaned up on load.
+
 ## [1.0.3] - 2026-03-07
 
 ### Added

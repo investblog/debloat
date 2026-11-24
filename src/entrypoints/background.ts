@@ -1,13 +1,7 @@
 import { addCssHiddenCount, getTabCount, initBadge } from '@background/badge';
+import { initClassicResults, isAiShown, showAiOnce } from '@background/classic-results';
 import { initPause, pause, unpause } from '@background/pause';
 import { initRules } from '@background/rules';
-import {
-  cleanupScoutTab,
-  getScoutStatus,
-  resetScoutTab,
-  sendStoredReport,
-  storeScoutCandidates,
-} from '@background/scout';
 import type { Message, MessageResponse } from '@shared/messaging';
 import { addSiteWhitelist, removeSiteWhitelist } from '@shared/settings';
 import type { ActivityEntry } from '@shared/types';
@@ -20,18 +14,27 @@ export default defineBackground(async () => {
   initBadge(tabActivity);
   initRules();
   initPause();
+  initClassicResults();
 
-  // Chrome/Edge: click icon → open Side Panel
-  if ((browser as unknown as { sidePanel?: { setPanelBehavior: (o: object) => void } }).sidePanel?.setPanelBehavior) {
-    (browser as unknown as { sidePanel: { setPanelBehavior: (o: object) => void } }).sidePanel.setPanelBehavior({
-      openPanelOnActionClick: true,
+  // Toolbar icon, no popup: Chrome/Edge open the side panel; Firefox toggles the sidebar
+  // straight from the click (sidebarAction needs the user gesture). Runs on every worker start.
+  const b = browser as unknown as {
+    sidePanel?: { setPanelBehavior?: (o: object) => Promise<void> };
+    sidebarAction?: { toggle?: () => Promise<void>; open: () => Promise<void> };
+    browserAction?: { onClicked: { addListener: (cb: () => void) => void } };
+  };
+  b.sidePanel?.setPanelBehavior?.({ openPanelOnActionClick: true })?.catch(() => undefined);
+  if (b.sidebarAction && b.browserAction) {
+    const sidebar = b.sidebarAction;
+    b.browserAction.onClicked.addListener(() => {
+      (sidebar.toggle ? sidebar.toggle() : sidebar.open()).catch(() => undefined);
     });
   }
 
   // Message handler for Side Panel / Sidebar
   browser.runtime.onMessage.addListener(((
     msg: Message,
-    sender: { tab?: { id?: number } },
+    sender: { tab?: { id?: number; url?: string } },
     sendResponse: (resp: MessageResponse) => void,
   ) => {
     handleMessage(msg, sender).then(sendResponse);
@@ -41,13 +44,6 @@ export default defineBackground(async () => {
   // Cleanup on tab close
   browser.tabs.onRemoved.addListener((tabId) => {
     tabActivity.delete(tabId);
-    cleanupScoutTab(tabId);
-  });
-
-  // Reset scout data on navigation
-  browser.webNavigation.onCommitted.addListener((details) => {
-    if (details.frameId !== 0) return;
-    resetScoutTab(details.tabId);
   });
 
   // Welcome page on first install + uninstall URL
@@ -59,7 +55,7 @@ export default defineBackground(async () => {
   });
 });
 
-async function handleMessage(msg: Message, sender: { tab?: { id?: number } }): Promise<MessageResponse> {
+async function handleMessage(msg: Message, sender: { tab?: { id?: number; url?: string } }): Promise<MessageResponse> {
   switch (msg.type) {
     case 'GET_TAB_COUNT':
       return { type: 'TAB_COUNT', count: getTabCount(msg.tabId) };
@@ -91,32 +87,13 @@ async function handleMessage(msg: Message, sender: { tab?: { id?: number } }): P
       return { type: 'OK' };
     }
 
-    case 'SCOUT_CANDIDATES': {
-      const tabId = sender.tab?.id;
-      if (tabId != null) {
-        storeScoutCandidates(tabId, msg.surface, msg.pageUrl, msg.candidates, msg.viewport, msg.known);
-      }
+    case 'SHOW_AI_ONCE':
+      await showAiOnce(msg.tabId);
       return { type: 'OK' };
-    }
 
-    case 'GET_SCOUT_STATUS':
-      return { type: 'SCOUT_STATUS', status: getScoutStatus(msg.tabId) };
-
-    case 'SCOUT_SEND_REPORT': {
-      const notification = await sendStoredReport(msg.tabId);
-      if (notification) {
-        try {
-          browser.notifications.create({
-            type: 'basic',
-            iconUrl: browser.runtime.getURL('/icons/128.png'),
-            title: notification.title,
-            message: notification.message,
-          });
-        } catch {
-          // Notifications may not be available
-        }
-      }
-      return { type: 'OK' };
+    case 'IS_AI_SHOWN': {
+      const { id, url } = sender.tab ?? {};
+      return { type: 'AI_SHOWN', shown: id != null && url != null && isAiShown(id, url) };
     }
   }
 }

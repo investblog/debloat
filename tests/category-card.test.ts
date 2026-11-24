@@ -89,14 +89,14 @@ describe('createCategoryCard()', () => {
     // ai_sidebar_ff (firefox) only — ai_overview (chrome+edge) and copilot_sidebar (edge) hidden
     expect(subRows.length).toBe(1);
     const label = card.querySelector('.card__sub-label');
-    expect(label!.textContent).toBe('AI sidebar');
+    expect(label!.textContent).toBe('[SUB_AI_SIDEBAR_FF]'); // localized via SUB_<ID> key
   });
 
   it('expand button shows sub count and toggles visibility', () => {
     const card = makeCard({ browser: 'edge' });
     const expandBtn = card.querySelector<HTMLButtonElement>('.card__expand');
     expect(expandBtn).not.toBeNull();
-    expect(expandBtn!.textContent).toContain('2 sub-toggles');
+    expect(expandBtn!.textContent).toContain('[SUB_TOGGLES_COUNT]');
 
     const subs = card.querySelector<HTMLElement>('.card__subs')!;
     expect(subs.style.display).toBe('none');

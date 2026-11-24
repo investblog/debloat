@@ -1,6 +1,5 @@
 import { detectBrowser } from '@background/browser';
 import { CATEGORIES } from '@shared/constants';
-import { setScoutReporting } from '@shared/settings';
 import { $, h } from '@ui/dom';
 import { icon } from '@ui/icons';
 import { browser } from 'wxt/browser';
@@ -10,6 +9,15 @@ function msg(key: string, fallback: string): string {
   return browser.i18n.getMessage(key as Parameters<typeof browser.i18n.getMessage>[0]) || fallback;
 }
 
+// sidePanel.open must run while the click's user gesture is active: read the window id up front
+let windowId: number | undefined;
+browser.windows
+  ?.getCurrent()
+  .then((w) => {
+    windowId = w.id;
+  })
+  .catch(() => undefined);
+
 async function render() {
   const app = $('#app')!;
   const currentBrowser = detectBrowser();
@@ -18,6 +26,9 @@ async function render() {
   const stored = await browser.storage.local.get('theme');
   const initialTheme = (stored.theme as string) ?? 'dark';
   document.documentElement.setAttribute('data-theme', initialTheme);
+  document.documentElement.lang = browser.i18n.getUILanguage();
+  document.documentElement.dir =
+    browser.i18n.getMessage('@@bidi_dir' as Parameters<typeof browser.i18n.getMessage>[0]) || 'ltr';
 
   let currentTheme = initialTheme;
   const themeIcon = h('span', { class: 'theme-toggle__icon' });
@@ -122,72 +133,6 @@ async function render() {
     );
   }
 
-  // ── Scout opt-in ──
-  const scoutIcon = h('span', { class: 'welcome__scout-icon' });
-  scoutIcon.append(icon('radar', 24));
-
-  const scoutStatus = h('span', { class: 'welcome__scout-status' }, 'Off');
-
-  const scoutBtn = h(
-    'button',
-    {
-      class: 'welcome__scout-btn',
-      onClick: async () => {
-        const settings = await setScoutReporting(true);
-        if (settings.scoutReporting) {
-          scoutBtn.classList.add('welcome__scout-btn--active');
-          scoutBtn.textContent = '';
-          scoutBtn.append(icon('check-circle', 16), ' Enabled');
-          scoutBtn.disabled = true;
-          scoutStatus.textContent = 'On';
-          scoutStatus.classList.add('welcome__scout-status--on');
-        }
-      },
-    },
-    msg('WELCOME_SCOUT_CTA', 'Enable Scout'),
-  );
-
-  const scoutSection = h(
-    'section',
-    { class: 'welcome__scout' },
-    h(
-      'div',
-      { class: 'welcome__scout-header' },
-      scoutIcon,
-      h(
-        'div',
-        { class: 'welcome__scout-text' },
-        h(
-          'h2',
-          { class: 'welcome__scout-title' },
-          msg('WELCOME_SCOUT_TITLE', 'Help improve Debloat'),
-          h('span', { class: 'welcome__scout-badge' }, 'Optional'),
-        ),
-        h(
-          'p',
-          { class: 'welcome__scout-desc' },
-          msg(
-            'WELCOME_SCOUT_DESC',
-            'Enable AI Scout to anonymously report new AI elements you encounter. Your reports help us detect changes faster and keep blocking rules up to date for everyone.',
-          ),
-        ),
-      ),
-    ),
-    h(
-      'div',
-      { class: 'welcome__scout-details' },
-      h('div', { class: 'welcome__scout-detail' }, icon('shield-check', 14), ' Anonymous — no personal data collected'),
-      h('div', { class: 'welcome__scout-detail' }, icon('filter', 14), ' Only reports AI elements on search pages'),
-      h('div', { class: 'welcome__scout-detail' }, icon('star', 14), ' Get notified when your reports are accepted'),
-    ),
-    h(
-      'div',
-      { class: 'welcome__scout-action' },
-      scoutBtn,
-      h('span', { class: 'welcome__scout-label' }, 'Status: ', scoutStatus),
-    ),
-  );
-
   // ── CTA ──
   const ctaText = msg('WELCOME_CTA', 'Open Side Panel');
   const ctaFallbackText = msg('WELCOME_CTA_FALLBACK', 'Click the Debloat icon in your toolbar to get started');
@@ -196,32 +141,31 @@ async function render() {
     'button',
     {
       class: 'welcome__cta',
-      onClick: async () => {
-        try {
-          if (currentBrowser === 'firefox') {
-            // @ts-expect-error -- Firefox sidebar API via globalThis
-            await globalThis.browser.sidebarAction.open();
-          } else if ((browser as unknown as { sidePanel?: { open: (o: object) => Promise<void> } }).sidePanel?.open) {
-            const win = await browser.windows.getCurrent();
-            if (!win.id) throw new Error('no-window');
-            await (browser as unknown as { sidePanel: { open: (o: object) => Promise<void> } }).sidePanel.open({
-              windowId: win.id,
-            });
-          } else {
-            throw new Error('no-api');
-          }
-        } catch {
+      onClick: () => {
+        // No await before open(): Edge drops the user gesture across an await and refuses
+        // to open the panel (the window id is read at page load instead).
+        const panels = browser as unknown as {
+          sidePanel?: { open: (o: object) => Promise<void> };
+          sidebarAction?: { open: () => Promise<void> };
+        };
+        let opening: Promise<void> | undefined;
+        if (currentBrowser !== 'firefox' && panels.sidePanel?.open && windowId !== undefined) {
+          opening = panels.sidePanel.open({ windowId });
+        } else if (panels.sidebarAction?.open) {
+          opening = panels.sidebarAction.open();
+        }
+        (opening ?? Promise.reject(new Error('no-api'))).catch(() => {
           ctaBtn.textContent = ctaFallbackText;
           ctaBtn.disabled = true;
           ctaBtn.classList.add('welcome__cta--fallback');
-        }
+        });
       },
     },
     ctaText,
   );
 
   // ── Assemble ──
-  app.append(themeBtn, hero, featuresTitle, featuresGrid, howTitle, stepsRow, scoutSection, ctaBtn);
+  app.append(themeBtn, hero, featuresTitle, featuresGrid, howTitle, stepsRow, ctaBtn);
 }
 
 render();

@@ -1,0 +1,398 @@
+{
+  "EXTENSION_NAME": {
+    "message": "Debloat — Google AI Bakışı, AI Modu gizleme",
+    "description": "Extension name (store listing title, ≤ 45 chars)"
+  },
+  "EXTENSION_DESCRIPTION": {
+    "message": "Google AI Bakışı, AI Modu ve Kullanıcılar bunları da sordu'yu gizler. Copilot, sponsorlu içerik ve telemetriyi kaldırır. İzleme yok.",
+    "description": "Extension description (≤ 132 chars)"
+  },
+  "CATEGORY_AI": {
+    "message": "Yapay zeka özellikleri",
+    "description": "AI Features category name"
+  },
+  "CATEGORY_AI_DESC": {
+    "message": "AI Bakışı, AI Modu, Kullanıcılar bunları da sordu, Gemini, Copilot",
+    "description": "AI category subtitle"
+  },
+  "CATEGORY_SPONSORED": {
+    "message": "Sponsorlu içerik",
+    "description": "Sponsored Content category name"
+  },
+  "CATEGORY_SPONSORED_DESC": {
+    "message": "Yeni sekme akışı, sponsorlu kutucuklar, önerilen haberler",
+    "description": "Sponsored Content category description"
+  },
+  "CATEGORY_SHOPPING": {
+    "message": "Alışveriş",
+    "description": "Shopping category name"
+  },
+  "CATEGORY_SHOPPING_DESC": {
+    "message": "Fiyat karşılaştırma, kuponlar, alışveriş asistanı",
+    "description": "Shopping category description"
+  },
+  "CATEGORY_TELEMETRY": {
+    "message": "Telemetri",
+    "description": "Telemetry category name"
+  },
+  "CATEGORY_TELEMETRY_DESC": {
+    "message": "Tanılama verileri, kullanım raporları, Firefox Araştırmaları",
+    "description": "Telemetry category description"
+  },
+  "CATEGORY_ANNOYANCES": {
+    "message": "Can sıkıcı öğeler",
+    "description": "Annoyances category name"
+  },
+  "CATEGORY_ANNOYANCES_DESC": {
+    "message": "Rewards bildirimleri, özellik ipuçları, metin tahmini, Acrobat düğmesi",
+    "description": "Annoyances category description"
+  },
+  "RATE_CHROME": {
+    "message": "Chrome Web Store'da değerlendir",
+    "description": "Footer link to rate extension on Chrome Web Store"
+  },
+  "RATE_EDGE": {
+    "message": "Edge Add-ons'ta değerlendir",
+    "description": "Footer link to rate extension on Edge Add-ons"
+  },
+  "RATE_FIREFOX": {
+    "message": "Firefox Add-ons'ta değerlendir",
+    "description": "Footer link to rate extension on Firefox Add-ons"
+  },
+  "WELCOME_TAGLINE": {
+    "message": "Tarayıcınız artık sade",
+    "description": "Welcome page hero tagline"
+  },
+  "WELCOME_FEATURES_TITLE": {
+    "message": "Neleri engeller",
+    "description": "Welcome page features section title"
+  },
+  "WELCOME_HOW_TITLE": {
+    "message": "Nasıl çalışır",
+    "description": "Welcome page how-it-works section title"
+  },
+  "WELCOME_STEP1_TITLE": {
+    "message": "Yükle",
+    "description": "Welcome page step 1 title"
+  },
+  "WELCOME_STEP1_DESC": {
+    "message": "Uzantıyı ekleyin — yönetici izni gerekmez",
+    "description": "Welcome page step 1 description"
+  },
+  "WELCOME_STEP2_TITLE": {
+    "message": "Özelleştir",
+    "description": "Welcome page step 2 title"
+  },
+  "WELCOME_STEP2_DESC": {
+    "message": "Hangi kategorilerin engelleneceğini veya izin verileceğini seçin",
+    "description": "Welcome page step 2 description"
+  },
+  "WELCOME_STEP3_TITLE": {
+    "message": "Gezin",
+    "description": "Welcome page step 3 title"
+  },
+  "WELCOME_STEP3_DESC": {
+    "message": "Daha temiz ve hızlı bir tarayıcının keyfini çıkarın",
+    "description": "Welcome page step 3 description"
+  },
+  "WELCOME_CTA": {
+    "message": "Yan paneli aç",
+    "description": "Welcome page CTA button text"
+  },
+  "WELCOME_CTA_FALLBACK": {
+    "message": "Başlamak için araç çubuğundaki Debloat simgesine tıklayın",
+    "description": "Welcome page CTA fallback text when sidePanel API is unavailable"
+  },
+  "ACTIVITY_ELEMENTS_HIDDEN": {
+    "message": "öğe gizlendi",
+    "description": "Activity drawer label for CSS/DOM hidden element count"
+  },
+  "MINIBAR_LABEL": {
+    "message": "AI Bakışı, Debloat tarafından gizlendi",
+    "description": "Collapsed bar shown on Google in place of a minimized AI Overview"
+  },
+  "MINIBAR_SHOW": {
+    "message": "Göster",
+    "description": "Collapsed AI Overview bar: button to expand"
+  },
+  "GOOGLE_ALL_BTN": {
+    "message": "Tüm Google alan adları",
+    "description": "Side panel button: grant access to every Google country domain"
+  },
+  "GOOGLE_ALL_TOOLTIP": {
+    "message": "Google'daki yapay zekayı yalnızca en büyük 18 ülkede değil, her ülkede gizle",
+    "description": "Tooltip for the All Google domains button"
+  },
+  "SHOW_AI_ONCE_BTN": {
+    "message": "Bu aramada yapay zekayı göster",
+    "description": "Side panel button: reload the current Google search once without classic results mode"
+  },
+  "MINIBAR_HIDE": {
+    "message": "Gizle",
+    "description": "Collapsed AI Overview bar: button to collapse again"
+  },
+  "ACTIVITY_LOG": {
+    "message": "Etkinlik günlüğü",
+    "description": "Header button tooltip: open the activity log"
+  },
+  "PRESET_AGGRESSIVE": {
+    "message": "Agresif",
+    "description": "Preset name: everything on"
+  },
+  "PRESET_BALANCED": {
+    "message": "Dengeli",
+    "description": "Preset name: AI and telemetry only"
+  },
+  "PRESET_MINIMAL": {
+    "message": "Minimal",
+    "description": "Preset name: telemetry only"
+  },
+  "PRESET_CUSTOM": {
+    "message": "Özel",
+    "description": "Preset name: user-defined"
+  },
+  "PAUSE_1H": {
+    "message": "Duraklat (1 sa)",
+    "description": "Quick control: pause all blocking for one hour"
+  },
+  "RESUME": {
+    "message": "Devam et",
+    "description": "Quick control: end the pause"
+  },
+  "ENABLE_ALL": {
+    "message": "Tümünü etkinleştir",
+    "description": "Footer button"
+  },
+  "DISABLE_ALL": {
+    "message": "Tümünü devre dışı bırak",
+    "description": "Footer button"
+  },
+  "ACTIVITY_CLEAR": {
+    "message": "Temizle",
+    "description": "Activity log: clear the list"
+  },
+  "ACTIVITY_EMPTY": {
+    "message": "Henüz etkinlik yok",
+    "description": "Activity log: empty state"
+  },
+  "ACTIVITY_ALLOW": {
+    "message": "Sitede izin ver",
+    "description": "Activity log: stop hiding this category on this site"
+  },
+  "ACTIVITY_RULESET": {
+    "message": "Kural kümesi: $1",
+    "description": "Activity log tooltip; $1 = ruleset id"
+  },
+  "SUB_TOGGLES_COUNT": {
+    "message": "$1 alt seçenek",
+    "description": "Category card: number of sub-toggles; $1 = count"
+  },
+  "BADGE_BLOCKED": {
+    "message": "Debloat: $1 engellendi",
+    "description": "Toolbar tooltip; $1 = number of blocked items"
+  },
+  "BADGE_PAUSED": {
+    "message": "Debloat: duraklatıldı",
+    "description": "Toolbar tooltip while paused"
+  },
+  "THEME_TOGGLE_TOOLTIP": {
+    "message": "Temayı değiştir",
+    "description": "Header button tooltip"
+  },
+  "WHITELIST_SITE_TOOLTIP": {
+    "message": "Bu sitede izin ver",
+    "description": "Header button tooltip"
+  },
+  "SUB_AI_OVERVIEW": {
+    "message": "Google AI Bakışı",
+    "description": "Sub-toggle label (ai_overview)"
+  },
+  "SUB_AI_OVERVIEW_MINIMIZE": {
+    "message": "AI Bakışı: kaldırmak yerine çubuğa daralt",
+    "description": "Sub-toggle label (ai_overview_minimize)"
+  },
+  "SUB_AI_MODE": {
+    "message": "Google AI Modu",
+    "description": "Sub-toggle label (ai_mode)"
+  },
+  "SUB_CLASSIC_RESULTS": {
+    "message": "Google: yalnızca klasik web sonuçları",
+    "description": "Sub-toggle label (classic_results)"
+  },
+  "SUB_CLASSIC_RESULTS_HINT": {
+    "message": "Hiç yapay zeka içeriği üretilmez, ancak hesap makinesi, hava durumu ve bilgi panelleri de kaybolur",
+    "description": "Sub-toggle caveat (classic_results)"
+  },
+  "SUB_PEOPLE_ALSO_ASK": {
+    "message": "Google \"Kullanıcılar bunları da sordu\"",
+    "description": "Sub-toggle label (people_also_ask)"
+  },
+  "SUB_THINGS_TO_KNOW": {
+    "message": "Google \"Bilinmesi gerekenler\" (yapay zeka bölümleri)",
+    "description": "Sub-toggle label (things_to_know)"
+  },
+  "SUB_GEMINI_SUGGESTIONS": {
+    "message": "Gemini önerileri",
+    "description": "Sub-toggle label (gemini_suggestions)"
+  },
+  "SUB_HELP_ME_WRITE": {
+    "message": "Yazmama yardım et / Copilot ile yeniden yaz",
+    "description": "Sub-toggle label (help_me_write)"
+  },
+  "SUB_COPILOT_SIDEBAR": {
+    "message": "Copilot kenar çubuğu ve araç çubuğu simgesi",
+    "description": "Sub-toggle label (copilot_sidebar)"
+  },
+  "SUB_COPILOT_CONTEXT": {
+    "message": "Copilot'un sayfa içeriğine erişimi",
+    "description": "Sub-toggle label (copilot_context)"
+  },
+  "SUB_VISUAL_SEARCH": {
+    "message": "Görsel Arama katmanı",
+    "description": "Sub-toggle label (visual_search)"
+  },
+  "SUB_AI_HISTORY": {
+    "message": "Yapay zeka ile geçmişte arama",
+    "description": "Sub-toggle label (ai_history)"
+  },
+  "SUB_TEXT_PREDICTION": {
+    "message": "Metin tahmini (Turing)",
+    "description": "Sub-toggle label (text_prediction)"
+  },
+  "SUB_AI_TABS": {
+    "message": "Yapay zeka ile sekme karşılaştırma / düzenleme",
+    "description": "Sub-toggle label (ai_tabs)"
+  },
+  "SUB_WINDOW_AI": {
+    "message": "Web yapay zeka API'leri (window.ai)",
+    "description": "Sub-toggle label (window_ai)"
+  },
+  "SUB_AI_SIDEBAR_FF": {
+    "message": "Yapay zeka kenar çubuğu ve sohbet botları",
+    "description": "Sub-toggle label (ai_sidebar_ff)"
+  },
+  "SUB_AI_PREVIEWS_FF": {
+    "message": "Yapay zeka bağlantı önizlemeleri",
+    "description": "Sub-toggle label (ai_previews_ff)"
+  },
+  "SUB_AI_TABGROUP_FF": {
+    "message": "Yapay zeka sekme grubu önerileri",
+    "description": "Sub-toggle label (ai_tabgroup_ff)"
+  },
+  "SUB_MSN_FEED": {
+    "message": "Yeni sekmede MSN / haber akışı",
+    "description": "Sub-toggle label (msn_feed)"
+  },
+  "SUB_SPONSORED_TILES": {
+    "message": "Yeni sekmede sponsorlu popüler siteler",
+    "description": "Sub-toggle label (sponsored_tiles)"
+  },
+  "SUB_SPOTLIGHT": {
+    "message": "Spotlight deneyimleri ve önerileri",
+    "description": "Sub-toggle label (spotlight)"
+  },
+  "SUB_FF_SPONSORED_STORIES": {
+    "message": "Firefox giriş sayfasında sponsorlu haberler",
+    "description": "Sub-toggle label (ff_sponsored_stories)"
+  },
+  "SUB_FF_SPONSORED_TILES": {
+    "message": "Firefox giriş sayfasında sponsorlu popüler siteler",
+    "description": "Sub-toggle label (ff_sponsored_tiles)"
+  },
+  "SUB_FF_RECOMMENDED": {
+    "message": "Firefox giriş sayfasında önerilen haberler",
+    "description": "Sub-toggle label (ff_recommended)"
+  },
+  "SUB_CHROME_DISCOVER": {
+    "message": "Google Discover tarzı kartlar",
+    "description": "Sub-toggle label (chrome_discover)"
+  },
+  "SUB_FF_PERPLEXITY": {
+    "message": "Arama motorlarında Perplexity",
+    "description": "Sub-toggle label (ff_perplexity)"
+  },
+  "SUB_SHOPPING_ASSISTANT": {
+    "message": "Alışveriş asistanı",
+    "description": "Sub-toggle label (shopping_assistant)"
+  },
+  "SUB_PRICE_COMPARE": {
+    "message": "Fiyat karşılaştırma açılır pencereleri",
+    "description": "Sub-toggle label (price_compare)"
+  },
+  "SUB_COUPONS": {
+    "message": "Kupon ve para iadesi bildirimleri",
+    "description": "Sub-toggle label (coupons)"
+  },
+  "SUB_EXPRESS_CHECKOUT": {
+    "message": "Hızlı ödeme önerileri",
+    "description": "Sub-toggle label (express_checkout)"
+  },
+  "SUB_TELE_CHROME": {
+    "message": "Google tanılama sunucuları",
+    "description": "Sub-toggle label (tele_chrome)"
+  },
+  "SUB_TELE_EDGE": {
+    "message": "Microsoft tanılama verileri",
+    "description": "Sub-toggle label (tele_edge)"
+  },
+  "SUB_TELE_FIREFOX": {
+    "message": "Mozilla telemetrisi",
+    "description": "Sub-toggle label (tele_firefox)"
+  },
+  "SUB_FF_STUDIES": {
+    "message": "Firefox Araştırmaları (Shield)",
+    "description": "Sub-toggle label (ff_studies)"
+  },
+  "SUB_CRASH_REPORTING": {
+    "message": "Kullanım/çökme raporlama sunucuları",
+    "description": "Sub-toggle label (crash_reporting)"
+  },
+  "SUB_REWARDS": {
+    "message": "Microsoft Rewards bildirimleri",
+    "description": "Sub-toggle label (rewards)"
+  },
+  "SUB_FEATURE_BANNERS": {
+    "message": "Özellik önerisi afişleri",
+    "description": "Sub-toggle label (feature_banners)"
+  },
+  "SUB_ACROBAT_BUTTON": {
+    "message": "\"Acrobat ile düzenle\" düğmesi",
+    "description": "Sub-toggle label (acrobat_button)"
+  },
+  "SUB_DEFAULT_PROMPT": {
+    "message": "\"Varsayılan tarayıcı yap\" bildirimleri",
+    "description": "Sub-toggle label (default_prompt)"
+  },
+  "SUB_DALLE_THEMES": {
+    "message": "DALL-E / yapay zeka tema önerileri",
+    "description": "Sub-toggle label (dalle_themes)"
+  },
+  "SUB_BING_REDIRECT": {
+    "message": "Yeni sekme arama kutusunun Bing'e yönlendirilmesi",
+    "description": "Sub-toggle label (bing_redirect)"
+  },
+  "SUB_AUTO_SIGNIN": {
+    "message": "Otomatik tarayıcı oturum açma istemi",
+    "description": "Sub-toggle label (auto_signin)"
+  },
+  "SITE_ACCESS_NOTICE": {
+    "message": "Web yapay zeka API'lerini (window.ai) her sitede engellemek için tüm sitelere erişime izin verin",
+    "description": "Side panel notice (Chrome/Firefox): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_NOTICE_EDGE": {
+    "message": "Copilot'u gizlemek ve web yapay zeka API'lerini (window.ai) her sitede engellemek için tüm sitelere erişime izin verin",
+    "description": "Side panel notice (Edge): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_GRANT": {
+    "message": "İzin ver",
+    "description": "Button in the notice: request the all-sites permission"
+  },
+  "FOOTER_ISSUES": {
+    "message": "Sorun bildir",
+    "description": "Side panel footer: GitHub icon link to report a bug"
+  },
+  "FOOTER_SUPPORT": {
+    "message": "Destek sohbeti (Telegram)",
+    "description": "Side panel footer: Telegram icon link to the support chat"
+  }
+}

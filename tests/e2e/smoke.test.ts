@@ -29,6 +29,51 @@ describe('extension loads', () => {
 });
 
 describe('side panel UI', () => {
+  it('asks for all-sites access (window.ai) until AI blocking is turned off', async () => {
+    const page = await openSidePanel(ctx);
+    try {
+      // Fresh profile: optional *://*/* is not granted, AI category is on
+      await page.waitForSelector('[data-testid="site-access"]:not([hidden])', { timeout: 5000 });
+      expect(await page.isVisible('[data-testid="grant-all-sites"]')).toBe(true);
+
+      await page.evaluate(async () => {
+        const { settings } = await chrome.storage.local.get('settings');
+        await chrome.storage.local.set({ settings: { ...(settings ?? {}), ai: false } });
+      });
+      await page.waitForSelector('[data-testid="site-access"][hidden]', { state: 'attached', timeout: 5000 });
+
+      await page.evaluate(async () => {
+        const { settings } = await chrome.storage.local.get('settings');
+        await chrome.storage.local.set({ settings: { ...(settings ?? {}), ai: true } });
+      });
+      await page.waitForSelector('[data-testid="site-access"]:not([hidden])', { timeout: 5000 });
+    } finally {
+      await page.close();
+    }
+  });
+
+  it('footer has the icon links, 301.st included, and they survive a re-render', async () => {
+    const page = await openSidePanel(ctx);
+    try {
+      await page.waitForSelector('.footer__links a', { timeout: 5000 });
+      await page.click('[data-testid="enable-all"]'); // re-renders the cards
+      await page.waitForTimeout(300);
+      const links = await page.$$eval('.footer__links a', (as) =>
+        as.map((a) => ({ href: (a as HTMLAnchorElement).href, label: a.getAttribute('aria-label') })),
+      );
+      expect(links.map((l) => new URL(l.href).hostname)).toEqual([
+        ctx.extensionId,
+        'chromewebstore.google.com',
+        'github.com',
+        '301.st',
+        't.me',
+      ]);
+      expect(links.every((l) => l.label)).toBe(true);
+    } finally {
+      await page.close();
+    }
+  });
+
   it('renders header and 5 category cards', async () => {
     const page = await openSidePanel(ctx);
     try {
@@ -99,6 +144,22 @@ describe('side panel UI', () => {
 
       const offCards = await page.$$('.card--off');
       expect(offCards.length).toBeGreaterThan(0);
+    } finally {
+      await page.close();
+    }
+  });
+});
+
+describe('welcome page', () => {
+  it('"Open Side Panel" opens the panel instead of falling back to the hint', async () => {
+    const page = await ctx.context.newPage();
+    try {
+      await page.goto(`chrome-extension://${ctx.extensionId}/welcome.html`);
+      await page.waitForSelector('.welcome__cta', { timeout: 5000 });
+      await page.waitForTimeout(300); // window id is read at load
+      await page.click('.welcome__cta');
+      await page.waitForTimeout(500);
+      expect(await page.$('.welcome__cta--fallback')).toBeNull();
     } finally {
       await page.close();
     }

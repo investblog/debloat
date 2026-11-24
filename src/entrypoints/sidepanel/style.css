@@ -16,8 +16,6 @@ body {
   color: var(--color-text);
   background: var(--color-bg);
   width: 100%;
-  min-width: 360px;
-  min-height: 520px;
   overflow: hidden;
 }
 
@@ -101,17 +99,6 @@ body {
 .btn-icon--active-log {
   color: var(--color-primary);
   border-color: var(--color-primary);
-}
-
-.btn-icon--scout {
-  color: #818CF8;
-  border-color: #818CF8;
-  animation: scout-pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes scout-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
 }
 
 .btn-icon__inner {
@@ -208,6 +195,56 @@ body {
   font-size: var(--font-size-sm);
   cursor: pointer;
   transition: background var(--transition);
+}
+
+.quick__btn[hidden] {
+  display: none;
+}
+
+/* ── Notice: one-line prompt with an action (e.g. all-sites permission) ── */
+
+.notice {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--gap-sm) var(--gap);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  line-height: 1.35;
+}
+
+.notice[hidden] {
+  display: none;
+}
+
+.notice__text {
+  flex: 1;
+}
+
+.notice__btn {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.notice__btn:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.notice__btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .quick__btn:hover {
@@ -344,6 +381,14 @@ body {
   color: var(--color-text-secondary);
 }
 
+.card__sub-hint {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--color-text-secondary);
+}
+
 /* ── Toggle ── */
 
 .toggle {
@@ -415,22 +460,31 @@ body {
   border-top: 1px solid var(--color-border);
 }
 
-.footer__review {
+/* Icon links as in the other 301.st extensions (dimmed until hover or focus) */
+.footer__links {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
-  padding-bottom: var(--gap-sm);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  text-decoration: none;
-  transition: color var(--transition);
+  justify-content: center;
+  gap: var(--gap-sm);
+  padding-top: var(--gap-sm);
 }
 
-.footer__review:hover {
+.footer__links a {
+  display: inline-flex;
   color: var(--color-text);
+  opacity: 0.45;
+  transition: opacity var(--transition);
 }
 
-.footer__review svg {
+.footer__links a:hover,
+.footer__links a:focus-visible {
+  opacity: 1;
+}
+
+.footer__sep {
+  width: 1px;
+  height: 12px;
+  background: var(--color-border);
   flex-shrink: 0;
 }
 
@@ -616,65 +670,4 @@ body {
   color: var(--color-success);
   border-color: var(--color-success);
   opacity: 1;
-}
-
-/* ── Scout row in activity ── */
-
-.activity__scout-row {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-xs);
-  padding: 8px var(--gap-xs);
-  margin-bottom: 6px;
-  background: var(--color-surface);
-  border-radius: var(--radius-sm);
-  border-left: 3px solid var(--color-primary);
-}
-
-.activity__scout-row--done {
-  border-left-color: var(--color-success);
-  opacity: 0.7;
-}
-
-.activity__scout-row--sending {
-  border-left-color: var(--color-primary);
-  opacity: 0.7;
-}
-
-.activity__icon--scout {
-  color: var(--color-primary);
-}
-
-.activity__scout-text {
-  flex: 1;
-  font-size: var(--font-size-sm);
-  color: var(--color-text);
-}
-
-.activity__scout-row--done .activity__scout-text {
-  color: var(--color-text-secondary);
-}
-
-.activity__scout-send {
-  flex-shrink: 0;
-  padding: 3px 10px;
-  border: 1px solid var(--color-primary);
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--color-primary);
-  font-size: 11px;
-  font-weight: 600;
-  font-family: var(--font-family);
-  cursor: pointer;
-  transition: background var(--transition), color var(--transition);
-}
-
-.activity__scout-send:hover {
-  background: var(--color-primary);
-  color: #fff;
-}
-
-.activity__scout-send:disabled {
-  opacity: 0.6;
-  cursor: default;
 }

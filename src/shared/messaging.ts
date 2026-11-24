@@ -1,6 +1,5 @@
 import { browser } from 'wxt/browser';
-import type { CandidateBlock } from './scout-collector';
-import type { ActivityEntry, CategoryId, ScoutStatus } from './types';
+import type { ActivityEntry, CategoryId } from './types';
 
 /**
  * Message types for background <-> UI communication.
@@ -17,21 +16,13 @@ export type Message =
   | { type: 'WHITELIST_SITE'; domain: string; categories: CategoryId[] }
   | { type: 'UNWHITELIST_SITE'; domain: string }
   | { type: 'REPORT_CSS_HIDDEN'; domain: string; count: number; category: CategoryId }
-  | {
-      type: 'SCOUT_CANDIDATES';
-      surface: string;
-      pageUrl: string;
-      candidates: CandidateBlock[];
-      viewport: { width: number; height: number };
-      known: boolean;
-    }
-  | { type: 'GET_SCOUT_STATUS'; tabId: number }
-  | { type: 'SCOUT_SEND_REPORT'; tabId: number };
+  | { type: 'SHOW_AI_ONCE'; tabId: number }
+  | { type: 'IS_AI_SHOWN' };
 
 export type MessageResponse =
   | { type: 'TAB_COUNT'; count: number }
   | { type: 'ACTIVITY'; entries: ActivityEntry[] }
-  | { type: 'SCOUT_STATUS'; status: ScoutStatus | null }
+  | { type: 'AI_SHOWN'; shown: boolean }
   | { type: 'OK' };
 
 export function sendMessage(msg: Message): Promise<MessageResponse> {

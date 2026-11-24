@@ -1,32 +1,12 @@
 import type { Category, CategoryId, PresetId, Settings } from './types';
 
-/** Top Google country domains for search content script */
-export const GOOGLE_SEARCH_DOMAINS = [
-  'www.google.com',
-  'www.google.co.uk',
-  'www.google.de',
-  'www.google.fr',
-  'www.google.co.jp',
-  'www.google.co.in',
-  'www.google.com.br',
-  'www.google.ca',
-  'www.google.com.au',
-  'www.google.ru',
-  'www.google.it',
-  'www.google.es',
-  'www.google.com.mx',
-  'www.google.co.kr',
-  'www.google.nl',
-  'www.google.pl',
-  'www.google.com.tr',
-  'www.google.co.id',
-];
+/** The optional host permission in the manifest (not <all_urls>, which also covers file:// and is never granted) */
+export const ALL_SITES = '*://*/*';
 
 export const BADGE_COLOR = '#10B981';
 export const BADGE_FLASH_COLOR = '#FFB347';
 export const BADGE_FLASH_MS = 600;
 export const BADGE_PAUSED_COLOR = '#6B7280';
-export const BADGE_SCOUT_COLOR = '#818CF8';
 export const BADGE_REFRESH_MS = 2000;
 export const ACTIVITY_BUFFER_SIZE = 100;
 export const PAUSE_DURATION_MS = 60 * 60 * 1000; // 1 hour
@@ -77,8 +57,6 @@ export const DEFAULT_SETTINGS: Settings = {
   preset: 'aggressive',
   siteWhitelist: {},
   pauseUntil: null,
-  scoutReporting: false,
-  scoutInstallId: '',
 };
 
 export const CATEGORIES: Category[] = [
@@ -88,8 +66,33 @@ export const CATEGORIES: Category[] = [
     labelKey: 'CATEGORY_AI',
     descriptionKey: 'CATEGORY_AI_DESC',
     subToggles: [
-      { id: 'ai_overview', label: 'Google AI Overview', browsers: ['chrome', 'edge'], defaultEnabled: true },
-      { id: 'ai_mode', label: 'Google AI Mode', browsers: ['chrome', 'edge'], defaultEnabled: true },
+      { id: 'ai_overview', label: 'Google AI Overview', browsers: ['chrome', 'edge', 'firefox'], defaultEnabled: true },
+      {
+        id: 'ai_overview_minimize',
+        label: 'AI Overview: collapse to a bar instead of removing',
+        browsers: ['chrome', 'edge', 'firefox'],
+        defaultEnabled: false,
+      },
+      { id: 'ai_mode', label: 'Google AI Mode', browsers: ['chrome', 'edge', 'firefox'], defaultEnabled: true },
+      {
+        id: 'classic_results',
+        label: 'Google: classic web results only',
+        hint: 'No AI is generated at all, but calculator, weather and knowledge panels disappear too',
+        browsers: ['chrome', 'edge', 'firefox'],
+        defaultEnabled: false,
+      },
+      {
+        id: 'people_also_ask',
+        label: 'Google "People also ask"',
+        browsers: ['chrome', 'edge', 'firefox'],
+        defaultEnabled: true,
+      },
+      {
+        id: 'things_to_know',
+        label: 'Google "Things to know" (AI parts)',
+        browsers: ['chrome', 'edge', 'firefox'],
+        defaultEnabled: true,
+      },
       {
         id: 'gemini_suggestions',
         label: 'Gemini suggestions',

@@ -5,6 +5,11 @@ name: Submit to stores
 # Firefox is manual-only (the reusable workflow centrally gates Firefox to
 # workflow_dispatch — AMO burns version numbers). Secrets are this repo's
 # GitHub Actions secrets (account-level creds reused; per-extension IDs differ).
+#
+# v1.1.0 is excluded from the tag trigger: it adds 19 listing languages, and the
+# stores offer a language only once a package containing that _locales dir is
+# uploaded. Submit it with workflow_dispatch + hold (upload as a draft), fill in
+# the listings and screenshots in the dashboards, then publish by hand.
 
 on:
   push:
@@ -22,12 +27,17 @@ on:
           - chrome
           - firefox
           - edge
+          - chrome-edge
           - all
         default: chrome
       dry_run:
         description: 'Dry run (validate credentials only, publish nothing)'
         type: boolean
         default: true
+      hold:
+        description: 'Upload but do NOT submit — waits as a draft for you to publish (Chrome/Edge only; AMO has no such state)'
+        type: boolean
+        default: false
 
 concurrency:
   group: submit-${{ github.ref }}
@@ -35,11 +45,15 @@ concurrency:
 
 jobs:
   submit:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && github.ref_name != 'v1.1.0')
     uses: investblog/geo-tier-builder/.github/workflows/store-submit.yml@main
     secrets: inherit
     with:
       ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
       dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
-      chrome: ${{ github.event_name == 'push' || inputs.stores == 'chrome' || inputs.stores == 'all' }}
+      hold: ${{ github.event_name == 'workflow_dispatch' && inputs.hold || false }}
+      chrome: ${{ github.event_name == 'push' || inputs.stores == 'chrome' || inputs.stores == 'chrome-edge' || inputs.stores == 'all' }}
       firefox: ${{ inputs.stores == 'firefox' || inputs.stores == 'all' }}
-      edge: ${{ github.event_name == 'push' || inputs.stores == 'edge' || inputs.stores == 'all' }}
+      edge: ${{ github.event_name == 'push' || inputs.stores == 'edge' || inputs.stores == 'chrome-edge' || inputs.stores == 'all' }}

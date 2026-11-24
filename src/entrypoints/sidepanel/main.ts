@@ -1,16 +1,16 @@
 import { detectBrowser } from '@background/browser';
-import { CATEGORIES, PRESETS, STORE_URLS } from '@shared/constants';
+import { ALL_SITES, CATEGORIES, PRESETS, STORE_URLS } from '@shared/constants';
+import { GOOGLE_EXTRA_DOMAINS, googleOrigins as googleOriginsFor } from '@shared/google-domains';
 import { sendMessage } from '@shared/messaging';
-import { loadSettings, patchSettings, setScoutReporting, toggleCategory, toggleSubToggle } from '@shared/settings';
+import { isSubEnabled, loadSettings, patchSettings, toggleCategory, toggleSubToggle } from '@shared/settings';
 import type { CategoryId, PresetId } from '@shared/types';
 import { createActivityDrawer } from '@ui/components/activity-drawer';
 import { createCategoryCard } from '@ui/components/category-card';
 import { $, h } from '@ui/dom';
-import { icon } from '@ui/icons';
+import { brandIcon, icon } from '@ui/icons';
 import { browser } from 'wxt/browser';
 import '../../assets/styles/tokens.css';
-
-type MsgKey = Parameters<typeof browser.i18n.getMessage>[0];
+import { t } from '@shared/i18n';
 
 async function render() {
   const app = $('#app')!;
@@ -21,6 +21,9 @@ async function render() {
   const stored = await browser.storage.local.get('theme');
   const initialTheme = (stored.theme as string) ?? 'dark';
   document.documentElement.setAttribute('data-theme', initialTheme);
+  document.documentElement.lang = browser.i18n.getUILanguage();
+  document.documentElement.dir =
+    browser.i18n.getMessage('@@bidi_dir' as Parameters<typeof browser.i18n.getMessage>[0]) || 'ltr';
 
   let currentTheme = initialTheme;
   const themeIcon = h('span', { class: 'theme-toggle__icon' });
@@ -31,7 +34,7 @@ async function render() {
     {
       class: 'theme-toggle',
       'data-testid': 'theme-toggle',
-      title: browser.i18n.getMessage('THEME_TOGGLE_TOOLTIP' as MsgKey) || 'Toggle theme',
+      title: t('THEME_TOGGLE_TOOLTIP', 'Toggle theme'),
       onClick: async () => {
         currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', currentTheme);
@@ -51,7 +54,7 @@ async function render() {
   const siteBtn = h('button', {
     class: 'btn-icon',
     'data-testid': 'whitelist-site',
-    title: browser.i18n.getMessage('WHITELIST_SITE_TOOLTIP' as MsgKey) || 'Allow on this site',
+    title: t('WHITELIST_SITE_TOOLTIP', 'Allow on this site'),
     onClick: () => {
       if (siteWhitelisted) {
         // Revert to default
@@ -84,7 +87,7 @@ async function render() {
   const logsBtn = h('button', {
     class: 'btn-icon',
     'data-testid': 'activity-log',
-    title: 'Activity log',
+    title: t('ACTIVITY_LOG', 'Activity log'),
   });
   logsBtn.append(h('span', { class: 'btn-icon__inner' }, icon('console-log', 16)));
 
@@ -92,9 +95,6 @@ async function render() {
   const activity = createActivityDrawer({
     onHasActivity: (has) => {
       logsBtn.classList.toggle('btn-icon--active-log', has);
-    },
-    onScoutPending: (pending) => {
-      logsBtn.classList.toggle('btn-icon--scout', pending);
     },
   });
   logsBtn.addEventListener('click', () => activity.open());
@@ -117,16 +117,16 @@ async function render() {
       ),
       h('div', { class: 'header__actions' }, logsBtn, siteBtn, themeBtn),
     ),
-    h('div', { class: 'header__subtitle' }, 'Your browser, decluttered'),
+    h('div', { class: 'header__subtitle' }, t('WELCOME_TAGLINE', 'Your browser, decluttered')),
   );
 
   // ── Preset pills ──
   const presetIds: PresetId[] = ['aggressive', 'balanced', 'minimal', 'custom'];
   const presetLabels: Record<PresetId, string> = {
-    aggressive: 'Aggressive',
-    balanced: 'Balanced',
-    minimal: 'Minimal',
-    custom: 'Custom',
+    aggressive: t('PRESET_AGGRESSIVE', 'Aggressive'),
+    balanced: t('PRESET_BALANCED', 'Balanced'),
+    minimal: t('PRESET_MINIMAL', 'Minimal'),
+    custom: t('PRESET_CUSTOM', 'Custom'),
   };
 
   const presetBar = h('div', { class: 'presets', 'data-testid': 'preset-selector' });
@@ -173,38 +173,130 @@ async function render() {
       if (settings.pauseUntil && settings.pauseUntil > Date.now()) {
         await sendMessage({ type: 'UNPAUSE' });
         pauseBtn.textContent = '';
-        pauseBtn.append(icon('pause', 14), ' Pause (1h)');
+        pauseBtn.append(icon('pause', 14), ` ${t('PAUSE_1H', 'Pause (1h)')}`);
         pauseBtn.classList.remove('quick__btn--active');
       } else {
         await sendMessage({ type: 'PAUSE', durationMs: 60 * 60 * 1000 });
         pauseBtn.textContent = '';
-        pauseBtn.append(icon('play', 14), ' Resume');
+        pauseBtn.append(icon('play', 14), ` ${t('RESUME', 'Resume')}`);
         pauseBtn.classList.add('quick__btn--active');
       }
       settings = await loadSettings();
     },
   });
   if (settings.pauseUntil && settings.pauseUntil > Date.now()) {
-    pauseBtn.append(icon('play', 14), ' Resume');
+    pauseBtn.append(icon('play', 14), ` ${t('RESUME', 'Resume')}`);
   } else {
-    pauseBtn.append(icon('pause', 14), ' Pause (1h)');
+    pauseBtn.append(icon('pause', 14), ` ${t('PAUSE_1H', 'Pause (1h)')}`);
   }
 
-  // ── Scout toggle ──
-  const scoutBtn = h('button', {
-    class: `quick__btn${settings.scoutReporting ? ' quick__btn--active' : ''}`,
-    'data-testid': 'scout-toggle',
+  // ── All Google country domains (optional permission; 18 are covered by the manifest) ──
+  const googleOrigins = googleOriginsFor(GOOGLE_EXTRA_DOMAINS);
+  const googleAllBtn = h('button', {
+    class: 'quick__btn',
+    'data-testid': 'google-all-domains',
+    title: t('GOOGLE_ALL_TOOLTIP', 'Hide AI on Google in every country, not only the 18 largest'),
     onClick: async () => {
-      const nowEnabled = !settings.scoutReporting;
-      settings = await setScoutReporting(nowEnabled);
-      scoutBtn.classList.toggle('quick__btn--active', nowEnabled);
-      scoutBtn.textContent = '';
-      scoutBtn.append(icon('radar', 14), nowEnabled ? ' Scout: On' : ' Scout: Off');
+      // Must run directly in the click handler (user gesture)
+      const granted = await browser.permissions.request({ origins: googleOrigins });
+      googleAllBtn.hidden = granted;
     },
   });
-  scoutBtn.append(icon('radar', 14), settings.scoutReporting ? ' Scout: On' : ' Scout: Off');
+  googleAllBtn.append(icon('web-plus', 14), ` ${t('GOOGLE_ALL_BTN', 'All Google domains')}`);
+  googleAllBtn.hidden = true;
+  browser.permissions
+    .contains({ origins: googleOrigins })
+    .then((has) => {
+      googleAllBtn.hidden = has;
+    })
+    .catch(() => {});
 
-  const quickBar = h('div', { class: 'quick', 'data-testid': 'quick-controls' }, pauseBtn, scoutBtn);
+  // ── Classic results bypass: show Google's AI view for the current search, once ──
+  const showAiBtn = h('button', {
+    class: 'quick__btn',
+    'data-testid': 'show-ai-once',
+    onClick: async () => {
+      const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+      if (tab?.id != null) await sendMessage({ type: 'SHOW_AI_ONCE', tabId: tab.id });
+    },
+  });
+  showAiBtn.append(icon('lightbulb-alert', 14), ` ${t('SHOW_AI_ONCE_BTN', 'Show AI for this search')}`);
+  showAiBtn.hidden = true;
+
+  async function syncShowAiBtn(): Promise<void> {
+    try {
+      const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+      const url = tab?.url ? new URL(tab.url) : null;
+      showAiBtn.hidden = !(
+        url &&
+        /(^|\.)google\.[a-z.]+$/.test(url.hostname) &&
+        url.pathname === '/search' &&
+        url.searchParams.get('udm') === '14' &&
+        isSubEnabled(settings, 'classic_results')
+      );
+    } catch {
+      showAiBtn.hidden = true;
+    }
+  }
+  syncShowAiBtn();
+  browser.tabs.onActivated.addListener(() => syncShowAiBtn());
+  browser.tabs.onUpdated.addListener((_id, info) => {
+    if (info.url || info.status === 'complete') syncShowAiBtn();
+  });
+
+  const quickBar = h('div', { class: 'quick', 'data-testid': 'quick-controls' }, pauseBtn, googleAllBtn, showAiBtn);
+
+  // ── All-sites access: Copilot hiding (Edge) and window.ai blocking run on every site ──
+  const siteAccessBtn = h(
+    'button',
+    {
+      class: 'notice__btn',
+      'data-testid': 'grant-all-sites',
+      onClick: async () => {
+        // Must run directly in the click handler (user gesture)
+        const granted = await browser.permissions.request({ origins: [ALL_SITES] });
+        if (granted) syncSiteAccess();
+      },
+    },
+    t('SITE_ACCESS_GRANT', 'Allow'),
+  );
+  const siteAccess = h(
+    'div',
+    { class: 'notice', 'data-testid': 'site-access' },
+    h(
+      'span',
+      { class: 'notice__text' },
+      currentBrowser === 'edge'
+        ? t(
+            'SITE_ACCESS_NOTICE_EDGE',
+            'To hide Copilot and block web AI APIs (window.ai) on every site, allow access to all sites',
+          )
+        : t('SITE_ACCESS_NOTICE', 'To block web AI APIs (window.ai) on every site, allow access to all sites'),
+    ),
+    siteAccessBtn,
+  );
+  siteAccess.hidden = true;
+
+  async function syncSiteAccess(): Promise<void> {
+    let granted = false;
+    try {
+      granted = await browser.permissions.contains({ origins: [ALL_SITES] });
+    } catch {
+      // keep false
+    }
+    const needed = settings.ai && (currentBrowser === 'edge' || isSubEnabled(settings, 'window_ai'));
+    siteAccess.hidden = granted || !needed;
+    if (granted) googleAllBtn.hidden = true; // all sites include every Google domain
+  }
+  syncSiteAccess();
+
+  // Presets, Enable/Disable All and toggles all write settings — keep the conditional controls in sync
+  browser.storage.onChanged.addListener(async (changes, area) => {
+    if (area !== 'local' || !('settings' in changes)) return;
+    settings = await loadSettings();
+    syncSiteAccess();
+    syncShowAiBtn();
+  });
 
   // ── Category cards ──
   const cardsContainer = h('div', { class: 'cards', 'data-testid': 'categories' });
@@ -227,6 +319,7 @@ async function render() {
         onToggleSub: async (id: string, enabled: boolean) => {
           settings = await toggleSubToggle(id, enabled);
           presetSelect.value = 'custom';
+          syncShowAiBtn();
         },
       });
       cardsContainer.append(card);
@@ -234,16 +327,23 @@ async function render() {
   }
   renderCards();
 
-  // ── Review link ──
+  // ── Footer links: icon row as in the other 301.st extensions (label in title + aria-label) ──
+  const link = (glyph: Element, label: string, href: string) =>
+    h('a', { href, target: '_blank', rel: 'noopener', title: label, 'aria-label': label }, glyph);
+  const sep = () => h('span', { class: 'footer__sep', 'aria-hidden': 'true' });
   const storeInfo = STORE_URLS[currentBrowser];
-  const reviewLink = storeInfo
-    ? h(
-        'a',
-        { class: 'footer__review', href: storeInfo.url, target: '_blank' },
-        icon(storeInfo.icon, 16),
-        browser.i18n.getMessage(storeInfo.labelKey as MsgKey) || 'Rate this extension',
-      )
-    : null;
+  const storeGlyph = currentBrowser === 'firefox' ? 'mozilla' : currentBrowser === 'edge' ? 'edge' : 'chrome';
+  const footerLinks = h(
+    'nav',
+    { class: 'footer__links' },
+    link(icon('help-circle', 16), t('WELCOME_HOW_TITLE', 'How it works'), browser.runtime.getURL('/welcome.html')),
+    sep(),
+    ...(storeInfo ? [link(brandIcon(storeGlyph), t(storeInfo.labelKey, 'Rate this extension'), storeInfo.url)] : []),
+    link(brandIcon('github'), t('FOOTER_ISSUES', 'Report a problem'), 'https://github.com/investblog/debloat/issues'),
+    sep(),
+    link(brandIcon('301'), '301.st', 'https://301.st/?utm_source=debloat&utm_medium=extension&utm_campaign=footer'),
+    link(brandIcon('telegram'), t('FOOTER_SUPPORT', 'Support chat (Telegram)'), 'https://t.me/traffic301'),
+  );
 
   // ── Footer ──
   const enableAllBtn = h(
@@ -257,7 +357,7 @@ async function render() {
         renderCards();
       },
     },
-    'Enable All',
+    t('ENABLE_ALL', 'Enable All'),
   );
 
   const disableAllBtn = h(
@@ -278,16 +378,18 @@ async function render() {
         renderCards();
       },
     },
-    'Disable All',
+    t('DISABLE_ALL', 'Disable All'),
   );
 
-  // Review link goes inside scrollable area
-  if (reviewLink) cardsContainer.append(reviewLink);
-
-  const footer = h('footer', { class: 'footer' }, h('div', { class: 'footer__actions' }, enableAllBtn, disableAllBtn));
+  const footer = h(
+    'footer',
+    { class: 'footer' },
+    h('div', { class: 'footer__actions' }, enableAllBtn, disableAllBtn),
+    footerLinks,
+  );
 
   // ── Assemble ──
-  app.append(header, presetBar, quickBar, cardsContainer, footer, activity.drawer);
+  app.append(header, presetBar, quickBar, siteAccess, cardsContainer, footer, activity.drawer);
 }
 
 render();

@@ -1,26 +1,26 @@
 {
   "EXTENSION_NAME": {
-    "message": "Debloat — Скрыть AI-мусор",
-    "description": "Extension display name"
+    "message": "Debloat: убрать Обзор от ИИ и Режим ИИ Google",
+    "description": "Extension name (store listing title, ≤ 45 chars)"
   },
   "EXTENSION_DESCRIPTION": {
-    "message": "Скрывает AI-панели, спонсированные блоки и мусор из браузера. Чистый поиск без телеметрии и слежки.",
-    "description": "Extension description for store listing"
+    "message": "Скрывает «Обзор от ИИ», Режим ИИ и «Похожие вопросы» в Google, а также Copilot, рекламные блоки и телеметрию. Без слежки.",
+    "description": "Extension description (≤ 132 chars)"
   },
   "CATEGORY_AI": {
     "message": "AI-функции",
     "description": "AI Features category name"
   },
   "CATEGORY_AI_DESC": {
-    "message": "Gemini, Copilot, AI Overview, Помощь в написании, Visual Search",
-    "description": "AI Features category description"
+    "message": "Обзор от ИИ, Режим ИИ, Похожие вопросы, Gemini, Copilot",
+    "description": "AI category subtitle"
   },
   "CATEGORY_SPONSORED": {
     "message": "Спонсированный контент",
     "description": "Sponsored Content category name"
   },
   "CATEGORY_SPONSORED_DESC": {
-    "message": "Лента NTP, спонсированные плитки, рекомендованные истории",
+    "message": "Лента на новой вкладке, спонсированные плитки, рекомендованные истории",
     "description": "Sponsored Content category description"
   },
   "CATEGORY_SHOPPING": {
@@ -28,7 +28,7 @@
     "description": "Shopping category name"
   },
   "CATEGORY_SHOPPING_DESC": {
-    "message": "Сравнение цен, купоны, ассистент покупок",
+    "message": "Сравнение цен, купоны, помощник покупок",
     "description": "Shopping category description"
   },
   "CATEGORY_TELEMETRY": {
@@ -44,7 +44,7 @@
     "description": "Annoyances category name"
   },
   "CATEGORY_ANNOYANCES_DESC": {
-    "message": "Реклама Rewards, подсказки фич, предиктивный ввод, кнопка Acrobat",
+    "message": "Реклама Rewards, подсказки функций, предиктивный ввод, кнопка Acrobat",
     "description": "Annoyances category description"
   },
   "RATE_CHROME": {
@@ -106,5 +106,293 @@
   "ACTIVITY_ELEMENTS_HIDDEN": {
     "message": "элем. скрыто",
     "description": "Activity drawer label for CSS/DOM hidden element count"
+  },
+  "MINIBAR_LABEL": {
+    "message": "Обзор от ИИ скрыт Debloat",
+    "description": "Collapsed bar shown on Google in place of a minimized AI Overview"
+  },
+  "MINIBAR_SHOW": {
+    "message": "Показать",
+    "description": "Collapsed AI Overview bar: button to expand"
+  },
+  "GOOGLE_ALL_BTN": {
+    "message": "Все домены Google",
+    "description": "Side panel button: grant access to every Google country domain"
+  },
+  "GOOGLE_ALL_TOOLTIP": {
+    "message": "Скрывать AI в Google всех стран, а не только 18 крупнейших",
+    "description": "Tooltip for the All Google domains button"
+  },
+  "SHOW_AI_ONCE_BTN": {
+    "message": "Показать AI для этого поиска",
+    "description": "Side panel button: reload the current Google search once without classic results mode"
+  },
+  "MINIBAR_HIDE": {
+    "message": "Скрыть",
+    "description": "Collapsed AI Overview bar: button to collapse again"
+  },
+  "ACTIVITY_LOG": {
+    "message": "Журнал активности",
+    "description": "Header button tooltip: open the activity log"
+  },
+  "PRESET_AGGRESSIVE": {
+    "message": "Максимум",
+    "description": "Preset name: everything on"
+  },
+  "PRESET_BALANCED": {
+    "message": "Баланс",
+    "description": "Preset name: AI and telemetry only"
+  },
+  "PRESET_MINIMAL": {
+    "message": "Минимум",
+    "description": "Preset name: telemetry only"
+  },
+  "PRESET_CUSTOM": {
+    "message": "Свой",
+    "description": "Preset name: user-defined"
+  },
+  "PAUSE_1H": {
+    "message": "Пауза (1 ч)",
+    "description": "Quick control: pause all blocking for one hour"
+  },
+  "RESUME": {
+    "message": "Продолжить",
+    "description": "Quick control: end the pause"
+  },
+  "ENABLE_ALL": {
+    "message": "Включить всё",
+    "description": "Footer button"
+  },
+  "DISABLE_ALL": {
+    "message": "Выключить всё",
+    "description": "Footer button"
+  },
+  "ACTIVITY_CLEAR": {
+    "message": "Очистить",
+    "description": "Activity log: clear the list"
+  },
+  "ACTIVITY_EMPTY": {
+    "message": "Пока ничего не заблокировано",
+    "description": "Activity log: empty state"
+  },
+  "ACTIVITY_ALLOW": {
+    "message": "Разрешить на сайте",
+    "description": "Activity log: stop hiding this category on this site"
+  },
+  "ACTIVITY_RULESET": {
+    "message": "Набор правил: $1",
+    "description": "Activity log tooltip; $1 = ruleset id"
+  },
+  "SUB_TOGGLES_COUNT": {
+    "message": "Настроек: $1",
+    "description": "Category card: number of sub-toggles; $1 = count"
+  },
+  "BADGE_BLOCKED": {
+    "message": "Debloat: заблокировано $1",
+    "description": "Toolbar tooltip; $1 = number of blocked items"
+  },
+  "BADGE_PAUSED": {
+    "message": "Debloat: на паузе",
+    "description": "Toolbar tooltip while paused"
+  },
+  "THEME_TOGGLE_TOOLTIP": {
+    "message": "Сменить тему",
+    "description": "Header button tooltip"
+  },
+  "WHITELIST_SITE_TOOLTIP": {
+    "message": "Разрешить на этом сайте",
+    "description": "Header button tooltip"
+  },
+  "SUB_AI_OVERVIEW": {
+    "message": "Обзор от ИИ в Google",
+    "description": "Sub-toggle label (ai_overview)"
+  },
+  "SUB_AI_OVERVIEW_MINIMIZE": {
+    "message": "Обзор от ИИ: свернуть в полоску вместо удаления",
+    "description": "Sub-toggle label (ai_overview_minimize)"
+  },
+  "SUB_AI_MODE": {
+    "message": "Режим ИИ в Google",
+    "description": "Sub-toggle label (ai_mode)"
+  },
+  "SUB_CLASSIC_RESULTS": {
+    "message": "Google: только классическая выдача",
+    "description": "Sub-toggle label (classic_results)"
+  },
+  "SUB_CLASSIC_RESULTS_HINT": {
+    "message": "ИИ не генерируется вовсе, но пропадут калькулятор, погода и карточки знаний",
+    "description": "Sub-toggle caveat (classic_results)"
+  },
+  "SUB_PEOPLE_ALSO_ASK": {
+    "message": "Google: «Похожие вопросы»",
+    "description": "Sub-toggle label (people_also_ask)"
+  },
+  "SUB_THINGS_TO_KNOW": {
+    "message": "Google: «Что нужно знать» (части от ИИ)",
+    "description": "Sub-toggle label (things_to_know)"
+  },
+  "SUB_GEMINI_SUGGESTIONS": {
+    "message": "Подсказки Gemini",
+    "description": "Sub-toggle label (gemini_suggestions)"
+  },
+  "SUB_HELP_ME_WRITE": {
+    "message": "«Помощь в написании» / переписать с Copilot",
+    "description": "Sub-toggle label (help_me_write)"
+  },
+  "SUB_COPILOT_SIDEBAR": {
+    "message": "Боковая панель и значок Copilot",
+    "description": "Sub-toggle label (copilot_sidebar)"
+  },
+  "SUB_COPILOT_CONTEXT": {
+    "message": "Доступ Copilot к содержимому страницы",
+    "description": "Sub-toggle label (copilot_context)"
+  },
+  "SUB_VISUAL_SEARCH": {
+    "message": "Оверлей визуального поиска",
+    "description": "Sub-toggle label (visual_search)"
+  },
+  "SUB_AI_HISTORY": {
+    "message": "AI-поиск по истории",
+    "description": "Sub-toggle label (ai_history)"
+  },
+  "SUB_TEXT_PREDICTION": {
+    "message": "Предиктивный ввод (Turing)",
+    "description": "Sub-toggle label (text_prediction)"
+  },
+  "SUB_AI_TABS": {
+    "message": "AI-сравнение и группировка вкладок",
+    "description": "Sub-toggle label (ai_tabs)"
+  },
+  "SUB_WINDOW_AI": {
+    "message": "AI-API для сайтов (window.ai)",
+    "description": "Sub-toggle label (window_ai)"
+  },
+  "SUB_AI_SIDEBAR_FF": {
+    "message": "AI-панель и чат-боты",
+    "description": "Sub-toggle label (ai_sidebar_ff)"
+  },
+  "SUB_AI_PREVIEWS_FF": {
+    "message": "AI-превью ссылок",
+    "description": "Sub-toggle label (ai_previews_ff)"
+  },
+  "SUB_AI_TABGROUP_FF": {
+    "message": "AI-подсказки групп вкладок",
+    "description": "Sub-toggle label (ai_tabgroup_ff)"
+  },
+  "SUB_MSN_FEED": {
+    "message": "Лента MSN / новостей на новой вкладке",
+    "description": "Sub-toggle label (msn_feed)"
+  },
+  "SUB_SPONSORED_TILES": {
+    "message": "Спонсированные сайты на новой вкладке",
+    "description": "Sub-toggle label (sponsored_tiles)"
+  },
+  "SUB_SPOTLIGHT": {
+    "message": "Spotlight: подборки и рекомендации",
+    "description": "Sub-toggle label (spotlight)"
+  },
+  "SUB_FF_SPONSORED_STORIES": {
+    "message": "Спонсированные истории на домашней странице Firefox",
+    "description": "Sub-toggle label (ff_sponsored_stories)"
+  },
+  "SUB_FF_SPONSORED_TILES": {
+    "message": "Спонсированные сайты на домашней странице Firefox",
+    "description": "Sub-toggle label (ff_sponsored_tiles)"
+  },
+  "SUB_FF_RECOMMENDED": {
+    "message": "Рекомендованные истории на домашней странице Firefox",
+    "description": "Sub-toggle label (ff_recommended)"
+  },
+  "SUB_CHROME_DISCOVER": {
+    "message": "Карточки в стиле Google Discover",
+    "description": "Sub-toggle label (chrome_discover)"
+  },
+  "SUB_FF_PERPLEXITY": {
+    "message": "Perplexity в списке поисковиков",
+    "description": "Sub-toggle label (ff_perplexity)"
+  },
+  "SUB_SHOPPING_ASSISTANT": {
+    "message": "Помощник покупок",
+    "description": "Sub-toggle label (shopping_assistant)"
+  },
+  "SUB_PRICE_COMPARE": {
+    "message": "Всплывающее сравнение цен",
+    "description": "Sub-toggle label (price_compare)"
+  },
+  "SUB_COUPONS": {
+    "message": "Уведомления о купонах и кешбэке",
+    "description": "Sub-toggle label (coupons)"
+  },
+  "SUB_EXPRESS_CHECKOUT": {
+    "message": "Подсказки быстрой оплаты",
+    "description": "Sub-toggle label (express_checkout)"
+  },
+  "SUB_TELE_CHROME": {
+    "message": "Диагностические адреса Google",
+    "description": "Sub-toggle label (tele_chrome)"
+  },
+  "SUB_TELE_EDGE": {
+    "message": "Диагностические данные Microsoft",
+    "description": "Sub-toggle label (tele_edge)"
+  },
+  "SUB_TELE_FIREFOX": {
+    "message": "Телеметрия Mozilla",
+    "description": "Sub-toggle label (tele_firefox)"
+  },
+  "SUB_FF_STUDIES": {
+    "message": "Исследования Firefox (Shield)",
+    "description": "Sub-toggle label (ff_studies)"
+  },
+  "SUB_CRASH_REPORTING": {
+    "message": "Отчёты об использовании и сбоях",
+    "description": "Sub-toggle label (crash_reporting)"
+  },
+  "SUB_REWARDS": {
+    "message": "Предложения Microsoft Rewards",
+    "description": "Sub-toggle label (rewards)"
+  },
+  "SUB_FEATURE_BANNERS": {
+    "message": "Баннеры с рекомендациями функций",
+    "description": "Sub-toggle label (feature_banners)"
+  },
+  "SUB_ACROBAT_BUTTON": {
+    "message": "Кнопка «Редактировать в Acrobat»",
+    "description": "Sub-toggle label (acrobat_button)"
+  },
+  "SUB_DEFAULT_PROMPT": {
+    "message": "Предложения сделать браузером по умолчанию",
+    "description": "Sub-toggle label (default_prompt)"
+  },
+  "SUB_DALLE_THEMES": {
+    "message": "Темы DALL-E / AI",
+    "description": "Sub-toggle label (dalle_themes)"
+  },
+  "SUB_BING_REDIRECT": {
+    "message": "Перенаправление поиска на новой вкладке в Bing",
+    "description": "Sub-toggle label (bing_redirect)"
+  },
+  "SUB_AUTO_SIGNIN": {
+    "message": "Автоматический вход в браузер",
+    "description": "Sub-toggle label (auto_signin)"
+  },
+  "SITE_ACCESS_NOTICE": {
+    "message": "Чтобы блокировать AI-API для сайтов (window.ai) везде, разрешите доступ ко всем сайтам",
+    "description": "Side panel notice (Chrome/Firefox): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_NOTICE_EDGE": {
+    "message": "Чтобы скрывать Copilot и блокировать AI-API для сайтов (window.ai) везде, разрешите доступ ко всем сайтам",
+    "description": "Side panel notice (Edge): why the all-sites permission is needed"
+  },
+  "SITE_ACCESS_GRANT": {
+    "message": "Разрешить",
+    "description": "Button in the notice: request the all-sites permission"
+  },
+  "FOOTER_ISSUES": {
+    "message": "Сообщить о проблеме",
+    "description": "Side panel footer: GitHub icon link to report a bug"
+  },
+  "FOOTER_SUPPORT": {
+    "message": "Чат поддержки (Telegram)",
+    "description": "Side panel footer: Telegram icon link to the support chat"
   }
 }

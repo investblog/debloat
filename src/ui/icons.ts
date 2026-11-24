@@ -1,5 +1,7 @@
 /** Inline SVG icon helper — all icons use fill="currentColor" to inherit text color */
 
+import brandSprite from '../assets/icons/brand.svg?raw';
+
 const PATHS: Record<string, string> = {
   'shield-check':
     'm8.182 14.546-3.636-3.637 1.281-1.282 2.355 2.346 5.99-5.991 1.283 1.29M10 0 1.818 3.636v5.455C1.818 14.136 5.31 18.855 10 20c4.691-1.145 8.182-5.864 8.182-10.91V3.637z',
@@ -11,6 +13,8 @@ const PATHS: Record<string, string> = {
   'lightbulb-alert':
     'M8 0C4.1 0 1 3.1 1 7c0 2.4 1.2 4.5 3 5.7V15c0 .6.4 1 1 1h6c.6 0 1-.4 1-1v-2.3c1.8-1.3 3-3.4 3-5.7 0-3.9-3.1-7-7-7M5 19c0 .6.4 1 1 1h4c.6 0 1-.4 1-1v-1H5zm12-9V5h2v6h-2m0 4v-2h2v2z',
   'chevron-down': 'M5.41 6.29 10 10.88l4.59-4.59L16 7.71l-6 6-6-6z',
+  'help-circle':
+    'M9 16h2v-2H9zm1-16a10 10 0 1 0 0 20 10 10 0 0 0 0-20m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-14a4 4 0 0 0-4 4h2a2 2 0 1 1 4 0c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5a4 4 0 0 0-4-4',
   'chevron-up': 'M5.41 13.705 10 9.125l4.59 4.58 1.41-1.41-6-6-6 6z',
   'check-circle':
     'M10 0C4.5 0 0 4.5 0 10s4.5 10 10 10 10-4.5 10-10S15.5 0 10 0m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m4.59-12.42L8 12.17 5.41 9.59 4 11l4 4 8-8z',
@@ -31,8 +35,6 @@ const PATHS: Record<string, string> = {
     'M17.85 5.65a7.3 7.3 0 0 0-1.2-1.85c.32.7.5 1.28.52 1.58a8 8 0 0 0-2.78-3.9c-2.82-2.1-4.93-1.12-5.35-.82a5.4 5.4 0 0 1 3.78-.28c-2.6.62-4.23 2.68-4.82 4.02-.35.02-1.5.18-2.53 1.2-.55.55-.9 1.12-1.1 1.52a5.4 5.4 0 0 1 .72-2.18 7.8 7.8 0 0 0-.88 2.06c-.38 1.36-.2 2.72-.15 3.1a7.5 7.5 0 0 0 .42 1.9c.96 2.58 3.2 4.72 5.9 5.42.66.18 1.32.28 1.98.3 3.28.1 6.36-1.7 7.72-4.65 0 0-.45 1.12-2.12 2.22.62-.62 1.02-1.1 1.58-2.12a8 8 0 0 0 .82-3.72c.08-1.2-.1-2.42-.52-3.52z',
   'console-log':
     'M3 0v6H1V0zM1 20h2v-6H1zm3-10a2 2 0 1 0-2 2c1.11 0 2-.89 2-2m19-6v12c0 1.11-.89 2-2 2H9a2 2 0 0 1-2-2v-4l-2-2 2-2V4a2 2 0 0 1 2-2h12c1.11 0 2 .89 2 2m-5 7h-8v2h8zm2-4H10v2h10z',
-  radar:
-    'M10 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0-8a6 6 0 0 0-6 6h2a4 4 0 0 1 4-4V4m0-4C4.48 0 0 4.48 0 10h2a8 8 0 0 1 8-8V0m8 10a8 8 0 0 1-8 8v2c5.52 0 10-4.48 10-10h-2m-4 0a4 4 0 0 1-4 4v2a6 6 0 0 0 6-6h-2',
 };
 
 const VIEWBOXES: Record<string, string> = {
@@ -63,4 +65,30 @@ export function icon(name: string, size = 20): HTMLElement {
 
   svg.appendChild(path);
   return svg as unknown as HTMLElement;
+}
+
+/** Multi-colour brand glyphs (301.st, stores, GitHub, Telegram), shared with the other 301.st extensions */
+export type BrandIcon = '301' | 'chrome' | 'edge' | 'mozilla' | 'github' | 'telegram';
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const BRAND_SPRITE_ID = 'debloat-brand-sprite';
+
+export function brandIcon(name: BrandIcon, size = 16): SVGSVGElement {
+  if (!document.getElementById(BRAND_SPRITE_ID)) {
+    const holder = document.createElement('div');
+    holder.id = BRAND_SPRITE_ID;
+    // Zero-size, not display:none — gradients inside a display:none sprite don't render
+    holder.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+    holder.setAttribute('aria-hidden', 'true');
+    holder.innerHTML = brandSprite; // bundled at build time, not remote content
+    document.body.prepend(holder);
+  }
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('width', String(size));
+  svg.setAttribute('height', String(size));
+  svg.setAttribute('aria-hidden', 'true');
+  const use = document.createElementNS(SVG_NS, 'use');
+  use.setAttribute('href', `#i-brand-${name}`);
+  svg.append(use);
+  return svg;
 }

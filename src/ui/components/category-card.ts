@@ -1,3 +1,5 @@
+import { subToggleKey, t } from '@shared/i18n';
+import { isSubEnabled } from '@shared/settings';
 import type { BrowserType, Category, CategoryId, Settings } from '@shared/types';
 import { h } from '@ui/dom';
 import { icon } from '@ui/icons';
@@ -29,7 +31,7 @@ export function createCategoryCard({
   subContainer.style.display = 'none';
 
   for (const sub of visibleSubs) {
-    const subEnabled = settings.subToggles[sub.id] ?? sub.defaultEnabled;
+    const subEnabled = isSubEnabled(settings, sub.id);
     const subToggle = createToggle({
       checked: subEnabled && masterEnabled,
       onChange: (val) => onToggleSub(sub.id, val),
@@ -41,7 +43,14 @@ export function createCategoryCard({
       'div',
       { class: 'card__sub-row', 'data-testid': `sub-row-${sub.id}` },
       subToggle,
-      h('span', { class: 'card__sub-label' }, sub.label),
+      sub.hint
+        ? h(
+            'span',
+            { class: 'card__sub-label' },
+            t(subToggleKey(sub.id), sub.label),
+            h('span', { class: 'card__sub-hint' }, t(`${subToggleKey(sub.id)}_HINT`, sub.hint)),
+          )
+        : h('span', { class: 'card__sub-label' }, t(subToggleKey(sub.id), sub.label)),
     );
     subContainer.append(subRow);
   }
@@ -64,7 +73,7 @@ export function createCategoryCard({
       },
     },
     chevron,
-    ` ${visibleSubs.length} sub-toggles`,
+    ` ${t('SUB_TOGGLES_COUNT', '$1 sub-toggles', visibleSubs.length)}`,
   );
 
   const masterToggle = createToggle({

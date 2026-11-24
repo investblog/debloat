@@ -21,7 +21,22 @@ vi.mock('wxt/browser', () => ({
 }));
 
 // Import after mocking
-const { loadSettings, patchSettings, saveSettings } = await import('@shared/settings');
+const { isPaused, isSubEnabled, loadSettings, patchSettings, saveSettings } = await import('@shared/settings');
+
+describe('isSubEnabled / isPaused', () => {
+  it('uses the saved override, else the sub-toggle default', () => {
+    const s: Settings = { ...DEFAULT_SETTINGS, subToggles: { people_also_ask: false } };
+    expect(isSubEnabled(s, 'people_also_ask')).toBe(false);
+    expect(isSubEnabled(s, 'ai_overview')).toBe(true);
+    expect(isSubEnabled(s, 'ai_overview_minimize')).toBe(false);
+  });
+
+  it('treats a future pauseUntil as paused', () => {
+    expect(isPaused({ ...DEFAULT_SETTINGS, pauseUntil: 2000 }, 1000)).toBe(true);
+    expect(isPaused({ ...DEFAULT_SETTINGS, pauseUntil: 500 }, 1000)).toBe(false);
+    expect(isPaused(DEFAULT_SETTINGS)).toBe(false);
+  });
+});
 
 describe('settings', () => {
   beforeEach(() => {
@@ -48,6 +63,14 @@ describe('settings', () => {
       expect(settings.sponsored).toBe(true);
       expect(settings.telemetry).toBe(true);
       expect(settings.siteWhitelist).toEqual({});
+    });
+
+    it('should drop obsolete AI Scout keys from ≤1.0.3 storage', async () => {
+      storeRef.current.settings = { ai: false, scoutReporting: true, scoutInstallId: 'abc' };
+      const settings = await loadSettings();
+      expect(settings).not.toHaveProperty('scoutReporting');
+      expect(settings).not.toHaveProperty('scoutInstallId');
+      expect(settings.ai).toBe(false);
     });
   });
 

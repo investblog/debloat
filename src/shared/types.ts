@@ -7,6 +7,8 @@ export type PresetId = 'aggressive' | 'balanced' | 'minimal' | 'custom';
 export interface SubToggle {
   id: string;
   label: string;
+  /** Optional caveat shown under the label */
+  hint?: string;
   browsers: BrowserType[];
   /** dNR ruleset IDs this sub-toggle controls (empty = CSS/DOM only) */
   rulesetIds?: string[];
@@ -36,10 +38,6 @@ export interface Settings {
   siteWhitelist: Record<string, CategoryId[]>;
   /** Pause state */
   pauseUntil: number | null;
-  /** AI Scout: opt-in anonymous reporting */
-  scoutReporting: boolean;
-  /** AI Scout: anonymous install UUID (generated on first enable) */
-  scoutInstallId: string;
 }
 
 export interface ActivityEntry {
@@ -49,18 +47,4 @@ export interface ActivityEntry {
   rulesetId: string;
   /** CSS/DOM entries carry element count; absent for dNR */
   count?: number;
-}
-
-/** Per-tab scout candidates state */
-export interface ScoutStatus {
-  /** Number of candidates collected */
-  candidateCount: number;
-  /** Number of unknown (heuristic) candidates — triggers aggressive UI */
-  unknownCount: number;
-  /** Surface identifier */
-  surface: string;
-  /** Reporting state */
-  state: 'pending' | 'sending' | 'reported';
-  /** Result message after reporting */
-  resultMessage?: string;
 }

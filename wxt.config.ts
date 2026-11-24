@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { defineConfig } from 'wxt';
+import { GOOGLE_CORE_DOMAINS } from './src/shared/google-domains';
 
 export default defineConfig({
   srcDir: 'src',
@@ -20,7 +21,7 @@ export default defineConfig({
   manifest: ({ browser }) => ({
     name: '__MSG_EXTENSION_NAME__',
     description: '__MSG_EXTENSION_DESCRIPTION__',
-    version: '1.0.3',
+    version: '1.1.0',
     author: 'Debloat <support@debloat.click>',
     homepage_url: 'https://debloat.click',
     default_locale: 'en',
@@ -31,7 +32,6 @@ export default defineConfig({
       ...(browser !== 'firefox' ? ['declarativeNetRequestFeedback', 'sidePanel'] : []),
       'scripting',
       'webNavigation',
-      'notifications',
     ],
 
     ...(browser !== 'firefox' && {
@@ -42,6 +42,8 @@ export default defineConfig({
     }),
 
     ...(browser === 'firefox' && {
+      // A bindable "toggle the sidebar" shortcut (the toolbar button toggles it too)
+      commands: { _execute_sidebar_action: { description: 'Toggle the Debloat sidebar' } },
       browser_specific_settings: {
         gecko: {
           id: 'debloat@debloat.click',
@@ -51,24 +53,7 @@ export default defineConfig({
     }),
 
     host_permissions: [
-      '*://www.google.com/*',
-      '*://www.google.co.uk/*',
-      '*://www.google.de/*',
-      '*://www.google.fr/*',
-      '*://www.google.co.jp/*',
-      '*://www.google.co.in/*',
-      '*://www.google.com.br/*',
-      '*://www.google.ca/*',
-      '*://www.google.com.au/*',
-      '*://www.google.ru/*',
-      '*://www.google.it/*',
-      '*://www.google.es/*',
-      '*://www.google.com.mx/*',
-      '*://www.google.co.kr/*',
-      '*://www.google.nl/*',
-      '*://www.google.pl/*',
-      '*://www.google.com.tr/*',
-      '*://www.google.co.id/*',
+      ...GOOGLE_CORE_DOMAINS.map((h) => `*://${h}/*`),
       '*://ntp.msn.com/*',
       '*://edge.microsoft.com/*',
       '*://*.bing.com/*',
@@ -87,8 +72,9 @@ export default defineConfig({
       ],
     },
 
-    // Toolbar button (Chrome/Edge: click → sidePanel via setPanelBehavior;
-    // Firefox: hook below adds default_popup so click opens panel as popup)
+    // Toolbar button without a popup: Chrome/Edge open the side panel via setPanelBehavior,
+    // Firefox toggles the sidebar from browserAction.onClicked (both in background).
+    // The side panel / sidebar is the only UI.
     action: {
       default_icon: {
         16: 'icons/16.png',
@@ -125,18 +111,14 @@ export default defineConfig({
         manifest.optional_permissions = [];
       }
 
-      // Firefox MV2: no sidePanel API — enrich auto-generated sidebar_action
-      // and set popup on action (WXT converts action → browser_action for MV2)
+      // Firefox MV2: no sidePanel API — enrich the auto-generated sidebar_action
+      // (WXT converts action → browser_action for MV2; no popup, the click toggles the sidebar)
       if (wxt.config.browser === 'firefox') {
         const sa = manifest as unknown as Record<string, unknown>;
         if (sa.sidebar_action && typeof sa.sidebar_action === 'object') {
           const sidebar = sa.sidebar_action as Record<string, unknown>;
           sidebar.open_at_install = false;
           sidebar.default_icon = { '16': 'icons/16.png', '32': 'icons/32.png' };
-        }
-        // Toolbar icon click → open sidepanel as popup
-        if (manifest.action) {
-          manifest.action.default_popup = 'sidepanel.html';
         }
         // MV2 has no optional_host_permissions — merge into optional_permissions
         const ohp = (manifest as unknown as Record<string, unknown>).optional_host_permissions as string[] | undefined;

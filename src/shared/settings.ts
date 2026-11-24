@@ -1,13 +1,32 @@
 import { browser } from 'wxt/browser';
-import { DEFAULT_SETTINGS } from './constants';
+import { CATEGORIES, DEFAULT_SETTINGS } from './constants';
 import type { CategoryId, Settings } from './types';
 import { normalizeHost } from './url';
 
 const STORAGE_KEY = 'settings';
 
+/** Keys from removed features (AI Scout, ≤1.0.3) — dropped on load so they don't linger in storage */
+const OBSOLETE_KEYS = ['scoutReporting', 'scoutInstallId'];
+
 export async function loadSettings(): Promise<Settings> {
   const result = await browser.storage.local.get(STORAGE_KEY);
-  return { ...DEFAULT_SETTINGS, ...(result[STORAGE_KEY] as Partial<Settings> | undefined) };
+  const stored = { ...(result[STORAGE_KEY] as Record<string, unknown> | undefined) };
+  for (const key of OBSOLETE_KEYS) delete stored[key];
+  return { ...DEFAULT_SETTINGS, ...(stored as Partial<Settings>) };
+}
+
+/** Sub-toggle state: the saved override, else the sub-toggle's default */
+export function isSubEnabled(settings: Settings, subId: string): boolean {
+  if (subId in settings.subToggles) return settings.subToggles[subId];
+  for (const cat of CATEGORIES) {
+    const sub = cat.subToggles.find((s) => s.id === subId);
+    if (sub) return sub.defaultEnabled;
+  }
+  return true;
+}
+
+export function isPaused(settings: Settings, now = Date.now()): boolean {
+  return settings.pauseUntil != null && settings.pauseUntil > now;
 }
 
 export async function saveSettings(settings: Settings): Promise<void> {
@@ -50,15 +69,4 @@ export async function removeSiteWhitelist(domain: string): Promise<void> {
   const current = await loadSettings();
   delete current.siteWhitelist[normalizeHost(domain)];
   await saveSettings(current);
-}
-
-/** Enable/disable scout reporting. Generates installId on first enable. */
-export async function setScoutReporting(enabled: boolean): Promise<Settings> {
-  const current = await loadSettings();
-  current.scoutReporting = enabled;
-  if (enabled && !current.scoutInstallId) {
-    current.scoutInstallId = crypto.randomUUID();
-  }
-  await saveSettings(current);
-  return current;
 }
