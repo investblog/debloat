@@ -29,6 +29,19 @@ const FIXTURE = `<!doctype html><html><head><meta charset="utf-8"><title>q - Goo
 </div></div></div>
 </body></html>`;
 
+// Live layout (24.11.2026): #rcnt is a grid, AI Overview and #center_col sit in a
+// display:contents wrapper and both take grid-column 2 / -2.
+const GRID_FIXTURE = `<!doctype html><html><head><meta charset="utf-8"><title>grid - Google Search</title></head><body>
+<div id="rcnt" style="display:grid;grid-template-columns:120px 600px 120px">
+  <div style="display:contents">
+    <div class="SLPe5b M8OgIe" id="aio" style="grid-column:2 / -2"><div id="eKIzJc"><div id="m-x-content">AI generated answer</div></div></div>
+    <div id="center_col" style="grid-column:2 / -2"><div id="rso">
+      <div class="g" id="r1"><a href="https://example.com/1"><h3>Result 1</h3></a></div>
+    </div></div>
+  </div>
+</div>
+</body></html>`;
+
 let ctx: ExtensionContext;
 let sw: Worker;
 
@@ -36,7 +49,11 @@ beforeAll(async () => {
   ctx = await launchWithExtension();
   sw = ctx.context.serviceWorkers().find((w) => w.url().endsWith('background.js')) as Worker;
   await ctx.context.route('https://www.google.com/search*', (route) =>
-    route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: FIXTURE }),
+    route.fulfill({
+      status: 200,
+      contentType: 'text/html; charset=utf-8',
+      body: new URL(route.request().url()).searchParams.get('q') === 'grid' ? GRID_FIXTURE : FIXTURE,
+    }),
   );
 }, 20_000);
 
@@ -60,9 +77,9 @@ async function visible(page: Page, selector: string): Promise<boolean> {
   });
 }
 
-async function openSerp(): Promise<Page> {
+async function openSerp(q = 'q'): Promise<Page> {
   const page = await ctx.context.newPage();
-  await page.goto('https://www.google.com/search?q=q', { waitUntil: 'domcontentloaded' });
+  await page.goto(`https://www.google.com/search?q=${q}`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('html[data-debloat-allow-ai_overview], [data-debloat-hide]', {
     state: 'attached',
     timeout: 5000,
@@ -176,6 +193,24 @@ describe('Google SERP (routed fixture)', () => {
       expect(await visible(page, '#B2Jtyd')).toBe(true);
       await page.click('.debloat-minibar button');
       expect(await visible(page, '#aio')).toBe(false);
+    } finally {
+      await page.close();
+      await setSubToggles({});
+    }
+  });
+
+  it('minimize bar sits in the results column on the grid layout, not in the gutter', async () => {
+    await setSubToggles({ ai_overview_minimize: true });
+    const page = await openSerp('grid');
+    try {
+      await page.waitForSelector('html[data-debloat-ai-minimize]', { state: 'attached' });
+      const bar = await page.$eval('.debloat-minibar', (el) => el.getBoundingClientRect().toJSON());
+      const col = await page.$eval('#center_col', (el) => el.getBoundingClientRect().toJSON());
+      expect(bar.x).toBe(col.x);
+      expect(bar.width).toBe(col.width);
+      expect(bar.y).toBeLessThan(col.y); // above the results
+      await page.click('.debloat-minibar button');
+      expect(await visible(page, '#aio')).toBe(true);
     } finally {
       await page.close();
       await setSubToggles({});
