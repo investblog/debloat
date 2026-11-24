@@ -106,6 +106,10 @@ export default defineContentScript({
       bar.className = MINIBAR_CLASS;
       bar.append(label, button);
       block.before(bar);
+      // Google lays #rcnt out as a grid through display:contents wrappers: give the bar the
+      // block's column, or auto-placement drops it into the left gutter as a tall empty box.
+      const column = getComputedStyle(block).gridColumn;
+      if (column && column !== 'auto') bar.style.gridColumn = column;
     }
 
     let scheduled = false;

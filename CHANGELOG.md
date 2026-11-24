@@ -4,7 +4,13 @@ All notable changes to Debloat are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0] - Unreleased
+## [1.1.1] - Unreleased
+
+### Fixed
+- Google "Collapse to a bar": on Google's current grid layout the bar landed in the left gutter as a
+  tall empty box; it now takes the AI Overview's column and sits above the results.
+
+## [1.1.0] - 2026-11-24 (uploaded as a store draft, superseded by 1.1.1 before publishing)
 
 ### Added
 - Google: new AI Overview detection (current markers + localized "AI Overview" headings),
