@@ -39,6 +39,19 @@ describe('findAiOverviewBlocks', () => {
     expect(ids(findAiOverviewBlocks(document))).toEqual(['banner']);
   });
 
+  it('live layout (24.11.2026, en + de): AI Overview is a sibling of #center_col, no ULSxyf', () => {
+    // Observed: #rcnt > div > [div.SLPe5b.M8OgIe (AI Overview), #center_col, …];
+    // markers inside: #eKIzJc, #m-x-content / #Odp5De, [data-subtree=mfc|aimc], folsrch*
+    serp(`<div>
+      <div class="SLPe5b M8OgIe"><div id="eKIzJc"><div data-subtree="aimc"><div data-subtree="mfc">
+        <div role="heading">Übersicht mit KI</div><div id="m-x-content">KI-Text</div>
+        <div id="folsrch-1">sources</div></div></div></div></div>
+      <div id="center_col"><div id="rso">${RESULT(1)}${RESULT(2)}</div></div>
+      <div id="rhs"></div>
+    </div>`);
+    expect(ids(findAiOverviewBlocks(document))).toEqual(['SLPe5b M8OgIe']);
+  });
+
   it('stops below a parent that also wraps organic results', () => {
     serp(`<div id="center_col"><div id="rso">
       <div id="mixed"><div id="aiwrap"><div id="Odp5De">AI</div></div>${RESULT(1)}</div>
