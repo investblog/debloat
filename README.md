@@ -99,7 +99,11 @@ A `v*` tag drives two workflows:
 **Chrome + Edge auto-submit on the tag; Firefox is manual** (Actions → *Submit to
 stores* → `stores=firefox`; AMO burns version numbers forever, so it never
 auto-runs). The manual dispatch has a `dry_run` toggle that validates
-credentials without publishing.
+credentials without publishing, and a `hold` toggle (Chrome/Edge) that uploads the
+package as a draft without submitting it — use it when the listing must be edited
+first (new listing languages appear only after a package with those `_locales` is
+uploaded). v1.1.0 is excluded from the tag trigger for that reason: submit it with
+`stores=chrome-edge`, `dry_run=false`, `hold=true`, then publish from the dashboards.
 
 Store credentials are this repo's **GitHub Actions secrets** (`CHROME_*`,
 `FIREFOX_*`, `EDGE_*`). API creds are account-level and shared across all
