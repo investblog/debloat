@@ -4,6 +4,8 @@
 
 Browser extension that removes AI features, sponsored content, shopping tools, telemetry, and annoyances from **Chrome**, **Edge**, and **Firefox**. One click, no admin rights.
 
+**Website:** [debloat.click](https://debloat.click/) · **Guides:** [How to turn off Google AI Overview](https://debloat.click/turn-off-google-ai-overview/) · [How to turn off Google AI Mode](https://debloat.click/turn-off-google-ai-mode/) · **Demo:** [48-second video](https://www.youtube.com/watch?v=znDE8LjJTo0)
+
 ![License](https://img.shields.io/github/license/investblog/debloat)
 ![GitHub release](https://img.shields.io/github/v/release/investblog/debloat?include_prereleases)
 ![CI](https://github.com/investblog/debloat/actions/workflows/ci.yml/badge.svg)
