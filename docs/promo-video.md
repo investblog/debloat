@@ -31,7 +31,9 @@ Outputs live in `store-assets/video/` (gitignored, owner's machine only): the `.
 
 1. **YouTube** — upload the `.mp4` (public or unlisted). Title, description, chapters and tags come
    from `store-assets/video/youtube-description.txt` (same layout as the other 301.st videos: links,
-   chapters, how it works, what you get, privacy, voice credit). Add the `.srt` as English subtitles.
+   chapters, how it works, what you get, privacy, voice credit). Add the `.srt` as English subtitles,
+   and `store-assets/video/subtitles/debloat-promo-<lang>.srt` for the other 20 extension languages
+   (same cue timings as the English file; the file name carries YouTube's language code).
    Chapter times must match the cues in the `.srt`; update both when the narration changes.
 2. **Stores** — the Chrome Web Store takes the video as a YouTube link (listing → "YouTube video");
    Edge Add-ons has the same field ("YouTube video URL"). AMO has no video field.
